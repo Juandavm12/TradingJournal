@@ -1,16 +1,37 @@
 ﻿@inherits LayoutComponentBase
+
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
+    <div class="sidebar" style="@IconMenuCssClass">
+        <NavMenu ShowIconMenu="ToggleIconMenu" />
     </div>
 
+
     <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
+        <ul>
+            <li><a href=""><i class="bi bi-house"></i>&nbsp; Prueba </a></li>
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="dropbtn"><i class="bi bi-arrow-left-right" aria-hidden="true"></i>&nbsp; Desplegable </a>
+                <div class="dropdown-content">
+                    <a href=""><i class="bi bi-bricks"></i>&nbsp; Prueba2 </a>
+                    <a href=""><i class="bi bi-gear"></i>&nbsp; Prueba3 </a>
+                </div>
+            </li>
+        </ul>
+
+           
 
         <article class="content px-4">
             @Body
         </article>
     </main>
 </div>
+
+@code {
+    private bool _iconMenuActive { get; set; }
+    private string? IconMenuCssClass => _iconMenuActive ? "width: 80px;" : null;
+
+    protected void ToggleIconMenu(bool iconMenuActive)
+    {
+        _iconMenuActive = iconMenuActive;
+    }
+}
