@@ -13,8 +13,8 @@ namespace TradingJournal.Shared.Entities
 {
     public class Account
     {
-        
-        public int Id { get; set; }
+        [Key]
+        public int AccNumber { get; set; }
 
         [ForeignKey("BrokersId")]
         [JsonIgnore]

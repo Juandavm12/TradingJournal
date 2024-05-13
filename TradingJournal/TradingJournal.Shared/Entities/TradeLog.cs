@@ -11,8 +11,8 @@ namespace TradingJournal.Shared.Entities
 {
     public class TradeLog
     {
-
-        public int Id { get; set; }
+        [Key]
+        public int TradeNumber { get; set; }
 
         [Display(Name = "StartTime")]
         [DataType(DataType.DateTime)]
@@ -52,9 +52,9 @@ namespace TradingJournal.Shared.Entities
 
         public double NetPnl { get; set; }
 
-        [ForeignKey("AccountsId")]
+        [ForeignKey("AccountsAccNumber")]
         [JsonIgnore]
         public Account Accounts { get; set; }
-        public int AccountsId { get; set; }
+        public int AccountsAccNumber { get; set; }
     }
 }

@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -10,7 +12,9 @@ namespace TradingJournal.Shared.Entities
 {
     public class Market
     {
-        public int Id { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int Code { get; set; }
 
         [Display(Name = "Name")]
         [MaxLength(20, ErrorMessage = "More than 20 charachters are not allowed")]
