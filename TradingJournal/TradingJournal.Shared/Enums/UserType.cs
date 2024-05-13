@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Construction.Shared.Enums
+namespace TradingJournal.Shared.Enums
 {
     public enum UserType
     {

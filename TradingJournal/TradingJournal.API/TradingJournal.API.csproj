@@ -20,4 +20,8 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TradingJournal.Shared\TradingJournal.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

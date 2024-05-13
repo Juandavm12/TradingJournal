@@ -10,7 +10,7 @@ namespace TradingJournal.Shared.Entities
 {
     public class Market
     {
-        public int Code { get; set; }
+        public int Id { get; set; }
 
         [Display(Name = "Name")]
         [MaxLength(20, ErrorMessage = "More than 20 charachters are not allowed")]

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -12,8 +13,8 @@ namespace TradingJournal.Shared.Entities
 {
     public class Account
     {
-
-        public int AccNumber { get; set; }
+        
+        public int Id { get; set; }
 
         [ForeignKey("BrokersId")]
         [JsonIgnore]

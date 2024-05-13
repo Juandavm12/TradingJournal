@@ -10,7 +10,7 @@ namespace TradingJournal.Shared.Entities
     public class TradeLog
     {
 
-        public int TradeNumber { get; set; }
+        public int Id { get; set; }
 
         [Display(Name = "StartTime")]
         [DataType(DataType.DateTime)]
