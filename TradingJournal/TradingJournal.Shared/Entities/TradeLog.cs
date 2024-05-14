@@ -17,13 +17,11 @@ namespace TradingJournal.Shared.Entities
         [Display(Name = "StartTime")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
-        [Required(ErrorMessage = "The field {0} is mandatory")]
         public DateTime StartTime { get; set; }
 
         [Display(Name = "EndTime")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
-        [Required(ErrorMessage = "The field {0} is mandatory")]
         public DateTime EndTime { get; set; }
 
         [Display(Name = "Asset")]

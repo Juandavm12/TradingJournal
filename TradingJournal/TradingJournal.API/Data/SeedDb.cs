@@ -25,7 +25,7 @@ namespace TradingJournal.API.Data
 
             await _context.Database.EnsureCreatedAsync();
 
-           /* await CheckProjectConstructionsAsync();
+           /*await CheckProjectConstructionsAsync();
 
             await CheckDutiesAsync();
 
@@ -47,7 +47,7 @@ namespace TradingJournal.API.Data
             await CheckUserAsync("1112", "Super", "Admin", "JUANDAV12@GMAIL.COM", "3005216416", "CARRERA 33 65 66", UserType.Admin);
         }
 
-        //------------------  Methods indivuals by entities whit default values  ---------------
+        //------------------  Methods indivuals by entities whit default values  ---------------//
         private async Task CheckAccountsAsync()
          {
              if (!_context.Accounts.Any())
@@ -116,7 +116,7 @@ namespace TradingJournal.API.Data
                 _context.Markets.Add(new Market { Code = 200, Name = "Indexes"});
                 _context.Markets.Add(new Market { Code = 201, Name = "Commodities"});
                 _context.Markets.Add(new Market { Code = 300, Name = "Options"});
-                _context.Markets.Add(new Market { Code = 300, Name = "Equities"});
+                _context.Markets.Add(new Market { Code = 301, Name = "Equities"});
             }
             await _context.SaveChangesAsync();
         }
@@ -160,39 +160,40 @@ namespace TradingJournal.API.Data
             await _context.SaveChangesAsync();
         }
 
-        /*private async Task CheckMaterialsAsync()
+        private async Task CheckTradesAsync()
         {
-            if (!_context.Materials.Any())
+            if (!_context.Trades.Any())
             {
-                _context.Materials.Add(new Material
-                {
-                    Name = "Poleas",
-                    Supplier = "Caterpillar",
-                    ProjectConstructionsId = 1
-                });
-                _context.Materials.Add(new Material
-                {
-                    Name = "Traillas",
-                    Supplier = "Kaishan",
-                    ProjectConstructionsId = 2
-                });
+                _context.Trades.Add(new Trade { TradersId = 1, MarketsCode = 100});
+                _context.Trades.Add(new Trade { TradersId = 1, MarketsCode = 200});
+                _context.Trades.Add(new Trade { TradersId = 1, MarketsCode = 300});
+                _context.Trades.Add(new Trade { TradersId = 1, MarketsCode = 301});
+                _context.Trades.Add(new Trade { TradersId = 2, MarketsCode = 101});
+                _context.Trades.Add(new Trade { TradersId = 2, MarketsCode = 201});
+                _context.Trades.Add(new Trade { TradersId = 2, MarketsCode = 301});
+                _context.Trades.Add(new Trade { TradersId = 2, MarketsCode = 100});
             }
             await _context.SaveChangesAsync();
         }
 
-        private async Task CheckMaterialsAssignmentsAsync()
+        /*private async Task CheckTradeLogsAsync()
         {
-            if (!_context.MaterialAssignments.Any())
+            if (!_context.TradeLogs.Any())
             {
-                _context.MaterialAssignments.Add(new MaterialAssignment
+                _context.TradeLogs.Add(new TradeLog 
+                 {
+                     Asset = 10,
+                     Name = "Fearless",
+                     Session = "Asia",
+                     Type = "Position"
+                 });
+
+                _context.TradeLogs.Add(new TradeLog
                 {
-                    MaterialsId = 1,
-                    DutiesId = 1
-                });
-                _context.MaterialAssignments.Add(new MaterialAssignment
-                {
-                    MaterialsId = 2,
-                    DutiesId = 2
+                    Asset = 20,
+                    Name = "Smart Money Concepts",
+                    Session = "London",
+                    Type = "Day Trading"
                 });
             }
             await _context.SaveChangesAsync();
