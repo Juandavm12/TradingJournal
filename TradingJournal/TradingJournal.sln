@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradingJournal.Shared", "TradingJournal.Shared\TradingJournal.Shared.csproj", "{F23AA6FB-D7E5-466C-8949-01A12D6F9EB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TradingJournal.Shared", "TradingJournal.Shared\TradingJournal.Shared.csproj", "{F23AA6FB-D7E5-466C-8949-01A12D6F9EB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradingJournal.API", "TradingJournal.API\TradingJournal.API.csproj", "{95651C49-D7E7-47ED-9D0E-9892C945D039}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TradingJournal.API", "TradingJournal.API\TradingJournal.API.csproj", "{95651C49-D7E7-47ED-9D0E-9892C945D039}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradingJournal.Web", "TradingJournal.Web\TradingJournal.Web.csproj", "{568F56C2-78F3-4AD8-81B7-119FBEA46605}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TradingJournal.Web", "TradingJournal.Web\TradingJournal.Web.csproj", "{568F56C2-78F3-4AD8-81B7-119FBEA46605}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

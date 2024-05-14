@@ -1,0 +1,22 @@
+﻿@page "/logout"
+@using TradingJournal.Shared.DTOs;
+@using TradingJournal.Shared.Enums;
+@using TradingJournal.Web.Auth;
+@using TradingJournal.Web.Repositories
+@inject SweetAlertService sweetAlertService
+@inject NavigationManager navigationManager
+@inject ILoginService loginService
+
+
+<p>Cerrando sesión...</p>
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        await loginService.LogoutAsync();
+        navigationManager.NavigateTo("/");
+    }
+
+
+}

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using TradingJournal.API.Data;
@@ -7,7 +9,8 @@ using TradingJournal.Shared.Entities;
 namespace TradingJournal.API.Controllers
 {
 
-    //Route for the api Methods
+    
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     [Route("/api/BrokerControllers")]
     public class BrokerControllers : ControllerBase

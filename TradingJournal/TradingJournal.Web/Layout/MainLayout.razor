@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using TradingJournal.Web.Shared
+@inherits LayoutComponentBase
 
 <div class="page">
     <div class="sidebar" style="@IconMenuCssClass">
@@ -7,6 +8,7 @@
 
 
     <main>
+        
         <ul>
             <li><a href=""><i class="bi bi-house"></i>&nbsp; Prueba </a></li>
             <li class="dropdown">
@@ -16,11 +18,15 @@
                     <a href=""><i class="bi bi-gear"></i>&nbsp; Prueba3 </a>
                 </div>
             </li>
+       
         </ul>
+       
 
-           
+
+
 
         <article class="content px-4">
+
             @Body
         </article>
     </main>

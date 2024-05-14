@@ -43,7 +43,7 @@ namespace TradingJournal.API.Data
 
             await CheckRoleAsync();
 
-            await CheckUserAsync("1111", "Super", "Admin", "EDWINRAMIREZGON@GMAIL.COM", "3137778067", "CARRERA 42A 78A 17", UserType.Admin);
+            await CheckUserAsync("111111", "Super", "Admin", "EDWINRAMIREZGON@GMAIL.COM", "3137778067", "CARRERA 42A 78A 17", UserType.Admin);
             await CheckUserAsync("1112", "Super", "Admin", "JUANDAV12@GMAIL.COM", "3005216416", "CARRERA 33 65 66", UserType.Admin);
         }
 

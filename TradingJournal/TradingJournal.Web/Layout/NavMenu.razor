@@ -1,4 +1,13 @@
-﻿<div class="navbar-wrapper">
+﻿@using TradingJournal.Shared.DTOs;
+@using TradingJournal.Shared.Enums;
+@using TradingJournal.Web.Auth;
+@using TradingJournal.Web.Repositories
+@inject SweetAlertService sweetAlertService
+@inject NavigationManager navigationManager
+@inject ILoginService loginService
+@inject IRepository Repository
+
+<div class="navbar-wrapper">
     <div class="top-row ps-3 navbar navbar-dark">
         <div class="container-fluid">
             <span class="" style="color:white;" aria-hidden="true"></span>
@@ -12,6 +21,59 @@
         </div>
     </div>
 
+
+    @if (!@IconMenuActive)
+    {
+        <AuthorizeView>
+            <Authorized>
+
+                <div class="mb-3 px-5">
+
+                    <div>
+                      
+
+                    </div>
+                </div>
+                <div class="mb-3 px-5">
+
+                    <div>
+                        <button class="btn btn-secondary " @onclick="Logout"><i class="bi bi-person"></i> Logout</button>
+
+                    </div>
+                </div>
+            </Authorized>
+            <NotAuthorized Context="NotAuthorizedContext">
+
+        <EditForm Model="loginDTO" OnValidSubmit="LoginAsync">
+            <DataAnnotationsValidator />
+            <div class="mb-3">
+                <div>
+                    <InputText class="form-control" @bind-Value="@loginDTO.Email" placeholder="              Email" />
+                    <ValidationMessage For="@(() => loginDTO.Email)" />
+
+                </div>
+            </div>
+            <div class="mb-3">
+
+                <div>
+                    <InputText type="password" class="form-control" @bind-Value="@loginDTO.Password" placeholder="           Password" />
+                    <ValidationMessage For="@(() => loginDTO.Password)" />
+                </div>
+            </div>
+            <div class="mb-3 px-5">
+
+                <div>
+                    <button class="btn btn-primary" type="submit"><i class="bi bi-person"></i> Login</button>
+
+                </div>
+            </div>
+
+
+        </EditForm>
+            </NotAuthorized>
+        </AuthorizeView>
+
+    }
     <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
         <nav class="flex-column">
             <div class="nav-item px-3">
@@ -22,13 +84,13 @@
                         <label>PRUEBA</label>
                     }
                 </NavLink>
-            </div>            
+            </div>
 
 
             <div>
                 @if (!@IconMenuActive)
                 {
-                    <div class="dropdown px-3">                      
+                    <div class="dropdown px-3">
                         <a href="javascript:void(0)" class="dropbtn"><i class="bi bi-arrow-left-right"></i>DESPLEGABLE</a>
                         <div class="dropdown-content">
                             <a href=""><i class="bi bi-bricks"></i> PRUEBA2</a>
@@ -36,42 +98,34 @@
                         </div>
                     </div>
 
-                }               
-                                
+                }
+
                 else
                 {
                     <div class="nav-item px-3" @onclick="ToggleSubMenu">
                         <NavLink class="nav-link">
                             <span class="oi bi-arrow-left-right" aria-hidden="true" title="Home"></span>
-                            
+
                         </NavLink>
                         <div class="sub-menu" style="display: @(showSubMenu ? "block" : "none")">
                             <NavLink class="nav-link" href="">
                                 <span class="oi bi-bricks" aria-hidden="true"></span>
-                                
+
                             </NavLink>
                             <NavLink class="nav-link" href="">
-                                <span class="oi bi-gear" aria-hidden="true"></span>                                
+                                <span class="oi bi-gear" aria-hidden="true"></span>
                             </NavLink>
 
                         </div>
                     </div>
                 }
             </div>
-             
+
+
 
         </nav>
 
     </div>
-
-
-
-
-
-
-
-
-
 
     <div class="bottom-row">
         <div class="icon-menu-arrow">
@@ -101,7 +155,7 @@
     }
 
     private bool IconMenuActive { get; set; } = false;
-  
+
     [Parameter]
     public EventCallback<bool> ShowIconMenu { get; set; }
 
@@ -114,10 +168,35 @@
         collapseNavMenu = !collapseNavMenu;
     }
 
-     private async Task ToggleIconMenu()
+    private async Task ToggleIconMenu()
     {
         IconMenuActive = !IconMenuActive;
         await ShowIconMenu.InvokeAsync(IconMenuActive);
+    }
+
+    private LoginDTO loginDTO = new();
+
+    private async Task LoginAsync()
+    {
+        var responseHttp = await Repository.PostAsync<LoginDTO, TokenDTO>("/api/accounts/Login", loginDTO);
+        if (responseHttp.Error)
+        {
+            var message = await responseHttp.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+        else
+        {
+
+            await loginService.LoginAsync(responseHttp.Response!.Token);
+            navigationManager.NavigateTo("/");
+        }
+    }
+
+    private async Task Logout()
+    {
+        await loginService.LogoutAsync();
+        navigationManager.NavigateTo("/");
     }
 }
 
