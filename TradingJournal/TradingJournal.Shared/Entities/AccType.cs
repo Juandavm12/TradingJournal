@@ -15,6 +15,6 @@ namespace TradingJournal.Shared.Entities
         [MaxLength(20, ErrorMessage = "More than 20 charachters are not allowed")]
         [Required(ErrorMessage = "The field {0} is mandatory")]
         public string Name { get; set; }
-    
-}
+
+    }
 }
