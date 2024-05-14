@@ -1,4 +1,5 @@
 ﻿//this class contains the methods to seed the database whit the defaults values of the entities
+using System.Linq;
 using System.Threading.Tasks;
 using TradingJournal.API.Data;
 using TradingJournal.API.Helpers;
@@ -46,116 +47,120 @@ namespace TradingJournal.API.Data
             await CheckUserAsync("1112", "Super", "Admin", "JUANDAV12@GMAIL.COM", "3005216416", "CARRERA 33 65 66", UserType.Admin);
         }
 
-        //-----------------------------------------Methods indivuals by entities whit default values------------
-       /* private async Task CheckProjectConstructionsAsync()
+        //------------------  Methods indivuals by entities whit default values  ---------------
+        private async Task CheckAccountsAsync()
+         {
+             if (!_context.Accounts.Any())
+             {
+                 _context.Accounts.Add(new Account 
+                 {
+                     BrokersId = 1,
+                     TradersId = 1,
+                     AccTypesId = 1,
+                     InitialBalance = 500000
+                 });
+
+                _context.Accounts.Add(new Account
+                {
+                    BrokersId = 2,
+                    TradersId = 2,
+                    AccTypesId = 2,
+                    InitialBalance = 800000
+                });
+            }
+             await _context.SaveChangesAsync();
+         }
+
+        private async Task CheckAccTypesAsync()
         {
-            if (!_context.ProjectConstructions.Any())
+            if (!_context.AccTypes.Any())
             {
-                _context.ProjectConstructions.Add(new ProjectConstruction { Name = "Changualito", Description = "Descripcion", });
-                _context.ProjectConstructions.Add(new ProjectConstruction { Name = "Changualo", Description = "Descripcion", });
+                _context.AccTypes.Add(new AccType { Name = "Standard"});
+                _context.AccTypes.Add(new AccType { Name = "Zero Spread"});
+                _context.AccTypes.Add(new AccType { Name = "Professional"});
             }
             await _context.SaveChangesAsync();
         }
 
-        private async Task CheckDutiesAsync()
+        private async Task CheckBrokersAsync()
         {
-            if (!_context.Duties.Any())
+            if (!_context.Brokers.Any())
             {
-                _context.Duties.Add(new Dutie { Name = "Cavar", Description = "Descripcion", ProjectConstructionsId = 1 });
-                _context.Duties.Add(new Dutie { Name = "Perforar", Description = "Descripcion", ProjectConstructionsId = 2 });
+                _context.Brokers.Add(new Broker { Name = "Tickmill"});
+                _context.Brokers.Add(new Broker { Name = "Libertex"});
+                _context.Brokers.Add(new Broker { Name = "Oanda"});
+                _context.Brokers.Add(new Broker { Name = "FTMO"});
             }
             await _context.SaveChangesAsync();
         }
 
-        private async Task CheckBudgetsAsync()
+        private async Task CheckHavesAsync()
         {
-            if (!_context.Budgets.Any())
+            if (!_context.Haves.Any())
             {
-                _context.Budgets.Add(new Budget
-                {
-                    BudgetConstructionTeam = 100000,
-                    BudgetDutie = 50000,
-                    BudgetEquipment = 80000,
-                    BudgetProyectConstruction = 75000,
-                    BudgetTotal = 305000,
-                    ProjectConstructionsId = 1,
-                });
-                _context.Budgets.Add(new Budget
-                {
-                    BudgetConstructionTeam = 60000,
-                    BudgetDutie = 90000,
-                    BudgetEquipment = 10000,
-                    BudgetProyectConstruction = 30000,
-                    BudgetTotal = 190000,
-                    ProjectConstructionsId = 2,
-                });
+                _context.Haves.Add(new Have { TradersId = 1, StrategiesCode = 10});
+                _context.Haves.Add(new Have { TradersId = 2, StrategiesCode = 20});
+                _context.Haves.Add(new Have { TradersId = 1, StrategiesCode = 20 });
+                _context.Haves.Add(new Have { TradersId = 2, StrategiesCode = 30 });
+                _context.Haves.Add(new Have { TradersId = 1, StrategiesCode = 40 });
             }
             await _context.SaveChangesAsync();
         }
 
-        private async Task CheckContructionTeamsAsync()
+        private async Task CheckMarketsAsync()
         {
-            if (!_context.ConstructionTeams.Any())
+            if (!_context.Markets.Any())
             {
-                _context.ConstructionTeams.Add(new ConstructionTeam
-                {
-                    Name = "Power Rangers",
-                    Specialties = "Excavacion, Perforacion"
-                });
-                _context.ConstructionTeams.Add(new ConstructionTeam
-                {
-                    Name = "Los Cubitos",
-                    Specialties = "Transporte, Mezclar cemento"
-                });
+                _context.Markets.Add(new Market { Code = 100, Name = "Forex"});
+                _context.Markets.Add(new Market { Code = 101, Name = "Cripto Currencies"});
+                _context.Markets.Add(new Market { Code = 200, Name = "Indexes"});
+                _context.Markets.Add(new Market { Code = 201, Name = "Commodities"});
+                _context.Markets.Add(new Market { Code = 300, Name = "Options"});
+                _context.Markets.Add(new Market { Code = 300, Name = "Equities"});
             }
             await _context.SaveChangesAsync();
         }
 
-        private async Task CheckEquipmentsAsync()
+        private async Task CheckStrategiesAsync()
         {
-            if (!_context.Equipments.Any())
+            if (!_context.Strategies.Any())
             {
-                _context.Equipments.Add(new Equipment
-                {
-                    Name = "Excavadora",
-                    Capacity = "3 toneladas cubicas",
-                    MaintenanceState = "Proximo a mantenimiento preventivo",
-                    Availability = "Disponible",
-                    ProjectConstructionsId = 1,
-                    DutiesId = 1
-                });
-                _context.Equipments.Add(new Equipment
-                {
-                    Name = "Perforadora",
-                    Capacity = "5 toneladas cubicas",
-                    MaintenanceState = "En mantenimiento",
-                    Availability = "No Disponible",
-                    ProjectConstructionsId = 2,
-                    DutiesId = 2
-                });
-            }
-            await _context.SaveChangesAsync();
-        }
+                _context.Strategies.Add(new Strategy 
+                 {
+                     Code = 10,
+                     Name = "Fearless",
+                     Session = "Asia",
+                     Type = "Position"
+                 });
 
-        private async Task CheckEquipmentAssignmentsAsync()
-        {
-            if (!_context.EquipmentAssignments.Any())
-            {
-                _context.EquipmentAssignments.Add(new EquipmentAssignment
+                _context.Strategies.Add(new Strategy
                 {
-                    ConstructionTeamsId = 1,
-                    ProjectConstructionsId = 1
+                    Code = 20,
+                    Name = "Smart Money Concepts",
+                    Session = "London",
+                    Type = "Day Trading"
                 });
-                _context.EquipmentAssignments.Add(new EquipmentAssignment
+                
+                _context.Strategies.Add(new Strategy 
+                 {
+                     Code = 30,
+                     Name = "Kill Zones",
+                     Session = "New York",
+                     Type = "Swing Trading"
+                 });
+
+                _context.Strategies.Add(new Strategy
                 {
-                    ConstructionTeamsId = 2,
-                    ProjectConstructionsId = 2
+                    Code = 40,
+                    Name = "Scalping",
+                    Session = "New York",
+                    Type = "Short Term"
                 });
             }
             await _context.SaveChangesAsync();
         }
 
-        private async Task CheckMaterialsAsync()
+        /*private async Task CheckMaterialsAsync()
         {
             if (!_context.Materials.Any())
             {

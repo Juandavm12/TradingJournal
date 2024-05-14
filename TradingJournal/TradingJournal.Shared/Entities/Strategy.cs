@@ -26,7 +26,7 @@ namespace TradingJournal.Shared.Entities
         public string Session { get; set; }
 
         [Display(Name = "Strategy Type")]
-        [MaxLength(10, ErrorMessage = "More than 10 charachters are not allowed")]
+        [MaxLength(20, ErrorMessage = "More than 20 charachters are not allowed")]
         public string Type { get; set; }
 
         [Display(Name = "Description")]
