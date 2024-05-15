@@ -1,0 +1,91 @@
+﻿@* AccType Edit *@
+@page "/AccTypes/edit/{AccTypeId:int}"
+@using TradingJournal.Shared.Entities
+@using TradingJournal.Web.Repositories
+@inject NavigationManager navigationManager
+@inject IRepository repository
+@inject SweetAlertService sweetAlertService
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Authorization;
+@attribute [Authorize(Roles = "Admin")]
+
+<h3>Edit Account Type</h3>
+
+@if (accType is null)
+{
+    <p>the account type is null</p>
+}
+else
+{   @* The form is called and when the submit is valid the Edit method is called and finally the Return method *@
+    <AccTypeForm AccType="accType" OnValidSubmit="Edit" ReturnAction="Return" />
+    
+}
+
+@code {
+    [Parameter] 
+    public int AccTypeId { get; set; }
+    private AccType accType = new();
+
+    //this method get the info of the object by Id and show in the form
+    protected override async Task OnInitializedAsync()
+    {
+
+        var responseHTTP = await repository.GetAsync<AccType>($"api/AccTypes/{AccTypeId}");
+
+        if (responseHTTP.Error)
+        {
+            if (responseHTTP.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+            {
+                //if the page its not found return to home
+                navigationManager.NavigateTo("AccTypes");
+                return;
+            }
+            else
+            {  //if any error its encountered the sweet alert whit the error message pop up
+                var mensajeError = await responseHTTP.GetErrorMessageAsync();
+                await sweetAlertService.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
+                return;
+            }
+        }
+        else
+        {
+            //if the get its sucesfull return the object whit the info
+            accType = responseHTTP.Response;
+        }
+    }
+
+    private async Task Edit()
+    {
+
+        var responseHTTP = await repository.PutAsync("api/AccTypes", accType);
+
+        if (responseHTTP.Error)
+        {
+            //if any error its encountered the sweet alert whit the error message pop up
+            var mensajeError = await responseHTTP.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
+        }
+        else
+        {
+            Return();
+
+            //if the Edit is succesfull the toast whit the sucessfull confirmation popup
+            var Toast = sweetAlertService.Mixin(new SweetAlertOptions
+                {
+                    Toast = true,
+                    Position = SweetAlertPosition.BottomEnd,
+                    ShowConfirmButton = true,
+                    Timer = 3000
+                });
+
+            await Toast.FireAsync(icon: SweetAlertIcon.Success, message: "Account type modified successfully");
+
+        }
+    }
+       
+    
+    private void Return()
+    {
+        navigationManager.NavigateTo("AccTypes");
+    }
+}
