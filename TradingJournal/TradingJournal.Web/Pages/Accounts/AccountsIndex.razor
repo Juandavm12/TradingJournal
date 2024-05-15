@@ -119,7 +119,7 @@
 
     }
 
-    // method to delete by id
+
     private async Task Delete(Account account)
     {
 
@@ -148,7 +148,7 @@
                 navigationManager.NavigateTo("/accounts");
             }
             else
-            {//if encountered any error the pop up whit the error message show
+            {
                 var mensajeError = await responseHTTP.GetErrorMessageAsync();
                 await sweetAlertService.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
             }
