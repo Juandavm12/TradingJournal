@@ -24,12 +24,12 @@ namespace TradingJournal.Shared.Entities
           public string Address { get; set; }
 
         [Display(Name = "Phone")]
-        [MaxLength(0, ErrorMessage = "More than 50 charachters are not allowed")]
+        [MaxLength(50, ErrorMessage = "More than 50 charachters are not allowed")]
         public string Phone { get; set; }
 
 
         [Display(Name = "License Number")]
-        [MaxLength(0, ErrorMessage = "More than 50 charachters are not allowed")]
+        [MaxLength(50, ErrorMessage = "More than 50 charachters are not allowed")]
         public string LicenseNumber { get; set; }
 
 

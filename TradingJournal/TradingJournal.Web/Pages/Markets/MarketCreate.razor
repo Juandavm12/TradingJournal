@@ -1,4 +1,4 @@
-﻿@page "/AccTypes/create"
+﻿@page "/Markets/create"
 @using TradingJournal.Shared.Entities
 @using TradingJournal.Web.Repositories
 @inject IRepository repository
@@ -9,27 +9,28 @@
 @attribute [Authorize(Roles = "Admin")]
 
 
-<h3>Account Type Creation</h3>
+<h3>Market Creation</h3>
 
-<AccTypeForm AccType="acctype" OnValidSubmit="Create" ReturnAction="Return"/>
+
+<MarketForm Market="market" OnValidSubmit="Create" ReturnAction="Return" />
 
 
 @code {
-    private AccType acctype = new();
+    private Market market = new();
 
     private async Task Create()
     {
-        var responseHttp = await repository.PostAsync("/api/AccTypes", acctype);
+        var responseHttp = await repository.PostAsync("/api/Markets", market);
 
         if (responseHttp.Error)
         {
-       
+            
             var message = await responseHttp.GetErrorMessageAsync();
             await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
         }
         else
         {
-
+            
             Return();
 
             var Toast = sweetAlertService.Mixin(new SweetAlertOptions
@@ -42,15 +43,18 @@
 
                 });
 
-            await Toast.FireAsync(icon: SweetAlertIcon.Success, message: "Account Type successfully created");
+            await Toast.FireAsync(icon: SweetAlertIcon.Success, message: "Market successfully created");
         }
     }
 
 
 
+   
     private void Return()
     {
-        navigationManager.NavigateTo("/AccTypes");
+        navigationManager.NavigateTo("/Markets");
+
+
     }
 
 }

@@ -1,0 +1,69 @@
+﻿@using TradingJournal.Shared.Entities
+@using TradingJournal.Web.Repositories
+@inject IRepository Repository
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Authorization;
+@attribute [Authorize(Roles = "Admin")]
+
+<EditForm Model="Broker" OnValidSubmit="OnValidSubmit">
+
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label>Name</label>
+        <div>
+            <InputText width="10" @bind-Value="@Broker.Name"></InputText>
+            <ValidationMessage For="@(() => Broker.Name)" />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label>Address</label>
+        <div>
+            <InputText width="10" @bind-Value="@Broker.Address"></InputText>
+            <ValidationMessage For="@(() => Broker.Address)" />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label>Phone</label>
+        <div>
+            <InputText width="10" @bind-Value="@Broker.Phone"></InputText>
+            <ValidationMessage For="@(() => Broker.Phone)" />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label>License Number</label>
+        <div>
+            <InputText width="10" @bind-Value="@Broker.LicenseNumber"></InputText>
+            <ValidationMessage For="@(() => Broker.LicenseNumber)" />
+        </div>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Save <i class="bi bi-floppy2"></i></button>
+
+
+    <button class="btn btn-info" type="reset">Clean <i class="bi bi-x-octagon"></i></button>
+
+
+    <button class="btn btn-secondary" @onclick="ReturnAction">Return <i class="bi bi-arrow-clockwise"></i></button>
+
+</EditForm>
+
+@code {
+
+
+    [EditorRequired]
+    [Parameter]
+    public Broker Broker { get; set; }
+
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback ReturnAction { get; set; }
+
+
+}

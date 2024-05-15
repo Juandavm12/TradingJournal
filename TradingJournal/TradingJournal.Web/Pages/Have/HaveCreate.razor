@@ -1,4 +1,4 @@
-﻿@page "/AccTypes/create"
+﻿@page "/Haves/create"
 @using TradingJournal.Shared.Entities
 @using TradingJournal.Web.Repositories
 @inject IRepository repository
@@ -9,27 +9,28 @@
 @attribute [Authorize(Roles = "Admin")]
 
 
-<h3>Account Type Creation</h3>
+<h3>Broker Creation</h3>
 
-<AccTypeForm AccType="acctype" OnValidSubmit="Create" ReturnAction="Return"/>
+
+<HaveForm Have="have" OnValidSubmit="Create" ReturnAction="Return" />
 
 
 @code {
-    private AccType acctype = new();
+    private Have have = new();
 
     private async Task Create()
     {
-        var responseHttp = await repository.PostAsync("/api/AccTypes", acctype);
+        var responseHttp = await repository.PostAsync("/api/haves", have);
 
         if (responseHttp.Error)
         {
-       
+            
             var message = await responseHttp.GetErrorMessageAsync();
             await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
         }
         else
         {
-
+            
             Return();
 
             var Toast = sweetAlertService.Mixin(new SweetAlertOptions
@@ -42,15 +43,18 @@
 
                 });
 
-            await Toast.FireAsync(icon: SweetAlertIcon.Success, message: "Account Type successfully created");
+            await Toast.FireAsync(icon: SweetAlertIcon.Success, message: "Have successfully created");
         }
     }
 
 
 
+   
     private void Return()
     {
-        navigationManager.NavigateTo("/AccTypes");
+        navigationManager.NavigateTo("/haves");
+
+
     }
 
 }

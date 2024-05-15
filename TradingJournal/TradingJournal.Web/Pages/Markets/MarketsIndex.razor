@@ -1,4 +1,4 @@
-﻿@page "/AccTypes"
+﻿@page "/Markets"
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Authorization;
 @attribute [Authorize(Roles = "Admin")]
@@ -9,18 +9,18 @@
 @inject SweetAlertService sweetAlertService
 @inject NavigationManager navigationManager
 
-<h3><i class="bi bi-bar-chart-steps" /> Account Types</h3>
+<h3><i class="bi-graph-up-arrow" /> Markets</h3>
 <div class="card">
     <div class="card-header">
         <span>
-            <a class="btn btn-primary btn-sm float-start" href="/AccTypes/create"><i class="bi bi-plus-circle" /> New Account Type</a>
+            <a class="btn btn-primary btn-sm float-start" href="/Markets/create"><i class="bi bi-plus-circle" /> New Market</a>
 
         </span>
     </div>
 
     <div class="card-body">
 
-        <GenericList MyList="AccTypes">
+        <GenericList MyList="Markets">
 
             <Body>
                 <table class="table table-striped">
@@ -32,7 +32,7 @@
                         <tr>
 
                             <td>
-                                <b>Account Type Id</b>
+                                <b>MArket Code</b>
                             </td>
                             <td>
                                 <b>Name</b>
@@ -42,19 +42,19 @@
                             </td>
 
                         </tr>
-                        @foreach (var accType in AccTypes!)
+                        @foreach (var market in Markets!)
                         {
 
                             <tr>
                                 <td>
-                                    @accType.Id
+                                    @market.Code
                                 </td>
                                 <td>
-                                    @accType.Name
-                                </td>
+                                    @market.Name
+                                </td>                                
                                 <td>
-                                    <a href="/Acctypes/edit/@accType.Id" class="btn btn-warning">Edit <i class="bi bi-pencil-square"></i></a>
-                                    <button class="btn btn-danger" @onclick=@(() => Delete(accType))>Delete <i class="bi bi-trash3"></i></button>
+                                    <a href="/Markets/edit/@market.Code" class="btn btn-warning">Edit <i class="bi bi-pencil-square"></i></a>
+                                    <button class="btn btn-danger" @onclick=@(() => Delete(market))>Delete <i class="bi bi-trash3"></i></button>
                                 </td>
 
                             </tr>
@@ -74,7 +74,7 @@
 
 @code {
 
-    public List<AccType> AccTypes { get; set; }
+    public List<Market> Markets { get; set; }
 
 
     protected async override Task OnInitializedAsync()
@@ -86,18 +86,18 @@
 
     private async Task Charging()
     {
-        var responseHTTP = await Repository.GetAsync<List<AccType>>("/api/AccTypes");
-        AccTypes = responseHTTP.Response!;
+        var responseHTTP = await Repository.GetAsync<List<Market>>("/api/Markets");
+        Markets = responseHTTP.Response!;
     }
 
 
-    private async Task Delete(AccType accType)
+    private async Task Delete(Market market)
     {
 
         var result = await sweetAlertService.FireAsync(new SweetAlertOptions
             {
                 Title = "Confirm",
-                Text = $"You really want to delete the account Type : {accType.Name}?",
+                Text = $"You really want to delete the Market : {market.Name}?",
                 Icon = SweetAlertIcon.Question,
                 ShowCancelButton = true,
                 CancelButtonText = "No",
@@ -110,13 +110,13 @@
             return;
         }
 
-        var responseHTTP = await Repository.DeleteAsync($"/api/AccTypes/{accType.Id}");
+        var responseHTTP = await Repository.DeleteAsync($"/api/Markets/{market.Code}");
 
         if (responseHTTP.Error)
         {
             if (responseHTTP.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                navigationManager.NavigateTo("/AccTypes");
+                navigationManager.NavigateTo("/Markets");
             }
             else
             {
@@ -136,7 +136,7 @@
                     Timer = 3000,
                     Position = SweetAlertPosition.BottomEnd
                 });
-            toast.FireAsync(icon: SweetAlertIcon.Success, message: "Account Type Successfully Deleted.");
+            toast.FireAsync(icon: SweetAlertIcon.Success, message: "Market Successfully Deleted.");
         }
     }
 }

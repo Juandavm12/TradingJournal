@@ -20,7 +20,7 @@
                     <li><a href="AccTypes"><i class="bi bi-bar-chart-steps"></i>&nbsp; Account Types </a></li>
                     <li><a href="Brokers"><i class="bi bi-piggy-bank-fill"></i>&nbsp; Brokers </a></li>
                     <li><a href="Markets"><i class="bi bi-graph-up-arrow"></i>&nbsp; Markets </a></li>
-                    <li><a href="Strategys"><i class="bi bi-clipboard-data"></i>&nbsp; Strategys </a></li>
+                    <li><a href="Strategies"><i class="bi bi-clipboard-data"></i>&nbsp; Strategies </a></li>
                     <li><a href="Tradelogs"><i class="bi bi-graph-down"></i>&nbsp; Trade Logs </a></li>                 
                     <li><a href="TraderTypes"><i class="bi bi-stopwatch"></i>&nbsp; Trader Types </a></li>
                     <li class="dropdown">
@@ -30,24 +30,8 @@
                             <a href="trades"><i class="bi bi-bar-chart-line-fill"></i>&nbsp; Trades </a>
                         </div>
                     </li>
-                    <div class="d-flex justify-content-end">
-                        
-                        <div class="p-2"><button class="btn btn-info btn-lg " @onclick="Logout" @onclick:preventDefault><i class="bi bi-box-arrow-left"></i> Logout </button></div>
-
-                    </div>
                 </Authorized>
-
-            </AuthorizeView>
-
-            <AuthorizeView Roles="User">
-                <Authorized>
-                    <div class="d-flex justify-content-end">
-                        
-                        <div class="p-2"><button class="btn btn-info btn-lg " @onclick="Logout" @onclick:preventDefault><i class="bi bi-box-arrow-left"></i> Logout </button></div>
-
-                    </div>
-                </Authorized>
-            </AuthorizeView>
+            </AuthorizeView>           
 
 
             <AuthorizeView>
@@ -63,14 +47,15 @@
 
         </ul>
 
+
         <AuthorizeView>
             <Authorized>
                       <div class="d-flex justify-content-end">
                     <div class="p-2"><button class="btn btn-dark" disabled> @context.User.Identity!.Name <i class="bi bi-person"></i></button></div>
+                    <div class="p-2"><button class="btn btn-info" @onclick="Logout" @onclick:preventDefault><i class="bi bi-box-arrow-left"></i> Logout </button></div>
                     
                 </div>
             </Authorized>
-
         </AuthorizeView>
 
 

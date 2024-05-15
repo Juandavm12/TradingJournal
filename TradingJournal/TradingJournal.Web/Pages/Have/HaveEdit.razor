@@ -1,4 +1,4 @@
-﻿@page "/account/edit/{AccountAccNumber:int}"
+﻿@page "/Haves/edit/{HaveId:int}"
 @using TradingJournal.Shared.Entities
 @using TradingJournal.Web.Repositories
 @inject NavigationManager navigationManager
@@ -8,35 +8,35 @@
 @using Microsoft.AspNetCore.Authorization;
 @attribute [Authorize(Roles = "Admin")]
 
-<h3>Edit Account</h3>
+<h3>Edit Have</h3>
 
-@if (account is null)
+@if (have is null)
 {
-    <p>the account is null</p>
+    <p>the have is null</p>
 }
 else
-{   
-    <AccountForm Account="account" OnValidSubmit="Editar" ReturnAction="Return" />
+{
+    <HaveForm Have="have" OnValidSubmit="Edit" ReturnAction="Return" />
     
 }
 
 @code {
     [Parameter] 
-    public int AccountAccNumber { get; set; }
-    private Account account = new();
+    public int HaveId { get; set; }
+    private Have have = new();
 
-    
+
     protected override async Task OnInitializedAsync()
     {
 
-        var responseHTTP = await repository.GetAsync<Account>($"api/account/{AccountAccNumber}");
+        var responseHTTP = await repository.GetAsync<Have>($"api/Haves/{HaveId}");
 
         if (responseHTTP.Error)
         {
             if (responseHTTP.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
             {
-              
-                navigationManager.NavigateTo("account");
+
+                navigationManager.NavigateTo("Haves");
                 return;
             }
             else
@@ -48,19 +48,19 @@ else
         }
         else
         {
-            
-            account = responseHTTP.Response;
+        
+            have = responseHTTP.Response;
         }
     }
 
-    private async Task Editar()
+    private async Task Edit()
     {
 
-        var responseHTTP = await repository.PutAsync("api/account", account);
+        var responseHTTP = await repository.PutAsync("api/Haves", have);
 
         if (responseHTTP.Error)
         {
-           
+          
             var mensajeError = await responseHTTP.GetErrorMessageAsync();
             await sweetAlertService.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
         }
@@ -68,18 +68,16 @@ else
         {
             Return();
 
-            
+        
             var Toast = sweetAlertService.Mixin(new SweetAlertOptions
                 {
-
                     Toast = true,
                     Position = SweetAlertPosition.BottomEnd,
                     ShowConfirmButton = true,
                     Timer = 3000
-
                 });
 
-            await Toast.FireAsync(icon: SweetAlertIcon.Success, message: "Account modified successfully");
+            await Toast.FireAsync(icon: SweetAlertIcon.Success, message: "Have modified successfully");
 
         }
     }
@@ -87,7 +85,6 @@ else
     
     private void Return()
     {
-        navigationManager.NavigateTo("accounts");
-
+        navigationManager.NavigateTo("Haves");
     }
 }

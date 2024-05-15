@@ -1,4 +1,4 @@
-﻿@page "/AccTypes"
+﻿@page "/Brokers"
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Authorization;
 @attribute [Authorize(Roles = "Admin")]
@@ -9,18 +9,18 @@
 @inject SweetAlertService sweetAlertService
 @inject NavigationManager navigationManager
 
-<h3><i class="bi bi-bar-chart-steps" /> Account Types</h3>
+<h3><i class="bi bi-piggy-bank-fill" /> Brokers</h3>
 <div class="card">
     <div class="card-header">
         <span>
-            <a class="btn btn-primary btn-sm float-start" href="/AccTypes/create"><i class="bi bi-plus-circle" /> New Account Type</a>
+            <a class="btn btn-primary btn-sm float-start" href="/brokers/create"><i class="bi bi-plus-circle" /> New Broker</a>
 
         </span>
     </div>
 
     <div class="card-body">
 
-        <GenericList MyList="AccTypes">
+        <GenericList MyList="Brokers">
 
             <Body>
                 <table class="table table-striped">
@@ -32,29 +32,47 @@
                         <tr>
 
                             <td>
-                                <b>Account Type Id</b>
+                                <b>Broker Id</b>
                             </td>
                             <td>
                                 <b>Name</b>
+                            </td>
+                            <td>
+                                <b>Address</b>
+                            </td>
+                            <td>
+                                <b>Phone</b>
+                            </td>
+                            <td>
+                                <b>License Number</b>
                             </td>
                             <td>
                                 <b>Actions</b>
                             </td>
 
                         </tr>
-                        @foreach (var accType in AccTypes!)
+                        @foreach (var broker in Brokers!)
                         {
 
                             <tr>
                                 <td>
-                                    @accType.Id
+                                    @broker.Id
                                 </td>
                                 <td>
-                                    @accType.Name
+                                    @broker.Name
                                 </td>
                                 <td>
-                                    <a href="/Acctypes/edit/@accType.Id" class="btn btn-warning">Edit <i class="bi bi-pencil-square"></i></a>
-                                    <button class="btn btn-danger" @onclick=@(() => Delete(accType))>Delete <i class="bi bi-trash3"></i></button>
+                                    @broker.Address
+                                </td>
+                                <td>
+                                    @broker.Phone
+                                </td>
+                                <td>
+                                    @broker.LicenseNumber
+                                </td>
+                                <td>
+                                    <a href="/brokers/edit/@broker.Id" class="btn btn-warning">Edit <i class="bi bi-pencil-square"></i></a>
+                                    <button class="btn btn-danger" @onclick=@(() => Delete(broker))>Delete <i class="bi bi-trash3"></i></button>
                                 </td>
 
                             </tr>
@@ -74,7 +92,7 @@
 
 @code {
 
-    public List<AccType> AccTypes { get; set; }
+    public List<Broker> Brokers { get; set; }
 
 
     protected async override Task OnInitializedAsync()
@@ -86,18 +104,18 @@
 
     private async Task Charging()
     {
-        var responseHTTP = await Repository.GetAsync<List<AccType>>("/api/AccTypes");
-        AccTypes = responseHTTP.Response!;
+        var responseHTTP = await Repository.GetAsync<List<Broker>>("/api/Brokers");
+        Brokers = responseHTTP.Response!;
     }
 
 
-    private async Task Delete(AccType accType)
+    private async Task Delete(Broker broker)
     {
 
         var result = await sweetAlertService.FireAsync(new SweetAlertOptions
             {
                 Title = "Confirm",
-                Text = $"You really want to delete the account Type : {accType.Name}?",
+                Text = $"You really want to delete the Broker : {broker.Name}?",
                 Icon = SweetAlertIcon.Question,
                 ShowCancelButton = true,
                 CancelButtonText = "No",
@@ -110,13 +128,13 @@
             return;
         }
 
-        var responseHTTP = await Repository.DeleteAsync($"/api/AccTypes/{accType.Id}");
+        var responseHTTP = await Repository.DeleteAsync($"/api/Brokers/{broker.Id}");
 
         if (responseHTTP.Error)
         {
             if (responseHTTP.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                navigationManager.NavigateTo("/AccTypes");
+                navigationManager.NavigateTo("/Brokers");
             }
             else
             {
@@ -136,7 +154,7 @@
                     Timer = 3000,
                     Position = SweetAlertPosition.BottomEnd
                 });
-            toast.FireAsync(icon: SweetAlertIcon.Success, message: "Account Type Successfully Deleted.");
+            toast.FireAsync(icon: SweetAlertIcon.Success, message: "Broker Successfully Deleted.");
         }
     }
 }
