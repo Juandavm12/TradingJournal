@@ -180,12 +180,13 @@ ul {
 }
 
 li {
+    color: black;
     float: left;
 }
 
     li a, .dropbtn {
-        display: inline-block;
-        color: white;
+        color: black;
+        display: inline-block;       
         text-align: center;
         padding: 18px 14px;
         text-decoration: none;
@@ -193,16 +194,19 @@ li {
 
 
         li a:hover, .dropdown:hover .dropbtn {
+            color: black;
             background-color: rgba(255,255,255,0.1);
-            color: white;
+          
         }
 
 
     li.dropdown {
+        color: black;
         display: inline-block;
     }
 
 .dropdown-content {
+    color: black;
     display: none;
     position: fixed;
     background-color: #A29E9E;
@@ -212,7 +216,7 @@ li {
 }
 
     .dropdown-content a {
-        color: white;
+        color: black;
         padding: 12px 16px;
         text-decoration: none;
         display: block;
@@ -221,14 +225,16 @@ li {
 
         .dropdown-content a:hover {
             background-color: rgba(255,255,255,0.1);
-            color: white;
+            color: black;
         }
 
 .dropdown:hover .dropdown-content {
     display: block;
+    color: black;
 }
 
 .oi {
+    color: black;
     width: 2rem;
     font-size: 1.1rem;
     vertical-align: text-top;
