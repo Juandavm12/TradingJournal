@@ -3,26 +3,39 @@
 @inject IRepository Repository
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Authorization;
+@using TradingJournal.Web.Shared
 @attribute [Authorize(Roles = "Admin")]
 
 <EditForm Model="Have" OnValidSubmit="OnValidSubmit">
 
     <DataAnnotationsValidator />
 
-    <div class="mb-3">
+     <div>
         <label>Trader</label>
-        <div>
-            <InputNumber width="10" @bind-Value="@Have.TradersId"></InputNumber>
-            <ValidationMessage For="@(() => Have.TradersId)" />
-        </div>    
+        <Dropdown TItem="int" OnSelected="@OnSelected2">
+            <InitialTip>Select a Trader</InitialTip>
+            <ChildContent>
+                @foreach (var trader in Traders!)
+                {
+                    <DropdownListItem Context="dropContext" Item="@trader.Id">@trader.Name (@trader.Id)</DropdownListItem>
+                }
+            </ChildContent>
+        </Dropdown>
     </div>
-    <div class="mb-3">
+
+    <div>
         <label>Strategy</label>
-        <div>
-            <InputNumber width="10" @bind-Value="@Have.StrategiesCode"></InputNumber>
-            <ValidationMessage For="@(() => Have.StrategiesCode)" />
-        </div>
+        <Dropdown TItem="int" OnSelected="@OnSelected">
+            <InitialTip>Select a Strategy</InitialTip>
+            <ChildContent>
+                @foreach (var strategy in Strategies!)
+                {
+                    <DropdownListItem Context="dropContext" Item="@strategy.Code">@strategy.Name</DropdownListItem>
+                }
+            </ChildContent>
+        </Dropdown>
     </div>
+         
 
     <button class="btn btn-primary" type="submit">Save <i class="bi bi-floppy2"></i></button>
 
@@ -32,9 +45,44 @@
 
     <button class="btn btn-secondary" @onclick="ReturnAction">Return <i class="bi bi-arrow-clockwise"></i></button>
 
+
 </EditForm>
 
 @code {
+
+    private List<Trader> Traders { get; set; } = new List<Trader>();
+
+    private List<Strategy> Strategies { get; set; } = new List<Strategy>();
+
+    private void OnSelected(int selection)
+    {
+        Have.StrategiesCode = selection;
+
+    }
+
+    private void OnSelected2(int selection)
+    {
+        Have.TradersId = selection;
+
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await Charging();
+
+    }
+
+    private async Task Charging()
+    {
+        var responseHTTP = await Repository.GetAsync<List<Strategy>>("/api/Strategies");
+        Strategies = responseHTTP.Response!;
+
+        var response2HTTP = await Repository.GetAsync<List<Trader>>("/api/traders");
+        Traders = response2HTTP.Response!;
+
+
+
+    }
 
 
     [EditorRequired]

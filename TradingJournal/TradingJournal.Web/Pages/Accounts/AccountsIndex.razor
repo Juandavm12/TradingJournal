@@ -38,7 +38,10 @@
                                 <b>Broker</b>
                             </td>
                             <td>
-                                <b>Trader</b>
+                                <b>Trader Id</b>
+                            </td>
+                            <td>
+                                <b>Trader Name</b>
                             </td>
                             <td>
                                 <b>Account Type</b>
@@ -57,19 +60,25 @@
                         </tr>
                         @foreach (var account in Accounts!)
                         {
+                            Brokername(@account.BrokersId);
+                            TraderName(@account.TradersId);
+                            AccTypeName(@account.AccTypesId);
 
                             <tr>
                                 <td>
                                     @account.AccNumber
                                 </td>
                                 <td>
-                                    @account.BrokersId
+                                    @brokername
                                 </td>
                                 <td>
                                     @account.TradersId
                                 </td>
                                 <td>
-                                    @account.AccTypes
+                                    @tradername
+                                </td>
+                                <td>
+                                    @acctypename
                                 </td>
                                 <td>
                                     @account.CreationDate
@@ -100,7 +109,21 @@
 
 @code {
 
+    public string brokername { get; set; }
+
+    public string tradername { get; set; }
+
+    public string acctypename { get; set; }
+
+
     public List<Account> Accounts { get; set; }
+
+    public List<Broker> Brokers { get; set; }
+
+    public List<Trader> Traders { get; set; }
+
+    public List<AccType> AccTypes { get; set; }
+
 
 
     protected async override Task OnInitializedAsync()
@@ -115,6 +138,14 @@
         var responseHTTP = await Repository.GetAsync<List<Account>>("/api/account");
         Accounts = responseHTTP.Response!;
 
+        var response2HTTP = await Repository.GetAsync<List<Broker>>("/api/brokers");
+        Brokers = response2HTTP.Response!;
+
+        var response3HTTP = await Repository.GetAsync<List<Trader>>("/api/traders");
+        Traders = response3HTTP.Response!;
+
+        var response4HTTP = await Repository.GetAsync<List<AccType>>("/api/acctypes");
+        AccTypes = response4HTTP.Response!;
 
 
     }
@@ -166,6 +197,45 @@
                     Position = SweetAlertPosition.BottomEnd
                 });
             toast.FireAsync(icon: SweetAlertIcon.Success, message: "Account Successfully Deleted.");
+        }
+    }
+    private void Brokername(int? selection)
+
+    {
+        brokername = "";
+        foreach (var broker in Brokers!)
+        {
+            if (selection == broker.Id)
+            {
+                brokername = broker.Name;
+            }
+
+        }
+    }
+    private void TraderName(int? selection)
+
+    {
+        tradername = "";
+        foreach (var trader in Traders!)
+        {
+            if (selection == trader.Id)
+            {
+                tradername = trader.Name;
+            }
+
+        }
+    }
+    private void AccTypeName(int? selection)
+
+    {
+        acctypename = "";
+        foreach (var acctype in AccTypes!)
+        {
+            if (selection == acctype.Id)
+            {
+                acctypename = acctype.Name;
+            }
+
         }
     }
 }

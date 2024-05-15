@@ -3,34 +3,54 @@
 @inject IRepository Repository
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Authorization;
+@using TradingJournal.Web.Shared
 @attribute [Authorize(Roles = "Admin")]
 
-<EditForm Model="Account"  OnValidSubmit="OnValidSubmit" >
+<EditForm Model="Account" OnValidSubmit="OnValidSubmit">
 
     <DataAnnotationsValidator />
 
-    <div class="mb-3">
-        <label>Broker</label>
-        <div>
-            <InputNumber width="10" @bind-Value="@Account.BrokersId"></InputNumber>
-            <ValidationMessage For="@(() => @Account.BrokersId)" />
-        </div>
-        </div>
+    
+    <div>
 
-    <div class="mb-3">
+        <label>Broker</label>
+        <Dropdown TItem="int" OnSelected="@OnSelected">
+            <InitialTip>Select a Broker</InitialTip>
+            <ChildContent>
+                @foreach (var broker in Brokers!)
+                {
+                    <DropdownListItem Context="dropContext" Item="@broker.Id">@broker.Name </DropdownListItem>
+                }
+            </ChildContent>
+        </Dropdown>
+    </div>
+
+    <div>
         <label>Trader</label>
-        <div>
-            <InputNumber width="10" @bind-Value="@Account.TradersId"></InputNumber>
-            <ValidationMessage For="@(() => @Account.TradersId)" />
-        </div>
+        <Dropdown TItem="int" OnSelected="@OnSelected2">
+            <InitialTip>Select a Trader</InitialTip>
+            <ChildContent>
+                @foreach (var trader in Traders!)
+                {
+                    <DropdownListItem Context="dropContext" Item="@trader.Id">@trader.Name (@trader.Id)</DropdownListItem>
+                }
+            </ChildContent>
+        </Dropdown>
     </div>
-    <div class="mb-3">
+
+    <div>
         <label>Account Type</label>
-        <div>
-            <InputNumber width="10" @bind-Value="@Account.AccTypesId"></InputNumber>
-            <ValidationMessage For="@(() => @Account.AccTypesId)" />
-        </div>
+        <Dropdown TItem="int" OnSelected="@OnSelected3">
+            <InitialTip>Select a Account Type</InitialTip>
+            <ChildContent>
+                @foreach (var acctype in AccTypes!)
+                {
+                    <DropdownListItem Context="dropContext" Item="@acctype.Id">@acctype.Name</DropdownListItem>
+                }
+            </ChildContent>
+        </Dropdown>
     </div>
+
     <div class="mb-3">
         <label>Creation Date</label>
         <div>
@@ -46,13 +66,13 @@
         </div>
     </div>
 
-   
-    <button class="btn btn-primary" type="submit" >Save <i class="bi bi-floppy2"></i></button>
 
-    
+    <button class="btn btn-primary" type="submit">Save <i class="bi bi-floppy2"></i></button>
+
+
     <button class="btn btn-info" type="reset">Clean <i class="bi bi-x-octagon"></i></button>
 
-   
+
     <button class="btn btn-secondary" @onclick="ReturnAction">Return <i class="bi bi-arrow-clockwise"></i></button>
 
 </EditForm>
@@ -60,7 +80,52 @@
 
 
 
-@code { 
+@code {
+
+    private List<Broker> Brokers { get; set; } = new List<Broker>();
+ 
+    private List<Trader> Traders { get; set; } = new List<Trader>();
+
+    private List<AccType> AccTypes { get; set; } = new List<AccType>();
+
+    private void OnSelected(int selection)
+    {
+        Account.BrokersId = selection;
+
+    }
+
+    private void OnSelected2(int selection)
+    {
+        Account.TradersId = selection;
+
+    }
+
+    private void OnSelected3(int selection)
+    {
+        Account.AccTypesId = selection;
+
+    }
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        await Charging();
+
+    }
+
+    private async Task Charging()
+    {
+
+       var responseHTTP = await Repository.GetAsync<List<Broker>>("/api/brokers");
+        Brokers = responseHTTP.Response!;
+
+        var response2HTTP = await Repository.GetAsync<List<Trader>>("/api/traders");
+        Traders = response2HTTP.Response!;
+
+        var response3HTTP = await Repository.GetAsync<List<AccType>>("/api/acctypes");
+        AccTypes = response3HTTP.Response!;
+
+    }
 
 
     [EditorRequired]

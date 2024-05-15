@@ -3,6 +3,7 @@
 @inject IRepository Repository
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Authorization;
+@using TradingJournal.Web.Shared
 @attribute [Authorize(Roles = "Admin")]
 
 <EditForm Model="Trader" OnValidSubmit="OnValidSubmit">
@@ -31,12 +32,17 @@
             <ValidationMessage For="@(() => @Trader.CellNumber)" />
         </div>
     </div>
-    <div class="mb-3">
-        <label>Trader Type</label>
         <div>
-            <InputNumber width="10" @bind-Value="@Trader.TraderTypesId"></InputNumber>
-            <ValidationMessage For="@(() => @Trader.TraderTypesId)" />
-        </div>
+        <label>Trader Type</label>
+        <Dropdown TItem="int" OnSelected="@OnSelected">
+            <InitialTip>Select a Trader Type</InitialTip>
+            <ChildContent>
+                @foreach (var tradertype in TraderTypes!)
+                {
+                    <DropdownListItem Context="dropContext" Item="@tradertype.Id">@tradertype.Name</DropdownListItem>
+                }
+            </ChildContent>
+        </Dropdown>
     </div>
     
 
@@ -56,6 +62,13 @@
 
 @code {
 
+    private List<TraderType> TraderTypes { get; set; } = new List<TraderType>();
+
+    private void OnSelected(int selection)
+    {
+        Trader.TraderTypesId = selection;
+
+    }
 
     [EditorRequired]
     [Parameter]
@@ -70,6 +83,21 @@
     [EditorRequired]
     [Parameter]
     public EventCallback ReturnAction { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await Charging();
+
+    }
+
+    private async Task Charging()
+    {
+
+        var responseHTTP = await Repository.GetAsync<List<TraderType>>("/api/TraderTypes");
+        TraderTypes = responseHTTP.Response!;
+
+
+    }
 
 
 }

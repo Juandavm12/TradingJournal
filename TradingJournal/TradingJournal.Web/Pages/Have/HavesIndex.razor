@@ -47,16 +47,19 @@
                         </tr>
                         @foreach (var have in Haves!)
                         {
+                            TraderName(have.TradersId);
+                            StrategyName(have.StrategiesCode);
+
 
                             <tr>
                                 <td>
                                     @have.Id
                                 </td>
                                 <td>
-                                    @have.TradersId
+                                    @tradername
                                 </td>
                                 <td>
-                                    @have.StrategiesCode
+                                    @strategyname
                                 </td>
                                  <td>
                                     <a href="/haves/edit/@have.Id" class="btn btn-warning">Edit <i class="bi bi-pencil-square"></i></a>
@@ -80,6 +83,15 @@
 
 @code {
 
+    public string tradername { get; set; }
+
+    public string strategyname { get; set; }
+
+
+    public List<Trader> Traders { get; set; }
+
+    public List<Strategy> Strategies { get; set; }
+
     public List<Have> Haves { get; set; }
 
 
@@ -94,6 +106,12 @@
     {
         var responseHTTP = await Repository.GetAsync<List<Have>>("/api/Haves");
         Haves = responseHTTP.Response!;
+
+        var response2HTTP = await Repository.GetAsync<List<Strategy>>("/api/Strategies");
+        Strategies = response2HTTP.Response!;
+
+        var response3HTTP = await Repository.GetAsync<List<Trader>>("/api/traders");
+        Traders = response3HTTP.Response!;
     }
 
 
@@ -143,6 +161,34 @@
                     Position = SweetAlertPosition.BottomEnd
                 });
             toast.FireAsync(icon: SweetAlertIcon.Success, message: "Have Successfully Deleted.");
+        }
+    }
+
+    private void TraderName(int? selection)
+
+    {
+        tradername = "";
+        foreach (var trader in Traders!)
+        {
+            if (selection == trader.Id)
+            {
+                tradername = trader.Name;
+            }
+
+        }
+    }
+
+    private void StrategyName(int? selection)
+
+    {
+        strategyname = "";
+        foreach (var strategy in Strategies!)
+        {
+            if (selection == strategy.Code)
+            {
+                strategyname = strategy.Name;
+            }
+
         }
     }
 }

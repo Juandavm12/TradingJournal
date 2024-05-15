@@ -3,25 +3,37 @@
 @inject IRepository Repository
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Authorization;
+@using TradingJournal.Web.Shared
 @attribute [Authorize(Roles = "Admin")]
 
 <EditForm Model="Trade" OnValidSubmit="OnValidSubmit">
 
     <DataAnnotationsValidator />
 
-    <div class="mb-3">
+   <div>
         <label>Trader</label>
-        <div>
-            <InputNumber width="10" @bind-Value="@Trade.TradersId"></InputNumber>
-            <ValidationMessage For="@(() => @Trade.TradersId)" />
-        </div>
+        <Dropdown TItem="int" OnSelected="@OnSelected2">
+            <InitialTip>Select a Trader</InitialTip>
+            <ChildContent>
+                @foreach (var trader in Traders!)
+                {
+                    <DropdownListItem Context="dropContext" Item="@trader.Id">@trader.Name (@trader.Id)</DropdownListItem>
+                }
+            </ChildContent>
+        </Dropdown>
     </div>
-    <div class="mb-3">
-        <label>Market</label>
-        <div>
-            <InputNumber width="10" @bind-Value="@Trade.MarketsCode"></InputNumber>
-            <ValidationMessage For="@(() => @Trade.MarketsCode)" />
-        </div>
+
+    <div>
+        <label>Strategy</label>
+        <Dropdown TItem="int" OnSelected="@OnSelected">
+            <InitialTip>Select a Strategy</InitialTip>
+            <ChildContent>
+                @foreach (var market in Markets!)
+                {
+                    <DropdownListItem Context="dropContext" Item="@market.Code">@market.Name</DropdownListItem>
+                }
+            </ChildContent>
+        </Dropdown>
     </div>
 
 
@@ -39,6 +51,40 @@
 
 
 @code {
+
+    private List<Trader> Traders { get; set; } = new List<Trader>();
+
+    private List<Market> Markets { get; set; } = new List<Market>();
+
+    private void OnSelected(int selection)
+    {
+        Trade.MarketsCode = selection;
+
+    }
+
+    private void OnSelected2(int selection)
+    {
+        Trade.TradersId = selection;
+
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await Charging();
+
+    }
+
+    private async Task Charging()
+    {
+        var responseHTTP = await Repository.GetAsync<List<Market>>("/api/Markets");
+        Markets = responseHTTP.Response!;
+
+        var response2HTTP = await Repository.GetAsync<List<Trader>>("/api/traders");
+        Traders = response2HTTP.Response!;
+
+
+
+    }
 
 
     [EditorRequired]

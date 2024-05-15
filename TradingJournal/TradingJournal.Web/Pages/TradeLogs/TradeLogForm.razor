@@ -3,6 +3,7 @@
 @inject IRepository Repository
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Authorization;
+@using TradingJournal.Web.Shared
 @attribute [Authorize(Roles = "Admin")]
 
 <EditForm Model="TradeLog" OnValidSubmit="OnValidSubmit">
@@ -72,12 +73,18 @@
             <ValidationMessage For="@(() => @TradeLog.NetPnl)" />
         </div>
     </div>
-    <div class="mb-3">
-        <label>Account Number</label>
-        <div>
-            <InputNumber width="10" @bind-Value="@TradeLog.AccountsAccNumber"></InputNumber>
-            <ValidationMessage For="@(() => @TradeLog.AccountsAccNumber)" />
-        </div>
+
+    <div>
+    <label>Account Number</label>
+        <Dropdown TItem="int" OnSelected="@OnSelected">
+            <InitialTip>Select a Account</InitialTip>
+            <ChildContent>
+                @foreach (var account in Accounts!)
+                {
+                    <DropdownListItem Context="dropContext" Item="@account.AccNumber">@account.AccNumber </DropdownListItem>
+                }
+            </ChildContent>
+        </Dropdown>
     </div>
 
 
@@ -96,6 +103,29 @@
 
 @code {
 
+    protected async override Task OnInitializedAsync()
+    {
+        await Charging();
+
+    }
+
+    private async Task Charging()
+    {
+
+        var responseHTTP = await Repository.GetAsync<List<Account>>("/api/account");
+        Accounts = responseHTTP.Response!;
+
+
+    }
+
+    private List<Account> Accounts { get; set; } = new List<Account>();
+
+    private void OnSelected(int selection)
+    {
+        TradeLog.AccountsAccNumber = selection;
+
+    }
+
 
     [EditorRequired]
     [Parameter]
@@ -110,6 +140,8 @@
     [EditorRequired]
     [Parameter]
     public EventCallback ReturnAction { get; set; }
+
+
 
 
 }

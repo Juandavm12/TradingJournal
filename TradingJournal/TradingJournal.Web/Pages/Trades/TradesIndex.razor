@@ -45,16 +45,17 @@
                         </tr>
                         @foreach (var trade in Trades!)
                         {
-
+                            TraderName(trade.TradersId);
+                            MarketName(trade.MarketsCode);
                             <tr>
                                 <td>
                                     @trade.Id
                                 </td>
                                 <td>
-                                    @trade.TradersId
+                                    @tradername
                                 </td>
                                 <td>
-                                    @trade.MarketsCode
+                                    @marketname
                                 </td>
 
 
@@ -80,7 +81,15 @@
 
 @code {
 
+    public string tradername { get; set; }
+
+    public string marketname { get; set; }
+
     public List<Trade> Trades { get; set; }
+
+    public List<Trader> Traders { get; set; }
+
+    public List<Market> Markets { get; set; }
 
 
     protected async override Task OnInitializedAsync()
@@ -94,6 +103,12 @@
     {
         var responseHTTP = await Repository.GetAsync<List<Trade>>("/api/Trades");
         Trades = responseHTTP.Response!;
+
+        var response2HTTP = await Repository.GetAsync<List<Market>>("/api/Markets");
+        Markets = response2HTTP.Response!;
+
+        var response3HTTP = await Repository.GetAsync<List<Trader>>("/api/traders");
+        Traders = response3HTTP.Response!;
 
 
 
@@ -146,6 +161,34 @@
                     Position = SweetAlertPosition.BottomEnd
                 });
             toast.FireAsync(icon: SweetAlertIcon.Success, message: "Trade Successfully Deleted.");
+        }
+    }
+
+    private void TraderName(int? selection)
+
+    {
+        tradername = "";
+        foreach (var trader in Traders!)
+        {
+            if (selection == trader.Id)
+            {
+                tradername = trader.Name;
+            }
+
+        }
+    }
+
+    private void MarketName(int? selection)
+
+    {
+        marketname = "";
+        foreach (var market in Markets!)
+        {
+            if (selection == market.Code)
+            {
+                marketname = market.Name;
+            }
+
         }
     }
 }

@@ -15,7 +15,7 @@
 
             <AuthorizeView Roles="Admin">
                 <Authorized>
-                    <li><a href="Users"><i class="bi bi-person-slash"></i>&nbsp; Users </a></li>
+                    <li ><a href="Users"><i class="bi bi-person-slash"></i>&nbsp; Users </a></li>
                     <li><a href="Account"><i class="bi bi-person-rolodex"></i>&nbsp; Accounts </a></li>
                     <li><a href="AccTypes"><i class="bi bi-bar-chart-steps"></i>&nbsp; Account Types </a></li>
                     <li><a href="Brokers"><i class="bi bi-piggy-bank-fill"></i>&nbsp; Brokers </a></li>
@@ -69,7 +69,7 @@
 
 @code {
     private bool _iconMenuActive { get; set; }
-    private string? IconMenuCssClass => _iconMenuActive ? "width: 80px;" : null;
+    private string IconMenuCssClass => _iconMenuActive ? "width: 80px;" : null;
 
     protected void ToggleIconMenu(bool iconMenuActive)
     {

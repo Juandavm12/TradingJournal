@@ -45,13 +45,14 @@
                                 <b>Cell Number</b>
                             </td>
                             <td>
-                                <b>TraderType</b>
+                                <b>Trader Type</b>
                             </td>
                           
 
                         </tr>
                         @foreach (var trader in Traders!)
                         {
+                            Tradertype(@trader.TraderTypesId);
 
                             <tr>
                                 <td>
@@ -67,7 +68,7 @@
                                     @trader.CellNumber
                                 </td>
                                 <td>
-                                    @trader.TraderTypesId
+                                    @tradertype
                                 </td>
 
 
@@ -93,7 +94,11 @@
 
 @code {
 
+    public string tradertype { get; set; }
+
     public List<Trader> Traders { get; set; }
+
+    public List<TraderType> TraderTypes { get; set; }
 
 
     protected async override Task OnInitializedAsync()
@@ -108,7 +113,8 @@
         var responseHTTP = await Repository.GetAsync<List<Trader>>("/api/Traders");
         Traders = responseHTTP.Response!;
 
-
+        var response2HTTP = await Repository.GetAsync<List<TraderType>>("/api/TraderTypes");
+        TraderTypes = response2HTTP.Response!;
 
     }
 
@@ -159,6 +165,20 @@
                     Position = SweetAlertPosition.BottomEnd
                 });
             toast.FireAsync(icon: SweetAlertIcon.Success, message: "Trader Successfully Deleted.");
+        }
+    }
+
+    private void Tradertype(int? selection)
+
+    {
+        tradertype = "";
+        foreach (var tradert in TraderTypes!)
+        {
+            if (selection == tradert.Id)
+            {
+                tradertype = tradert.Name;
+            }
+
         }
     }
 }
