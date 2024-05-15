@@ -25,21 +25,25 @@ namespace TradingJournal.API.Data
 
             await _context.Database.EnsureCreatedAsync();
 
-           /*await CheckProjectConstructionsAsync();
+            await CheckAccTypesAsync();
 
-            await CheckDutiesAsync();
+            await CheckBrokersAsync();
 
-            await CheckBudgetsAsync();
+            await CheckMarketsAsync();
 
-            await CheckContructionTeamsAsync();
+            await CheckStrategiesAsync();
 
-            await CheckEquipmentsAsync();
+            await CheckTraderTypesAsync();
 
-            await CheckEquipmentAssignmentsAsync();
+            await CheckTradersAsync();
 
-            await CheckMaterialsAsync();
+            await CheckTradesAsync();
 
-            await CheckMaterialsAssignmentsAsync();*/
+            await CheckHavesAsync();
+
+            await CheckAccountsAsync();
+
+            await CheckTradeLogsAsync();
 
             await CheckRoleAsync();
 
@@ -49,16 +53,16 @@ namespace TradingJournal.API.Data
 
         //------------------  Methods indivuals by entities whit default values  ---------------//
         private async Task CheckAccountsAsync()
-         {
-             if (!_context.Accounts.Any())
-             {
-                 _context.Accounts.Add(new Account 
-                 {
-                     BrokersId = 1,
-                     TradersId = 1,
-                     AccTypesId = 1,
-                     InitialBalance = 500000
-                 });
+        {
+            if (!_context.Accounts.Any())
+            {
+                _context.Accounts.Add(new Account
+                {
+                    BrokersId = 1,
+                    TradersId = 1,
+                    AccTypesId = 1,
+                    InitialBalance = 500000
+                });
 
                 _context.Accounts.Add(new Account
                 {
@@ -68,16 +72,16 @@ namespace TradingJournal.API.Data
                     InitialBalance = 800000
                 });
             }
-             await _context.SaveChangesAsync();
-         }
+            await _context.SaveChangesAsync();
+        }
 
         private async Task CheckAccTypesAsync()
         {
             if (!_context.AccTypes.Any())
             {
-                _context.AccTypes.Add(new AccType { Name = "Standard"});
-                _context.AccTypes.Add(new AccType { Name = "Zero Spread"});
-                _context.AccTypes.Add(new AccType { Name = "Professional"});
+                _context.AccTypes.Add(new AccType { Name = "Standard" });
+                _context.AccTypes.Add(new AccType { Name = "Zero Spread" });
+                _context.AccTypes.Add(new AccType { Name = "Professional" });
             }
             await _context.SaveChangesAsync();
         }
@@ -86,10 +90,10 @@ namespace TradingJournal.API.Data
         {
             if (!_context.Brokers.Any())
             {
-                _context.Brokers.Add(new Broker { Name = "Tickmill"});
-                _context.Brokers.Add(new Broker { Name = "Libertex"});
-                _context.Brokers.Add(new Broker { Name = "Oanda"});
-                _context.Brokers.Add(new Broker { Name = "FTMO"});
+                _context.Brokers.Add(new Broker { Name = "Tickmill" });
+                _context.Brokers.Add(new Broker { Name = "Libertex" });
+                _context.Brokers.Add(new Broker { Name = "Oanda" });
+                _context.Brokers.Add(new Broker { Name = "FTMO" });
             }
             await _context.SaveChangesAsync();
         }
@@ -98,8 +102,8 @@ namespace TradingJournal.API.Data
         {
             if (!_context.Haves.Any())
             {
-                _context.Haves.Add(new Have { TradersId = 1, StrategiesCode = 10});
-                _context.Haves.Add(new Have { TradersId = 2, StrategiesCode = 20});
+                _context.Haves.Add(new Have { TradersId = 1, StrategiesCode = 10 });
+                _context.Haves.Add(new Have { TradersId = 2, StrategiesCode = 20 });
                 _context.Haves.Add(new Have { TradersId = 1, StrategiesCode = 20 });
                 _context.Haves.Add(new Have { TradersId = 2, StrategiesCode = 30 });
                 _context.Haves.Add(new Have { TradersId = 1, StrategiesCode = 40 });
@@ -111,12 +115,12 @@ namespace TradingJournal.API.Data
         {
             if (!_context.Markets.Any())
             {
-                _context.Markets.Add(new Market { Code = 100, Name = "Forex"});
-                _context.Markets.Add(new Market { Code = 101, Name = "Cripto Currencies"});
-                _context.Markets.Add(new Market { Code = 200, Name = "Indexes"});
-                _context.Markets.Add(new Market { Code = 201, Name = "Commodities"});
-                _context.Markets.Add(new Market { Code = 300, Name = "Options"});
-                _context.Markets.Add(new Market { Code = 301, Name = "Equities"});
+                _context.Markets.Add(new Market { Code = 100, Name = "Forex" });
+                _context.Markets.Add(new Market { Code = 101, Name = "Cripto Currencies" });
+                _context.Markets.Add(new Market { Code = 200, Name = "Indexes" });
+                _context.Markets.Add(new Market { Code = 201, Name = "Commodities" });
+                _context.Markets.Add(new Market { Code = 300, Name = "Options" });
+                _context.Markets.Add(new Market { Code = 301, Name = "Equities" });
             }
             await _context.SaveChangesAsync();
         }
@@ -125,13 +129,13 @@ namespace TradingJournal.API.Data
         {
             if (!_context.Strategies.Any())
             {
-                _context.Strategies.Add(new Strategy 
-                 {
-                     Code = 10,
-                     Name = "Fearless",
-                     Session = "Asia",
-                     Type = "Position"
-                 });
+                _context.Strategies.Add(new Strategy
+                {
+                    Code = 10,
+                    Name = "Fearless",
+                    Session = "Asia",
+                    Type = "Position"
+                });
 
                 _context.Strategies.Add(new Strategy
                 {
@@ -140,14 +144,14 @@ namespace TradingJournal.API.Data
                     Session = "London",
                     Type = "Day Trading"
                 });
-                
-                _context.Strategies.Add(new Strategy 
-                 {
-                     Code = 30,
-                     Name = "Kill Zones",
-                     Session = "New York",
-                     Type = "Swing Trading"
-                 });
+
+                _context.Strategies.Add(new Strategy
+                {
+                    Code = 30,
+                    Name = "Kill Zones",
+                    Session = "New York",
+                    Type = "Swing Trading"
+                });
 
                 _context.Strategies.Add(new Strategy
                 {
@@ -164,40 +168,81 @@ namespace TradingJournal.API.Data
         {
             if (!_context.Trades.Any())
             {
-                _context.Trades.Add(new Trade { TradersId = 1, MarketsCode = 100});
-                _context.Trades.Add(new Trade { TradersId = 1, MarketsCode = 200});
-                _context.Trades.Add(new Trade { TradersId = 1, MarketsCode = 300});
-                _context.Trades.Add(new Trade { TradersId = 1, MarketsCode = 301});
-                _context.Trades.Add(new Trade { TradersId = 2, MarketsCode = 101});
-                _context.Trades.Add(new Trade { TradersId = 2, MarketsCode = 201});
-                _context.Trades.Add(new Trade { TradersId = 2, MarketsCode = 301});
-                _context.Trades.Add(new Trade { TradersId = 2, MarketsCode = 100});
+                _context.Trades.Add(new Trade { TradersId = 1, MarketsCode = 100 });
+                _context.Trades.Add(new Trade { TradersId = 1, MarketsCode = 200 });
+                _context.Trades.Add(new Trade { TradersId = 1, MarketsCode = 300 });
+                _context.Trades.Add(new Trade { TradersId = 1, MarketsCode = 301 });
+                _context.Trades.Add(new Trade { TradersId = 2, MarketsCode = 101 });
+                _context.Trades.Add(new Trade { TradersId = 2, MarketsCode = 201 });
+                _context.Trades.Add(new Trade { TradersId = 2, MarketsCode = 301 });
+                _context.Trades.Add(new Trade { TradersId = 2, MarketsCode = 100 });
             }
             await _context.SaveChangesAsync();
         }
 
-        /*private async Task CheckTradeLogsAsync()
+        private async Task CheckTradeLogsAsync()
         {
             if (!_context.TradeLogs.Any())
             {
-                _context.TradeLogs.Add(new TradeLog 
-                 {
-                     Asset = 10,
-                     Name = "Fearless",
-                     Session = "Asia",
-                     Type = "Position"
-                 });
+                _context.TradeLogs.Add(new TradeLog
+                {
+                    AccountsAccNumber = 1,
+                    Asset = "GBPUSD",
+                    Risk = 1000,
+                    Pnl = 4000,
+                    Comission = 20.5
+                });
 
                 _context.TradeLogs.Add(new TradeLog
                 {
-                    Asset = 20,
-                    Name = "Smart Money Concepts",
-                    Session = "London",
-                    Type = "Day Trading"
+                    AccountsAccNumber = 2,
+                    Asset = "NAS100",
+                    Risk = 5000,
+                    Pnl = -5000,
+                    Comission = 50
+                });
+
+                _context.TradeLogs.Add(new TradeLog
+                {
+                    AccountsAccNumber = 1,
+                    Asset = "EURUSD",
+                    Risk = 500,
+                    Pnl = 1500,
+                    Comission = 10.5
+                });
+
+                _context.TradeLogs.Add(new TradeLog
+                {
+                    AccountsAccNumber = 2,
+                    Asset = "XAUUSD",
+                    Risk = 3000,
+                    Pnl = 10000,
+                    Comission = 28
                 });
             }
             await _context.SaveChangesAsync();
-        }*/
+        }
+
+        private async Task CheckTradersAsync()
+        {
+            if (!_context.Traders.Any())
+            {
+                _context.Traders.Add(new Trader { Name = "Juan David", TraderTypesId = 1 });
+                _context.Traders.Add(new Trader { Name = "Edwin", TraderTypesId = 2 });
+            }
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task CheckTraderTypesAsync()
+        {
+            if (!_context.TraderTypes.Any())
+            {
+                _context.TraderTypes.Add(new TraderType { Name = "Swing Trader" });
+                _context.TraderTypes.Add(new TraderType { Name = "Day Trader" });
+                _context.TraderTypes.Add(new TraderType { Name = "Scalper" });
+            }
+            await _context.SaveChangesAsync();
+        }
 
         private async Task CheckRoleAsync()
         {
