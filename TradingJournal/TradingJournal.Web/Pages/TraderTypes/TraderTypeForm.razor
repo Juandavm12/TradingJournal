@@ -1,5 +1,55 @@
-﻿<h3>TraderTypeForm</h3>
+﻿@using TradingJournal.Shared.Entities
+@using TradingJournal.Web.Repositories
+@inject IRepository Repository
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Authorization;
+@attribute [Authorize(Roles = "Admin")]
+
+<EditForm Model="TraderType" OnValidSubmit="OnValidSubmit">
+
+    <DataAnnotationsValidator />
+
+
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label>Name</label>
+        <div>
+            <InputText width="10" @bind-Value="@TraderType.Name"></InputText>
+            <ValidationMessage For="@(() => @TraderType.Name)" />
+        </div>
+    </div>
+
+
+    <button class="btn btn-primary" type="submit">Save <i class="bi bi-floppy2"></i></button>
+
+
+    <button class="btn btn-info" type="reset">Clean <i class="bi bi-x-octagon"></i></button>
+
+
+    <button class="btn btn-secondary" @onclick="ReturnAction">Return <i class="bi bi-arrow-clockwise"></i></button>
+
+</EditForm>
+
+
+
 
 @code {
+
+
+    [EditorRequired]
+    [Parameter]
+    public TraderType TraderType { get; set; }
+
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback ReturnAction { get; set; }
+
 
 }
