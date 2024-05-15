@@ -11,7 +11,7 @@ namespace TradingJournal.API.Controllers
 
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
-    [Route("/api/Trade")]
+    [Route("/api/Trades")]
     public class TradeControllers : ControllerBase
     {
 

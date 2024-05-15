@@ -9,18 +9,18 @@
 @inject SweetAlertService sweetAlertService
 @inject NavigationManager navigationManager
 
-<h3><i class="bi bi-person-rolodex" /> Accounts</h3>
+<h3><i class="bi bi-stopwatch" /> Trader Types</h3>
 <div class="card">
     <div class="card-header">
         <span>
-            <a class="btn btn-primary btn-sm float-start" href="/account/create"><i class="bi bi-plus-circle" /> New Account</a>
+            <a class="btn btn-primary btn-sm float-start" href="/TraderTypes/create"><i class="bi bi-plus-circle" /> New Trader Type</a>
 
         </span>
     </div>
 
     <div class="card-body">
 
-        <GenericList MyList="Accounts">
+        <GenericList MyList="TraderTypes">
 
             <Body>
                 <table class="table table-striped">
@@ -31,57 +31,32 @@
                     <tbody>
                         <tr>
 
-
                             <td>
-                                <b>Account Number</b>
+                                <b>Trader Type Id</b>
                             </td>
                             <td>
-                                <b>Broker</b>
+                                <b>Name</b>
                             </td>
-                            <td>
-                                <b>Trader</b>
-                            </td>
-                            <td>
-                                <b>Account Type</b>
-                            </td>
-                            <td>
-                                <b>Creation Date</b>
-                            </td>
-                            <td>
-                                <b>Initial Balance</b>
-                            </td>
-
                             <td>
                                 <b>Actions</b>
                             </td>
 
                         </tr>
-                        @foreach (var account in Accounts!)
+                        @foreach (var tradertype in TraderTypes!)
                         {
 
                             <tr>
                                 <td>
-                                    @account.AccNumber
+                                    @tradertype.Id
                                 </td>
                                 <td>
-                                    @account.BrokersId
+                                    @tradertype.Name
                                 </td>
-                                <td>
-                                    @account.TradersId
-                                </td>
-                                <td>
-                                    @account.AccTypes
-                                </td>
-                                <td>
-                                    @account.CreationDate
-                                </td>
-                                <td>
-                                    @account.InitialBalance
-                                </td>
+                                                          
 
                                 <td>
-                                    <a href="/account/edit/@account.AccNumber" class="btn btn-warning">Edit <i class="bi bi-pencil-square"></i></a>
-                                    <button class="btn btn-danger" @onclick=@(() => Delete(account))>Delete <i class="bi bi-trash3"></i></button>
+                                    <a href="/TraderTypes/edit/@tradertype.Id" class="btn btn-warning">Edit <i class="bi bi-pencil-square"></i></a>
+                                    <button class="btn btn-danger" @onclick=@(() => Delete(tradertype))>Delete <i class="bi bi-trash3"></i></button>
                                 </td>
 
                             </tr>
@@ -101,7 +76,7 @@
 
 @code {
 
-    public List<Account> Accounts { get; set; }
+    public List<TraderType> TraderTypes { get; set; }
 
 
     protected async override Task OnInitializedAsync()
@@ -113,21 +88,21 @@
 
     private async Task Charging()
     {
-        var responseHTTP = await Repository.GetAsync<List<Account>>("/api/account");
-        Accounts = responseHTTP.Response!;
+        var responseHTTP = await Repository.GetAsync<List<TraderType>>("/api/TraderTypes");
+        TraderTypes = responseHTTP.Response!;
 
 
 
     }
 
     // method to delete by id
-    private async Task Delete(Account account)
+    private async Task Delete(TraderType tradertype)
     {
 
         var result = await sweetAlertService.FireAsync(new SweetAlertOptions
             {
                 Title = "Confirm",
-                Text = $"You really want to delete the account : {account.AccNumber}?",
+                Text = $"You really want to delete the Trader Type : {tradertype.Id}?",
                 Icon = SweetAlertIcon.Question,
                 ShowCancelButton = true,
                 CancelButtonText = "No",
@@ -140,13 +115,13 @@
             return;
         }
 
-        var responseHTTP = await Repository.DeleteAsync($"/api/account/{account.AccNumber}");
+        var responseHTTP = await Repository.DeleteAsync($"/api/TraderTypes/{tradertype.Id}");
 
         if (responseHTTP.Error)
         {
             if (responseHTTP.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                navigationManager.NavigateTo("/accounts");
+                navigationManager.NavigateTo("/TraderTypes");
             }
             else
             {//if encountered any error the pop up whit the error message show
@@ -166,7 +141,7 @@
                     Timer = 3000,
                     Position = SweetAlertPosition.BottomEnd
                 });
-            toast.FireAsync(icon: SweetAlertIcon.Success, message: "Account Successfully Deleted.");
+            toast.FireAsync(icon: SweetAlertIcon.Success, message: "Trader Type Successfully Deleted.");
         }
     }
 }
