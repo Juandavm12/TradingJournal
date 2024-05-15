@@ -20,12 +20,10 @@ namespace TradingJournal.Shared.Entities
 
         [Display(Name = "Address")]
         [MaxLength(50, ErrorMessage = "More than 50 charachters are not allowed")]
-        [Required(ErrorMessage = "The field {0} is mandatory")]
         public string Address { get; set; }
 
         [Display(Name = "CellNumber")]
         [MaxLength(10, ErrorMessage = "More than 10 charachters are not allowed")]
-        [Required(ErrorMessage = "The field {0} is mandatory")]
         public string CellNumber { get; set; }
 
         //Trader Types FK 
