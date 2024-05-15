@@ -1,0 +1,115 @@
+﻿@using TradingJournal.Shared.Entities
+@using TradingJournal.Web.Repositories
+@inject IRepository Repository
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Authorization;
+@attribute [Authorize(Roles = "Admin")]
+
+<EditForm Model="TradeLog" OnValidSubmit="OnValidSubmit">
+
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label>Start Time</label>
+        <div>
+            <InputDate width="10" @bind-Value="@TradeLog.StartTime"></InputDate>
+            <ValidationMessage For="@(() => @TradeLog.StartTime)" />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label>End Time</label>
+        <div>
+            <InputDate width="10" @bind-Value="@TradeLog.EndTime"></InputDate>
+            <ValidationMessage For="@(() => @TradeLog.EndTime)" />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label>Asset</label>
+        <div>
+            <InputText width="10" @bind-Value="@TradeLog.Asset"></InputText>
+            <ValidationMessage For="@(() => @TradeLog.Asset)" />
+        </div>
+            </div>
+    <div class="mb-3">
+        <label>Risk</label>
+        <div>
+            <InputNumber width="10" @bind-Value="@TradeLog.Risk"></InputNumber>
+            <ValidationMessage For="@(() => @TradeLog.Risk)" />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label>Pnl</label>
+        <div>
+            <InputNumber width="10" @bind-Value="@TradeLog.Pnl"></InputNumber>
+            <ValidationMessage For="@(() => @TradeLog.Pnl)" />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label>Win Rate</label>
+        <div>
+            <InputNumber width="10" @bind-Value="@TradeLog.WinRate"></InputNumber>
+            <ValidationMessage For="@(() => @TradeLog.WinRate)" />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label>Risk Reward Ratio</label>
+        <div>
+            <InputNumber width="10" @bind-Value="@TradeLog.RiskRewardRatio"></InputNumber>
+            <ValidationMessage For="@(() => @TradeLog.RiskRewardRatio)" />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label>Comission</label>
+        <div>
+            <InputNumber width="10" @bind-Value="@TradeLog.Comission"></InputNumber>
+            <ValidationMessage For="@(() => @TradeLog.Comission)" />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label>NetPnl</label>
+        <div>
+            <InputNumber width="10" @bind-Value="@TradeLog.NetPnl"></InputNumber>
+            <ValidationMessage For="@(() => @TradeLog.NetPnl)" />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label>Account Number</label>
+        <div>
+            <InputNumber width="10" @bind-Value="@TradeLog.AccountsAccNumber"></InputNumber>
+            <ValidationMessage For="@(() => @TradeLog.AccountsAccNumber)" />
+        </div>
+    </div>
+
+
+    <button class="btn btn-primary" type="submit">Save <i class="bi bi-floppy2"></i></button>
+
+
+    <button class="btn btn-info" type="reset">Clean <i class="bi bi-x-octagon"></i></button>
+
+
+    <button class="btn btn-secondary" @onclick="ReturnAction">Return <i class="bi bi-arrow-clockwise"></i></button>
+
+</EditForm>
+
+
+
+
+@code {
+
+
+    [EditorRequired]
+    [Parameter]
+    public TradeLog TradeLog { get; set; }
+
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback ReturnAction { get; set; }
+
+
+}

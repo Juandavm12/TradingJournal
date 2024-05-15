@@ -1,4 +1,4 @@
-﻿@page "/Account"
+﻿@page "/TradeLogs"
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Authorization;
 @attribute [Authorize(Roles = "Admin")]
@@ -9,18 +9,18 @@
 @inject SweetAlertService sweetAlertService
 @inject NavigationManager navigationManager
 
-<h3><i class="bi bi-person-rolodex" /> Accounts</h3>
+<h3><i class="bi bi-graph-down" /> TradeLogs</h3>
 <div class="card">
     <div class="card-header">
         <span>
-            <a class="btn btn-primary btn-sm float-start" href="/account/create"><i class="bi bi-plus-circle" /> New Account</a>
+            <a class="btn btn-primary btn-sm float-start" href="/TradeLogs/create"><i class="bi bi-plus-circle" /> New Trade Log</a>
 
         </span>
     </div>
 
     <div class="card-body">
 
-        <GenericList MyList="Accounts">
+        <GenericList MyList="TradeLogs">
 
             <Body>
                 <table class="table table-striped">
@@ -32,55 +32,86 @@
                         <tr>
 
                             <td>
-                                <b>Account Number</b>
-                            </td>
-                            <td>
-                                <b>Broker</b>
-                            </td>
-                            <td>
-                                <b>Trader</b>
-                            </td>
-                            <td>
-                                <b>Account Type</b>
-                            </td>
-                            <td>
-                                <b>Creation Date</b>
-                            </td>
-                            <td>
-                                <b>Initial Balance</b>
+                                <b>Trade Number</b>
                             </td>
 
+                            <td>
+                                <b>Start Time</b>
+                            </td>
+                            <td>
+                                <b>End Time</b>
+                            </td>
+                            <td>
+                                <b>Asset</b>
+                            </td>
+                            <td>
+                                <b>Risk</b>
+                            </td>
+                            <td>
+                                <b>Pnl</b>
+                            </td>
+                            <td>
+                                <b>Win Rate</b>
+                            </td>
+                            <td>
+                                <b>Risk Reward Rate</b>
+                            </td>
+                            <td>
+                                <b>Commision</b>
+                            </td>
+                            <td>
+                                <b>Net Pnl</b>
+                            </td>
+                            <td>
+                                <b>Account Number</b>
+                            </td>
                             <td>
                                 <b>Actions</b>
                             </td>
 
                         </tr>
-                        @foreach (var account in Accounts!)
+                        @foreach (var tradelog in TradeLogs!)
                         {
 
                             <tr>
                                 <td>
-                                    @account.AccNumber
+                                    @tradelog.TradeNumber
                                 </td>
                                 <td>
-                                    @account.BrokersId
+                                    @tradelog.StartTime
                                 </td>
                                 <td>
-                                    @account.TradersId
+                                    @tradelog.EndTime
                                 </td>
                                 <td>
-                                    @account.AccTypes
+                                    @tradelog.Asset
                                 </td>
                                 <td>
-                                    @account.CreationDate
+                                    @tradelog.Risk
                                 </td>
                                 <td>
-                                    @account.InitialBalance
+                                    @tradelog.Pnl
+                                </td>
+                                <td>
+                                    @tradelog.WinRate
+                                </td>
+                                <td>
+                                    @tradelog.RiskRewardRatio
+                                </td>
+                                <td>
+                                    @tradelog.Comission
+                                </td>
+                                <td>
+                                    @tradelog.NetPnl
+                                </td>
+                                <td>
+                                    @tradelog.AccountsAccNumber
                                 </td>
 
+
                                 <td>
-                                    <a href="/account/edit/@account.AccNumber" class="btn btn-warning">Edit <i class="bi bi-pencil-square"></i></a>
-                                    <button class="btn btn-danger" @onclick=@(() => Delete(account))>Delete <i class="bi bi-trash3"></i></button>
+                                    <a href="/TradeLogs/edit/@tradelog.TradeNumber" class="btn btn-warning">Edit <i class="bi bi-pencil-square"></i></a>
+                                    <button class="btn btn-danger" @onclick=@(() => Delete(tradelog))>Delete <i class="bi bi-trash3"></i></button>
                                 </td>
 
                             </tr>
@@ -100,7 +131,7 @@
 
 @code {
 
-    public List<Account> Accounts { get; set; }
+    public List<TradeLog> TradeLogs { get; set; }
 
 
     protected async override Task OnInitializedAsync()
@@ -112,21 +143,21 @@
 
     private async Task Charging()
     {
-        var responseHTTP = await Repository.GetAsync<List<Account>>("/api/account");
-        Accounts = responseHTTP.Response!;
+        var responseHTTP = await Repository.GetAsync<List<TradeLog>>("/api/TradeLogs");
+        TradeLogs = responseHTTP.Response!;
 
 
 
     }
 
 
-    private async Task Delete(Account account)
+    private async Task Delete(TradeLog tradelog)
     {
 
         var result = await sweetAlertService.FireAsync(new SweetAlertOptions
             {
                 Title = "Confirm",
-                Text = $"You really want to delete the Account : {account.AccNumber}?",
+                Text = $"You really want to delete the Trade Log : {tradelog.TradeNumber}?",
                 Icon = SweetAlertIcon.Question,
                 ShowCancelButton = true,
                 CancelButtonText = "No",
@@ -139,13 +170,13 @@
             return;
         }
 
-        var responseHTTP = await Repository.DeleteAsync($"/api/account/{account.AccNumber}");
+        var responseHTTP = await Repository.DeleteAsync($"/api/tradelogs/{tradelog.TradeNumber}");
 
         if (responseHTTP.Error)
         {
             if (responseHTTP.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                navigationManager.NavigateTo("/account");
+                navigationManager.NavigateTo("/tradelogs");
             }
             else
             {
@@ -165,9 +196,7 @@
                     Timer = 3000,
                     Position = SweetAlertPosition.BottomEnd
                 });
-            toast.FireAsync(icon: SweetAlertIcon.Success, message: "Account Successfully Deleted.");
+            toast.FireAsync(icon: SweetAlertIcon.Success, message: "Trade Log Successfully Deleted.");
         }
     }
 }
-
-

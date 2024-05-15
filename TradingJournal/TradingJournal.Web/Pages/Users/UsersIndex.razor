@@ -1,4 +1,4 @@
-﻿@page "/Account"
+﻿@page "/Users"
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Authorization;
 @attribute [Authorize(Roles = "Admin")]
@@ -9,18 +9,18 @@
 @inject SweetAlertService sweetAlertService
 @inject NavigationManager navigationManager
 
-<h3><i class="bi bi-person-rolodex" /> Accounts</h3>
+<h3><i class="bi bi-person-slash" /> Users</h3>
 <div class="card">
     <div class="card-header">
         <span>
-            <a class="btn btn-primary btn-sm float-start" href="/account/create"><i class="bi bi-plus-circle" /> New Account</a>
+            <a class="btn btn-primary btn-sm float-start" href="/users/create"><i class="bi bi-plus-circle" /> New User</a>
 
         </span>
     </div>
 
     <div class="card-body">
 
-        <GenericList MyList="Accounts">
+        <GenericList MyList="Users">
 
             <Body>
                 <table class="table table-striped">
@@ -32,22 +32,22 @@
                         <tr>
 
                             <td>
-                                <b>Account Number</b>
+                                <b>Document</b>
                             </td>
                             <td>
-                                <b>Broker</b>
+                                <b>First Name</b>
                             </td>
                             <td>
-                                <b>Trader</b>
+                                <b>Last Name</b>
                             </td>
                             <td>
-                                <b>Account Type</b>
+                                <b>Address</b>
                             </td>
                             <td>
-                                <b>Creation Date</b>
+                                <b>User Type</b>
                             </td>
                             <td>
-                                <b>Initial Balance</b>
+                                <b>Email</b>
                             </td>
 
                             <td>
@@ -55,32 +55,32 @@
                             </td>
 
                         </tr>
-                        @foreach (var account in Accounts!)
+                        @foreach (var user in Users!)
                         {
 
                             <tr>
                                 <td>
-                                    @account.AccNumber
+                                    @user.Document
                                 </td>
                                 <td>
-                                    @account.BrokersId
+                                    @user.FirstName
                                 </td>
                                 <td>
-                                    @account.TradersId
+                                    @user.LastName
                                 </td>
                                 <td>
-                                    @account.AccTypes
+                                    @user.Address
                                 </td>
                                 <td>
-                                    @account.CreationDate
+                                    @user.UserType
                                 </td>
                                 <td>
-                                    @account.InitialBalance
+                                    @user.Email
                                 </td>
-
+                               
                                 <td>
-                                    <a href="/account/edit/@account.AccNumber" class="btn btn-warning">Edit <i class="bi bi-pencil-square"></i></a>
-                                    <button class="btn btn-danger" @onclick=@(() => Delete(account))>Delete <i class="bi bi-trash3"></i></button>
+                                    <a href="/users/edit/@user.Id" class="btn btn-warning">Edit <i class="bi bi-pencil-square"></i></a>
+                                    <button class="btn btn-danger" @onclick=@(() => Delete(user))>Delete <i class="bi bi-trash3"></i></button>
                                 </td>
 
                             </tr>
@@ -100,7 +100,7 @@
 
 @code {
 
-    public List<Account> Accounts { get; set; }
+    public List<User> Users { get; set; }
 
 
     protected async override Task OnInitializedAsync()
@@ -112,21 +112,21 @@
 
     private async Task Charging()
     {
-        var responseHTTP = await Repository.GetAsync<List<Account>>("/api/account");
-        Accounts = responseHTTP.Response!;
+        var responseHTTP = await Repository.GetAsync<List<User>>("/api/users");
+        Users = responseHTTP.Response!;
 
 
 
     }
 
 
-    private async Task Delete(Account account)
+    private async Task Delete(User user)
     {
 
         var result = await sweetAlertService.FireAsync(new SweetAlertOptions
             {
                 Title = "Confirm",
-                Text = $"You really want to delete the Account : {account.AccNumber}?",
+                Text = $"You really want to delete the User : {user.FullName}?",
                 Icon = SweetAlertIcon.Question,
                 ShowCancelButton = true,
                 CancelButtonText = "No",
@@ -139,13 +139,13 @@
             return;
         }
 
-        var responseHTTP = await Repository.DeleteAsync($"/api/account/{account.AccNumber}");
+        var responseHTTP = await Repository.DeleteAsync($"/api/users/{user.Id}");
 
         if (responseHTTP.Error)
         {
             if (responseHTTP.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                navigationManager.NavigateTo("/account");
+                navigationManager.NavigateTo("/users");
             }
             else
             {
@@ -165,7 +165,7 @@
                     Timer = 3000,
                     Position = SweetAlertPosition.BottomEnd
                 });
-            toast.FireAsync(icon: SweetAlertIcon.Success, message: "Account Successfully Deleted.");
+            toast.FireAsync(icon: SweetAlertIcon.Success, message: "User Successfully Deleted.");
         }
     }
 }

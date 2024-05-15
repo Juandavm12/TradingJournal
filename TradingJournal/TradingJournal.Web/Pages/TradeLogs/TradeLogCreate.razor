@@ -1,4 +1,4 @@
-﻿@page "/account/create"
+﻿@page "/TradeLogs/create"
 @using TradingJournal.Shared.Entities
 @using TradingJournal.Web.Repositories
 @inject IRepository repository
@@ -9,22 +9,22 @@
 @attribute [Authorize(Roles = "Admin")]
 
 
-<h3>Account Creation</h3>
+<h3>Trade Log Creation</h3>
 
 
-<AccountForm  Account="account" OnValidSubmit="Create" ReturnAction="Return" />
+<TradeLogForm TradeLog="tradelog" OnValidSubmit="Create" ReturnAction="Return" />
 
 
 @code {
-    private Account account = new();
+    private TradeLog tradelog = new();
 
     private async Task Create()
     {
-        var responseHttp = await repository.PostAsync("/api/account", account);
+        var responseHttp = await repository.PostAsync("/api/tradelogs", tradelog);
 
         if (responseHttp.Error)
         {
-           
+            
             var message = await responseHttp.GetErrorMessageAsync();
             await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
         }
@@ -43,16 +43,16 @@
 
                 });
 
-            await Toast.FireAsync(icon: SweetAlertIcon.Success, message: "Account successfully created");
+            await Toast.FireAsync(icon: SweetAlertIcon.Success, message: "Trade Log successfully created");
         }
     }
 
 
 
-
+   
     private void Return()
     {
-        navigationManager.NavigateTo("/account");
+        navigationManager.NavigateTo("/tradelogs");
 
 
     }

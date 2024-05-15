@@ -56,7 +56,7 @@ namespace TradingJournal.API.Controllers
                 return Ok(BuildToken(user));
             }
 
-            return BadRequest("Email o contraseña incorrectos.");
+            return BadRequest("Email or Password Incorrect.");
         }
 
         private TokenDTO BuildToken(User user)

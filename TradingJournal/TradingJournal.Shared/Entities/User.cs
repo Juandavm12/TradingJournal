@@ -30,7 +30,7 @@ namespace TradingJournal.Shared.Entities
 
         public UserType UserType { get; set; }
 
-        public string FullName => $"{FirstName}{LastName}";
+        public string FullName => $"{FirstName} {LastName}";
 
 
     }

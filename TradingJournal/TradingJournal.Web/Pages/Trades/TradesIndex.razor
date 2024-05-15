@@ -1,4 +1,4 @@
-﻿@page "/Account"
+﻿@page "/Trades"
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Authorization;
 @attribute [Authorize(Roles = "Admin")]
@@ -9,18 +9,18 @@
 @inject SweetAlertService sweetAlertService
 @inject NavigationManager navigationManager
 
-<h3><i class="bi bi-person-rolodex" /> Accounts</h3>
+<h3><i class="bi bi-bar-chart-line-fill" /> Trades</h3>
 <div class="card">
     <div class="card-header">
         <span>
-            <a class="btn btn-primary btn-sm float-start" href="/account/create"><i class="bi bi-plus-circle" /> New Account</a>
+            <a class="btn btn-primary btn-sm float-start" href="/Trades/create"><i class="bi bi-plus-circle" /> New Trade</a>
 
         </span>
     </div>
 
     <div class="card-body">
 
-        <GenericList MyList="Accounts">
+        <GenericList MyList="Trades">
 
             <Body>
                 <table class="table table-striped">
@@ -32,55 +32,35 @@
                         <tr>
 
                             <td>
-                                <b>Account Number</b>
+                                <b>Trade Id</b>
                             </td>
-                            <td>
-                                <b>Broker</b>
-                            </td>
+                            
                             <td>
                                 <b>Trader</b>
                             </td>
                             <td>
-                                <b>Account Type</b>
-                            </td>
-                            <td>
-                                <b>Creation Date</b>
-                            </td>
-                            <td>
-                                <b>Initial Balance</b>
-                            </td>
-
-                            <td>
-                                <b>Actions</b>
+                                <b>Market</b>
                             </td>
 
                         </tr>
-                        @foreach (var account in Accounts!)
+                        @foreach (var trade in Trades!)
                         {
 
                             <tr>
                                 <td>
-                                    @account.AccNumber
+                                    @trade.Id
                                 </td>
                                 <td>
-                                    @account.BrokersId
+                                    @trade.TradersId
                                 </td>
                                 <td>
-                                    @account.TradersId
-                                </td>
-                                <td>
-                                    @account.AccTypes
-                                </td>
-                                <td>
-                                    @account.CreationDate
-                                </td>
-                                <td>
-                                    @account.InitialBalance
+                                    @trade.MarketsCode
                                 </td>
 
+
                                 <td>
-                                    <a href="/account/edit/@account.AccNumber" class="btn btn-warning">Edit <i class="bi bi-pencil-square"></i></a>
-                                    <button class="btn btn-danger" @onclick=@(() => Delete(account))>Delete <i class="bi bi-trash3"></i></button>
+                                    <a href="/Trades/edit/@trade.Id" class="btn btn-warning">Edit <i class="bi bi-pencil-square"></i></a>
+                                    <button class="btn btn-danger" @onclick=@(() => Delete(trade))>Delete <i class="bi bi-trash3"></i></button>
                                 </td>
 
                             </tr>
@@ -100,7 +80,7 @@
 
 @code {
 
-    public List<Account> Accounts { get; set; }
+    public List<Trade> Trades { get; set; }
 
 
     protected async override Task OnInitializedAsync()
@@ -112,21 +92,21 @@
 
     private async Task Charging()
     {
-        var responseHTTP = await Repository.GetAsync<List<Account>>("/api/account");
-        Accounts = responseHTTP.Response!;
+        var responseHTTP = await Repository.GetAsync<List<Trade>>("/api/Trades");
+        Trades = responseHTTP.Response!;
 
 
 
     }
 
 
-    private async Task Delete(Account account)
+    private async Task Delete(Trade trade)
     {
 
         var result = await sweetAlertService.FireAsync(new SweetAlertOptions
             {
                 Title = "Confirm",
-                Text = $"You really want to delete the Account : {account.AccNumber}?",
+                Text = $"You really want to delete the Trade : {trade.Id}?",
                 Icon = SweetAlertIcon.Question,
                 ShowCancelButton = true,
                 CancelButtonText = "No",
@@ -139,13 +119,13 @@
             return;
         }
 
-        var responseHTTP = await Repository.DeleteAsync($"/api/account/{account.AccNumber}");
+        var responseHTTP = await Repository.DeleteAsync($"/api/trades/{trade.Id}");
 
         if (responseHTTP.Error)
         {
             if (responseHTTP.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                navigationManager.NavigateTo("/account");
+                navigationManager.NavigateTo("/trades");
             }
             else
             {
@@ -165,9 +145,7 @@
                     Timer = 3000,
                     Position = SweetAlertPosition.BottomEnd
                 });
-            toast.FireAsync(icon: SweetAlertIcon.Success, message: "Account Successfully Deleted.");
+            toast.FireAsync(icon: SweetAlertIcon.Success, message: "Trade Successfully Deleted.");
         }
     }
 }
-
-

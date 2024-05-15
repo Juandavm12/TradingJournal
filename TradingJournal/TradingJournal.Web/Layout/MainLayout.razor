@@ -15,8 +15,8 @@
 
             <AuthorizeView Roles="Admin">
                 <Authorized>
-                    <li><a href="Account"><i class="bi bi-person-slash"></i>&nbsp; Users </a></li>
-                    <li><a href="Accounts"><i class="bi bi-person-rolodex"></i>&nbsp; Accounts </a></li>
+                    <li><a href="Users"><i class="bi bi-person-slash"></i>&nbsp; Users </a></li>
+                    <li><a href="Account"><i class="bi bi-person-rolodex"></i>&nbsp; Accounts </a></li>
                     <li><a href="AccTypes"><i class="bi bi-bar-chart-steps"></i>&nbsp; Account Types </a></li>
                     <li><a href="Brokers"><i class="bi bi-piggy-bank-fill"></i>&nbsp; Brokers </a></li>
                     <li><a href="Markets"><i class="bi bi-graph-up-arrow"></i>&nbsp; Markets </a></li>
@@ -39,7 +39,7 @@
                 <NotAuthorized Context="NotAuthorizedContext">
 
                     <div class="d-flex justify-content-end">
-                        <div class="p-2"><button class="btn btn-success btn-lg" @onclick="Registrar"><i class="bi bi-card-checklist"></i> Register</button></div>
+                        <div class="p-2"><button class="btn btn-success" @onclick="Registrar"><i class="bi bi-card-checklist"></i> Register</button></div>
 
                     </div>
                 </NotAuthorized>
