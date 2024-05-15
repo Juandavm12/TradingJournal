@@ -24,7 +24,8 @@
 
     @if (!@IconMenuActive)
     {
-        <AuthorizeView>         
+        <AuthorizeView>   
+            
 
             <NotAuthorized Context="NotAuthorizedContext">
 
@@ -55,6 +56,8 @@
         </EditForm>
             </NotAuthorized>
         </AuthorizeView>
+
+
 
     }
     <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
