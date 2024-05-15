@@ -13,7 +13,7 @@
         
         <ul>
            
-            <AuthorizeView>
+            <AuthorizeView Roles="Admin">
                 <Authorized>
             <li><a href="Accounts"><i class="bi bi-person-rolodex"></i>&nbsp; Accounts </a></li>
             <li class="dropdown">
@@ -24,19 +24,36 @@
                 </div>
             </li>            
                     <div class="d-flex justify-content-end">
-                        <div class="p-2"><button class="btn btn-outline-warning" disabled> @context.User.Identity!.Name <i class="bi bi-person"></i></button></div>
-                        <div class="p-2"><button class="btn btn-outline-danger btn-lg " @onclick="Logout" @onclick:preventDefault><i class="bi bi-box-arrow-left"></i> Logout </button></div>
+                        <div class="p-2"><button class="btn btn-dark" disabled> @context.User.Identity!.Name <i class="bi bi-person"></i></button></div>
+                        <div class="p-2"><button class="btn btn-info btn-lg " @onclick="Logout" @onclick:preventDefault><i class="bi bi-box-arrow-left"></i> Logout </button></div>
 
                     </div>
                 </Authorized>
+
+            </AuthorizeView>
+
+            <AuthorizeView Roles="User">
+                <Authorized>
+                                        <div class="d-flex justify-content-end">
+                        <div class="p-2"><button class="btn btn-dark" disabled> @context.User.Identity!.Name <i class="bi bi-person"></i></button></div>
+                        <div class="p-2"><button class="btn btn-info btn-lg " @onclick="Logout" @onclick:preventDefault><i class="bi bi-box-arrow-left"></i> Logout </button></div>
+
+                    </div>
+                </Authorized>
+            </AuthorizeView>
+
+
+            <AuthorizeView >
                 <NotAuthorized Context="NotAuthorizedContext">
 
                     <div class="d-flex justify-content-end">
-                        <div class="p-2"><button class="btn btn-outline-warning btn-lg" @onclick="Registrar"><i class="bi bi-card-checklist"></i> Register</button></div>
+                        <div class="p-2"><button class="btn btn-success btn-lg" @onclick="Registrar"><i class="bi bi-card-checklist"></i> Register</button></div>
 
                     </div>
                 </NotAuthorized>
             </AuthorizeView>
+
+
         </ul>
              
 
