@@ -1,4 +1,6 @@
-﻿@using TradingJournal.Web.Shared
+﻿@inject NavigationManager navigationManager
+@using TradingJournal.Web.Auth
+@inject ILoginService loginService
 @inherits LayoutComponentBase
 
 <div class="page">
@@ -10,18 +12,33 @@
     <main>
         
         <ul>
-            <li><a href=""><i class="bi bi-house"></i>&nbsp; Prueba </a></li>
+           
+            <AuthorizeView>
+                <Authorized>
+            <li><a href="Accounts"><i class="bi bi-person-rolodex"></i>&nbsp; Accounts </a></li>
             <li class="dropdown">
                 <a href="javascript:void(0)" class="dropbtn"><i class="bi bi-arrow-left-right" aria-hidden="true"></i>&nbsp; Desplegable </a>
                 <div class="dropdown-content">
                     <a href=""><i class="bi bi-bricks"></i>&nbsp; Prueba2 </a>
                     <a href=""><i class="bi bi-gear"></i>&nbsp; Prueba3 </a>
                 </div>
-            </li>
-       
-        </ul>
-       
+            </li>            
+                    <div class="d-flex justify-content-end">
+                        <div class="p-2"><button class="btn btn-outline-warning" disabled> @context.User.Identity!.Name <i class="bi bi-person"></i></button></div>
+                        <div class="p-2"><button class="btn btn-outline-danger btn-lg " @onclick="Logout" @onclick:preventDefault><i class="bi bi-box-arrow-left"></i> Logout </button></div>
 
+                    </div>
+                </Authorized>
+                <NotAuthorized Context="NotAuthorizedContext">
+
+                    <div class="d-flex justify-content-end">
+                        <div class="p-2"><button class="btn btn-outline-warning btn-lg" @onclick="Registrar"><i class="bi bi-card-checklist"></i> Register</button></div>
+
+                    </div>
+                </NotAuthorized>
+            </AuthorizeView>
+        </ul>
+             
 
 
 
@@ -40,4 +57,18 @@
     {
         _iconMenuActive = iconMenuActive;
     }
+
+    private async Task Logout()
+    {
+        await loginService.LogoutAsync();
+        navigationManager.NavigateTo("/");
+    }
+
+
+    private async Task Registrar()
+    {
+        await loginService.LogoutAsync();
+        navigationManager.NavigateTo("/Register");
+    }
+ 
 }

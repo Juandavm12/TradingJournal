@@ -24,24 +24,8 @@
 
     @if (!@IconMenuActive)
     {
-        <AuthorizeView>
-            <Authorized>
+        <AuthorizeView>         
 
-                <div class="mb-3 px-5">
-
-                    <div>
-                      
-
-                    </div>
-                </div>
-                <div class="mb-3 px-5">
-
-                    <div>
-                        <button class="btn btn-secondary " @onclick="Logout"><i class="bi bi-person"></i> Logout</button>
-
-                    </div>
-                </div>
-            </Authorized>
             <NotAuthorized Context="NotAuthorizedContext">
 
         <EditForm Model="loginDTO" OnValidSubmit="LoginAsync">
@@ -61,13 +45,12 @@
                 </div>
             </div>
             <div class="mb-3 px-5">
-
                 <div>
-                    <button class="btn btn-primary" type="submit"><i class="bi bi-person"></i> Login</button>
-
-                </div>
+                            <button class="btn btn-outline-success" type="Submit"><i class="bi bi-box-arrow-right"></i> Login &nbsp; &nbsp; </button>
+                </div>                     
+                        
             </div>
-
+                    
 
         </EditForm>
             </NotAuthorized>
@@ -85,7 +68,6 @@
                     }
                 </NavLink>
             </div>
-
 
             <div>
                 @if (!@IconMenuActive)
@@ -193,10 +175,8 @@
         }
     }
 
-    private async Task Logout()
-    {
-        await loginService.LogoutAsync();
-        navigationManager.NavigateTo("/");
-    }
+
+
+
 }
 

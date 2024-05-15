@@ -12,7 +12,7 @@ namespace TradingJournal.API.Controllers
 
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
-    [Route("/api/StrategyControllers")]
+    [Route("/api/Strategy")]
     public class StrategyControllers : ControllerBase
     {
 

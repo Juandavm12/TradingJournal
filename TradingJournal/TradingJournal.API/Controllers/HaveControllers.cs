@@ -11,7 +11,7 @@ namespace TradingJournal.API.Controllers
 
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
-    [Route("/api/HaveControllers")]
+    [Route("/api/Have")]
     public class HaveControllers : ControllerBase
     {
         private readonly DataContext _context;

@@ -1,0 +1,174 @@
+﻿@page "/Accounts"
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Authorization;
+@attribute [Authorize(Roles = "Admin")]
+@using TradingJournal.Shared.Entities
+@using TradingJournal.Web.Repositories
+@using TradingJournal.Web.Shared
+@inject IRepository Repository
+@inject SweetAlertService sweetAlertService
+@inject NavigationManager navigationManager
+
+<h3><i class="bi bi-person-rolodex" /> Accounts</h3>
+<div class="card">
+    <div class="card-header">
+        <span>
+            <a class="btn btn-outline-primary btn-sm float-start" href="/accounts/create"><i class="bi bi-plus-circle" /> New Account</a>
+
+        </span>
+    </div>
+
+    <div class="card-body">
+
+        <GenericList MyList="Accounts">
+
+            <Body>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+
+
+                            <td>
+                                <b>Account Number</b>
+                            </td>
+                            <td>
+                                <b>Broker</b>
+                            </td>
+                            <td>
+                                <b>Trader</b>
+                            </td>
+                            <td>
+                                <b>Account Type</b>
+                            </td>
+                            <td>
+                                <b>Creation Date</b>
+                            </td>
+                            <td>
+                                <b>Initial Balance</b>
+                            </td>
+
+                            <td>
+                                <b>Actions</b>
+                            </td>
+
+                        </tr>
+                        @foreach (var account in Accounts!)
+                        {
+
+                            <tr>
+                                <td>
+                                    @account.AccNumber
+                                </td>
+                                <td>
+                                    @account.BrokersId
+                                </td>
+                                <td>
+                                    @account.TradersId
+                                </td>
+                                <td>
+                                    @account.AccTypes
+                                </td>
+                                <td>
+                                    @account.CreationDate
+                                </td>
+                                <td>
+                                    @account.InitialBalance
+                                </td>
+
+                                <td>
+                                    <a href="/budgets/edit/@account.AccNumber" class="btn btn-outline-warning">Edit <i class="bi bi-pencil-square"></i></a>
+                                    <button class="btn btn-outline-danger" @onclick=@(() => Delete(account))>Delete <i class="bi bi-trash3"></i></button>
+                                </td>
+
+                            </tr>
+                        }
+
+
+                    </tbody>
+                </table>
+
+            </Body>
+
+        </GenericList>
+    </div>
+</div>
+
+
+
+@code {
+
+    public List<Account> Accounts { get; set; }
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        await Charging();
+    }
+
+
+
+    private async Task Charging()
+    {
+        var responseHTTP = await Repository.GetAsync<List<Account>>("/api/account");
+        Accounts = responseHTTP.Response!;
+
+
+
+    }
+
+    // method to delete by id
+    private async Task Delete(Account account)
+    {
+
+        var result = await sweetAlertService.FireAsync(new SweetAlertOptions
+            {
+                Title = "Confirm",
+                Text = $"You really want to delete the account : {account.AccNumber}?",
+                Icon = SweetAlertIcon.Question,
+                ShowCancelButton = true,
+                CancelButtonText = "No",
+                ConfirmButtonText = "yes"
+            });
+
+        var confirm = string.IsNullOrEmpty(result.Value);
+        if (confirm)
+        {
+            return;
+        }
+
+        var responseHTTP = await Repository.DeleteAsync($"/api/account/{account.AccNumber}");
+
+        if (responseHTTP.Error)
+        {
+            if (responseHTTP.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("/account");
+            }
+            else
+            {//if encountered any error the pop up whit the error message show
+                var mensajeError = await responseHTTP.GetErrorMessageAsync();
+                await sweetAlertService.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
+            }
+        }
+        else
+        {
+
+            await Charging();
+
+            var toast = sweetAlertService.Mixin(new SweetAlertOptions
+                {
+                    Toast = true,
+                    ShowConfirmButton = true,
+                    Timer = 3000,
+                    Position = SweetAlertPosition.BottomEnd
+                });
+            toast.FireAsync(icon: SweetAlertIcon.Success, message: "Account Successfully Deleted.");
+        }
+    }
+}
+
+

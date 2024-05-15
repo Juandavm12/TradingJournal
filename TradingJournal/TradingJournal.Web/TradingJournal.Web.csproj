@@ -25,4 +25,12 @@
     <ProjectReference Include="..\TradingJournal.Shared\TradingJournal.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Images\loader.gif" />
+  </ItemGroup>
+
 </Project>
