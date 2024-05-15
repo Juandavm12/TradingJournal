@@ -1,0 +1,57 @@
+﻿@page "/account/create"
+@using TradingJournal.Shared.Entities
+@using TradingJournal.Web.Repositories
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService sweetAlertService
+
+
+<h3>Account Creation</h3>
+
+
+<AccountForm  Account="account" OnValidSubmit="Create" ReturnAction="Return" />
+
+
+@code {
+    private Account account = new();
+
+    private async Task Create()
+    {
+        var responseHttp = await repository.PostAsync("/api/account", account);
+
+        if (responseHttp.Error)
+        {
+            //if any error its encountered the sweet alert whit the error message pop up
+            var message = await responseHttp.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+        }
+        else
+        {
+            
+            Return();
+
+            var Toast = sweetAlertService.Mixin(new SweetAlertOptions
+                {
+
+                    Toast = true,
+                    Position = SweetAlertPosition.BottomEnd,
+                    ShowConfirmButton = true,
+                    Timer = 3000
+
+                });
+
+            await Toast.FireAsync(icon: SweetAlertIcon.Success, message: "Account successfully created");
+        }
+    }
+
+
+
+    // Return method to navigate to home of budgets
+    private void Return()
+    {
+        navigationManager.NavigateTo("/account");
+
+
+    }
+
+}

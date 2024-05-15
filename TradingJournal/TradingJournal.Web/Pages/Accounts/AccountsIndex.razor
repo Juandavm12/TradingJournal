@@ -13,7 +13,7 @@
 <div class="card">
     <div class="card-header">
         <span>
-            <a class="btn btn-outline-primary btn-sm float-start" href="/accounts/create"><i class="bi bi-plus-circle" /> New Account</a>
+            <a class="btn btn-outline-primary btn-sm float-start" href="/account/create"><i class="bi bi-plus-circle" /> New Account</a>
 
         </span>
     </div>
@@ -80,7 +80,7 @@
                                 </td>
 
                                 <td>
-                                    <a href="/budgets/edit/@account.AccNumber" class="btn btn-outline-warning">Edit <i class="bi bi-pencil-square"></i></a>
+                                    <a href="/account/edit/@account.AccNumber" class="btn btn-outline-warning">Edit <i class="bi bi-pencil-square"></i></a>
                                     <button class="btn btn-outline-danger" @onclick=@(() => Delete(account))>Delete <i class="bi bi-trash3"></i></button>
                                 </td>
 

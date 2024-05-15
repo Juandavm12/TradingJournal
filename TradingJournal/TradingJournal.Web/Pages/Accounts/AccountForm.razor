@@ -1,0 +1,78 @@
+﻿@using TradingJournal.Shared.Entities
+@using TradingJournal.Web.Repositories
+@inject IRepository Repository
+
+<EditForm Model="Account"  OnValidSubmit="OnValidSubmit" >
+
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label>Broker</label>
+        <div>
+            <InputNumber width="10" @bind-Value="@Account.BrokersId"></InputNumber>
+            <ValidationMessage For="@(() => @Account.BrokersId)" />
+        </div>
+        </div>
+
+    <div class="mb-3">
+        <label>Trader</label>
+        <div>
+            <InputNumber width="10" @bind-Value="@Account.TradersId"></InputNumber>
+            <ValidationMessage For="@(() => @Account.TradersId)" />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label>Account Type</label>
+        <div>
+            <InputNumber width="10" @bind-Value="@Account.AccTypesId"></InputNumber>
+            <ValidationMessage For="@(() => @Account.AccTypesId)" />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label>Creation Date</label>
+        <div>
+            <InputDate width="10" @bind-Value="@Account.CreationDate"></InputDate>
+            <ValidationMessage For="@(() => @Account.CreationDate)" />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label>Initial Balance</label>
+        <div>
+            <InputNumber width="10" @bind-Value="@Account.InitialBalance"></InputNumber>
+            <ValidationMessage For="@(() => @Account.InitialBalance)" />
+        </div>
+    </div>
+
+   
+    <button class="btn btn-outline-primary" type="submit" >Save <i class="bi bi-floppy2"></i></button>
+
+    
+    <button class="btn btn-outline-info" type="reset">Clean <i class="bi bi-x-octagon"></i></button>
+
+   
+    <button class="btn btn-outline-secondary" @onclick="ReturnAction">Return <i class="bi bi-arrow-clockwise"></i></button>
+
+</EditForm>
+
+
+
+
+@code { 
+
+
+    [EditorRequired]
+    [Parameter]
+    public Account Account { get; set; }
+
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback ReturnAction { get; set; }
+
+
+}
