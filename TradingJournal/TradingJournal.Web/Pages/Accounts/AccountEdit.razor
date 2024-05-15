@@ -15,7 +15,7 @@
     <p>the account is null</p>
 }
 else
-{   @* The form is called and when the submit is valid the Edit method is called and finally the Return method *@
+{   
     <AccountForm Account="account" OnValidSubmit="Editar" ReturnAction="Return" />
     
 }
@@ -25,7 +25,7 @@ else
     public int AccountAccNumber { get; set; }
     private Account account = new();
 
-    //this method get the info of the object by Id and show in the form
+    
     protected override async Task OnInitializedAsync()
     {
 
@@ -35,12 +35,12 @@ else
         {
             if (responseHTTP.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
             {
-                //if the page its not found return to home
+              
                 navigationManager.NavigateTo("account");
                 return;
             }
             else
-            {  //if any error its encountered the sweet alert whit the error message pop up
+            {  
                 var mensajeError = await responseHTTP.GetErrorMessageAsync();
                 await sweetAlertService.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
                 return;
@@ -48,7 +48,7 @@ else
         }
         else
         {
-            //if the get its sucesfull return the object whit the info
+            
             account = responseHTTP.Response;
         }
     }
@@ -60,7 +60,7 @@ else
 
         if (responseHTTP.Error)
         {
-            //if any error its encountered the sweet alert whit the error message pop up
+           
             var mensajeError = await responseHTTP.GetErrorMessageAsync();
             await sweetAlertService.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
         }
@@ -68,7 +68,7 @@ else
         {
             Return();
 
-            //if the Edit its succesfull the toast whit the sucessfull confirmation popup
+            
             var Toast = sweetAlertService.Mixin(new SweetAlertOptions
                 {
 

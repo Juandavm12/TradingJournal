@@ -95,7 +95,7 @@
 
     }
 
-    // method to delete by id
+
     private async Task Delete(TraderType tradertype)
     {
 
@@ -124,7 +124,7 @@
                 navigationManager.NavigateTo("/TraderTypes");
             }
             else
-            {//if encountered any error the pop up whit the error message show
+            {
                 var mensajeError = await responseHTTP.GetErrorMessageAsync();
                 await sweetAlertService.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
             }

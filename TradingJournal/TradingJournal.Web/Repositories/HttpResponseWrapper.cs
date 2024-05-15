@@ -29,7 +29,7 @@ namespace TradingJournal.Web.Repositories
             var StatusCode = HttpResponseMessage.StatusCode;
             if (StatusCode == HttpStatusCode.NotFound)
             {
-                return "Recurso no encontrado";
+                return "Resource not found";
             }
             else if (StatusCode == HttpStatusCode.BadRequest)
             {
@@ -37,14 +37,14 @@ namespace TradingJournal.Web.Repositories
             }
             else if (StatusCode == HttpStatusCode.Unauthorized)
             {
-                return " Debes loguearte para realizar esta acción";
+                return " Must be logged in to perform this action";
             }
             else if (StatusCode == HttpStatusCode.Forbidden)
             {
-                return " No tienes permisos para ejecutar esta acción";
+                return " You are not allowed to perform this action";
             }
 
-            return "Ha ocurrido un error inesperado";
+            return "An unexpected error has occurred";
         }
     }
 }

@@ -24,7 +24,7 @@
 
         if (responseHttp.Error)
         {
-            //if any error its encountered the sweet alert whit the error message pop up
+           
             var message = await responseHttp.GetErrorMessageAsync();
             await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
         }
@@ -49,7 +49,7 @@
 
 
 
-    // Return method to navigate to home of budgets
+
     private void Return()
     {
         navigationManager.NavigateTo("/accounts");
