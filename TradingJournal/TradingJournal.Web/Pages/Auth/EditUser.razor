@@ -1,0 +1,223 @@
+﻿@page "/EditUser"
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Authorization;
+@using TradingJournal.Shared.Entities
+@using TradingJournal.Web.Repositories
+@using TradingJournal.Web.Shared
+@using TradingJournal.Web.Auth
+@attribute [Authorize(Roles = "Admin")]
+@inject IRepository repository
+@inject SweetAlertService sweetAlertService
+@inject NavigationManager navigationManager
+@inject ILoginService loginService
+@inherits LayoutComponentBase
+@inject AuthenticationStateProvider GetAuthenticationStateAsync
+
+
+
+@if (user is null) 
+
+{ 
+    <div class="spinner" />
+
+}
+else
+{
+    <h3><i class="bi bi-person-slash" /> Edit User</h3>
+    <EditForm Model="user" OnValidSubmit="SaveUserAsync">
+
+        <DataAnnotationsValidator />
+
+
+
+        
+
+           
+                               
+
+     
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="col-6">
+
+                        <div class="mb-3">
+                            <label>First Name:</label>
+                            <div>
+                                <InputText class="form-control" @bind-Value="@user.FirstName" />
+                                <ValidationMessage For="@(() => user.FirstName)" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Last Name:</label>
+                            <div>
+                                <InputText class="form-control" @bind-Value="@user.LastName" />
+                                <ValidationMessage For="@(() => user.LastName)" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Document:</label>
+                            <div>
+                                <InputText class="form-control" @bind-Value="@user.Document" />
+                                <ValidationMessage For="@(() => user.Document)" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Phone:</label>
+                            <div>
+                                <InputText class="form-control" @bind-Value="@user.PhoneNumber" />
+                                <ValidationMessage For="@(() => user.PhoneNumber)" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Address:</label>
+                            <div>
+                                <InputText class="form-control" @bind-Value="@user.Address" />
+                                <ValidationMessage For="@(() => user.Address)" />
+                            </div>
+                        </div>
+
+                       
+
+                        <div class="mb-3">
+
+                            <InputImg Label="Foto" ImageSelected="ImageSelected" ImageURL="@imageUrl" />
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+            <span>
+
+
+            <a class="btn btn-sm btn-warning " href="/changePassword"><i class="bi bi-pencil-square" /> Change Password</a>
+
+            <button class="btn btn-sm btn-primary  mx-2" type="submit"><i class="bi bi-floppy2" /> Save Changes</button>
+
+            </span>
+       
+                        
+
+    </EditForm>
+
+
+}
+
+
+   
+
+ 
+
+@code {
+
+    private User user;
+
+    private List<User>? Users;
+
+    private string? imageUrl;
+
+
+
+    protected override async Task OnInitializedAsync()
+
+    {
+
+        await LoadUserAsyc();
+
+    
+
+        if (!string.IsNullOrEmpty(user!.Photo))
+
+        {
+
+            imageUrl = user.Photo;
+
+            user.Photo = null;
+
+        }
+
+
+
+    }
+
+
+
+    private async Task LoadUserAsyc()
+
+    {
+       
+        var responseHTTP = await repository.GetAsync<User>($"/api/accounts");
+
+        if (responseHTTP.Error)
+
+        {
+
+            if (responseHTTP.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+
+            {
+
+                navigationManager.NavigateTo("/");
+
+                return;
+
+            }
+
+            var messageError = await responseHTTP.GetErrorMessageAsync();
+
+            await sweetAlertService.FireAsync("Error", messageError, SweetAlertIcon.Error);
+
+            return;
+
+        }
+
+        user = responseHTTP.Response;
+
+    }
+
+
+
+    private void ImageSelected(string imagenBase64)
+
+    {
+
+        user!.Photo = imagenBase64;
+
+        imageUrl = null;
+
+    }
+        
+
+
+    private async Task SaveUserAsync()
+
+    {
+
+        var responseHttp = await repository.PutAsync<User>("/api/accounts", user!);
+
+        if (responseHttp.Error)
+
+        {
+
+            var message = await responseHttp.GetErrorMessageAsync();
+
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+
+            return;
+
+        }
+
+
+
+        navigationManager.NavigateTo("/", true);
+
+    }
+
+} 

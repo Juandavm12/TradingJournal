@@ -60,7 +60,26 @@
 
 
     }
-    <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+
+
+
+    <AuthorizeView>
+        <Authorized>
+
+            <div class="mb-3 px-5 py-4">
+               
+                <div><button class="btn btn-warning" @onclick="Edit" @onclick:preventDefault><i class="bi bi-person-slash"></i>Edit user</button></div>
+              
+            </div>
+
+            <div class ="mb-3 px-5">
+                
+                <div ><button class="btn btn-info" @onclick="Logout" @onclick:preventDefault><i class="bi bi-box-arrow-left"></i> Logout </button></div>
+            </div>
+        </Authorized>
+    </AuthorizeView>
+
+    @*<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
         <nav class="flex-column">
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
@@ -108,9 +127,9 @@
 
 
 
-        </nav>
+    </nav>
 
-    </div>
+    </div>*@
 
     <div class="bottom-row">
         <div class="icon-menu-arrow">
@@ -178,6 +197,17 @@
         }
     }
 
+    private async Task Logout()
+    {
+        await loginService.LogoutAsync();
+        navigationManager.NavigateTo("/", true);
+    }
+
+    private async Task Edit()
+    {
+      
+        navigationManager.NavigateTo("/edituser", true);
+    }
 
 
 

@@ -122,7 +122,7 @@
         }
 
         await loginService.LoginAsync(responseHttp.Response!.Token);
-        navigationManager.NavigateTo("/");
+        navigationManager.NavigateTo("/",true);
 
     }
 }
