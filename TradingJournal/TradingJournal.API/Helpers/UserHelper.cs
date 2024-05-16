@@ -1,6 +1,7 @@
 ﻿//this class contains the methods of security for users (user,role, password)
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Threading.Tasks;
 using TradingJournal.API.Data;
 using TradingJournal.API.Helpers;
@@ -57,7 +58,9 @@ namespace TradingJournal.API.Helpers
 
         public async Task<User> GetUserAsync(string email)
         {
-            return await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
+            var user = await _context.Users
+.FirstOrDefaultAsync(x => x.Email == email);
+            return user!;
         }
 
         public async Task<bool> IsUserInRoleAsync(User user, string roleName)
@@ -75,5 +78,21 @@ namespace TradingJournal.API.Helpers
             await _signInManager.SignOutAsync();
         }
 
+        public async Task<User> GetUserAsync(Guid userId)
+        {
+            var user = await _context.Users
+            .FirstOrDefaultAsync(x => x.Id == userId.ToString());
+            return user!;
+        }
+        public async Task<IdentityResult> ChangePasswordAsync(User user, string currentPassword, string newPassword)
+        {
+            return await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+        }
+        public async Task<IdentityResult> UpdateUserAsync(User user)
+        {
+            return await _userManager.UpdateAsync(user);
+        }
+
     }
+
 }

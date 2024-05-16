@@ -78,5 +78,21 @@ namespace TradingJournal.API.Controllers
 
             return NoContent();
         }
+
+        [AllowAnonymous]
+
+        [HttpGet("combo")]
+
+        public async Task<ActionResult> GetCombo()
+
+        {
+
+            return Ok(await _context.Accounts.ToListAsync());
+
+        }
+
+
+
+       
     }
 }

@@ -3,6 +3,7 @@ using TradingJournal.Shared.Entities;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using TradingJournal.Shared.DTOs;
+using System;
 
 namespace TradingJournal.API.Helpers
 {
@@ -16,6 +17,10 @@ namespace TradingJournal.API.Helpers
         Task<bool> IsUserInRoleAsync(User user, string roleName);
         Task<SignInResult> LoginAsync(LoginDTO model);
         Task LogoutAsync();
+
+        Task<IdentityResult> ChangePasswordAsync(User user, string currentPassword, string newPassword);
+        Task<IdentityResult> UpdateUserAsync(User user);
+        Task<User> GetUserAsync(Guid userId);
 
     }
 }

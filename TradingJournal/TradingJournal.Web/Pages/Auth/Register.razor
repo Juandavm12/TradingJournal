@@ -3,19 +3,21 @@
 @using TradingJournal.Shared.Enums;
 @using TradingJournal.Web.Auth;
 @using TradingJournal.Web.Repositories
+@using TradingJournal.Web.Shared
 @inject SweetAlertService sweetAlertService
 @inject NavigationManager navigationManager
 @inject ILoginService loginService
 @inject IRepository Repository
 
-<h3>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+<h3>
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  Register New User
 </h3>
 
 <EditForm Model="userDTO" OnValidSubmit="CreateUserAsync">
-    <DataAnnotationsValidator/>
+    <DataAnnotationsValidator />
 
-        <div class="row">
+    <div class="row">
         <div class="col-6">
             <div class="mb-3">
                 <label>First Name :</label>
@@ -38,7 +40,7 @@
                     <ValidationMessage For="@(() => userDTO.Document)" />
                 </div>
             </div>
-                        <div class="mb-3">
+            <div class="mb-3">
                 <label>Phone Number :</label>
                 <div>
                     <InputText class="form-control" @bind-Value="@userDTO.PhoneNumber" />
@@ -59,8 +61,8 @@
                     <ValidationMessage For="@(() => userDTO.Email)" />
                 </div>
             </div>
-        
-                   <div class="mb-3">
+
+            <div class="mb-3">
                 <label>Password :</label>
                 <div>
                     <InputText type="password" class="form-control" @bind-Value="@userDTO.Password" />
@@ -74,6 +76,9 @@
                     <ValidationMessage For="@(() => userDTO.PasswordConfirm)" />
                 </div>
             </div>
+            <div class="mb-3">
+                <InputImg Label="Photo" ImageSelected="ImageSelected" ImageURL="@imageUrl" />
+            </div>
         </div>
     </div>
 
@@ -82,10 +87,30 @@
 </EditForm>
 @code {
 
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(userDTO.Photo))
+        {
+            imageUrl = userDTO.Photo;
+            userDTO.Photo = null;
+        }
+    }
+
+    private string imageUrl;
+
     private UserDTO userDTO = new();
+
+
+
+    private void ImageSelected(string imagenBase64)
+    {
+        userDTO.Photo = imagenBase64;
+        imageUrl = null;
+    }
 
     private async Task CreateUserAsync()
     {
+
         userDTO.UserName = userDTO.Email;
         userDTO.UserType = UserType.User;
         var responseHttp = await Repository.PostAsync<UserDTO, TokenDTO>("/api/accounts/CreateUser", userDTO);
@@ -99,5 +124,5 @@
         await loginService.LoginAsync(responseHttp.Response!.Token);
         navigationManager.NavigateTo("/");
 
-}
+    }
 }
