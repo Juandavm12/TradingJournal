@@ -47,8 +47,8 @@ namespace TradingJournal.API.Data
 
             await CheckRoleAsync();
 
-            await CheckUserAsync("111111", "Super", "Admin", "EDWINRAMIREZGON@GMAIL.COM", "3137778067", "CARRERA 42A 78A 17", UserType.Admin);
-            await CheckUserAsync("1112", "Super", "Admin", "JUANDAV12@GMAIL.COM", "3005216416", "CARRERA 33 65 66", UserType.Admin);
+            await CheckUserAsync("111111", "Super", "Admin", "EDWINRAMIREZGON@GMAIL.COM", "3137778067", "CARRERA 42A 78A 17", "https://tradingjournalphotos.blob.core.windows.net/users/dd747d07-7961-45f4-8f5c-5cd954a1a3a7.jpg",  UserType.Admin);
+            await CheckUserAsync("1112", "Super", "Admin", "JUANDAV12@GMAIL.COM", "3005216416", "CARRERA 33 65 66", "https://tradingjournalphotos.blob.core.windows.net/users/dd747d07-7961-45f4-8f5c-5cd954a1a3a7.jpg",  UserType.Admin);
         }
 
         //------------------  Methods indivuals by entities whit default values  ---------------//
@@ -266,7 +266,7 @@ namespace TradingJournal.API.Data
             await _userHelper.CheckRoleAsync(UserType.User.ToString());
         }
 
-        private async Task<User> CheckUserAsync(string document, string firstname, string lastname, string email, string phone, string address, UserType userType)
+        private async Task<User> CheckUserAsync(string document, string firstname, string lastname, string email, string phone, string address, string photo,  UserType userType)
         {
             var user = await _userHelper.GetUserAsync(email);
             if (user == null)
@@ -281,7 +281,9 @@ namespace TradingJournal.API.Data
                     PhoneNumber = phone,
                     UserName = email,
                     Address = address,
+                    Photo = photo,
                     UserType = userType,
+                   
                 };
 
                 await _userHelper.AddUserAsync(user, "123456");

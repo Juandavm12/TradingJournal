@@ -1,11 +1,12 @@
 ﻿@page "/EditUser"
-@attribute [Authorize(Roles = "Admin")]
+@attribute [Authorize(Roles = "Admin , User")]
 @inject IRepository repository
 @inject SweetAlertService sweetAlertService
 @inject NavigationManager navigationManager
 @inject ILoginService loginService
 @inherits LayoutComponentBase
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
+
 
 
 @if (user is null) 
@@ -72,7 +73,7 @@ else
 
                         <div class="mb-3">
 
-                            <InputImg Label="Foto" ImageSelected="ImageSelected" ImageURL="@imageUrl" />
+                            <InputImg Label="Photo" ImageSelected="ImageSelected" ImageURL="@imageUrl" />
 
                         </div>
 
@@ -107,7 +108,9 @@ else
 
     private List<User>? Users;
 
-    private string? imageUrl;
+    private string imageUrl;
+
+    private LoginDTO loginDTO = new();
 
 
 
@@ -117,7 +120,7 @@ else
 
         await LoadUserAsyc();
 
-    
+
 
         if (!string.IsNullOrEmpty(user!.Photo))
 
@@ -138,7 +141,7 @@ else
     private async Task LoadUserAsyc()
 
     {
-       
+
         var responseHTTP = await repository.GetAsync<User>($"/api/accounts");
 
         if (responseHTTP.Error)
@@ -178,7 +181,7 @@ else
         imageUrl = null;
 
     }
-        
+
 
 
     private async Task SaveUserAsync()
@@ -199,10 +202,16 @@ else
 
         }
 
+        await loginService.LogoutAsync();
 
 
-        navigationManager.NavigateTo("/", true);
+
+        navigationManager.NavigateTo("/" , true);
 
     }
+    
+ 
+
+   
 
 } 

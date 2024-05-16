@@ -1,8 +1,4 @@
-﻿@using TradingJournal.Shared.DTOs;
-@using TradingJournal.Shared.Enums;
-@using TradingJournal.Web.Auth;
-@using TradingJournal.Web.Repositories
-@inject SweetAlertService sweetAlertService
+﻿@inject SweetAlertService sweetAlertService
 @inject NavigationManager navigationManager
 @inject ILoginService loginService
 @inject IRepository Repository
@@ -24,36 +20,36 @@
 
     @if (!@IconMenuActive)
     {
-        <AuthorizeView>   
-            
+        <AuthorizeView>
+
 
             <NotAuthorized Context="NotAuthorizedContext">
 
-        <EditForm Model="loginDTO" OnValidSubmit="LoginAsync">
-            <DataAnnotationsValidator />
-            <div class="mb-3">
-                <div>
-                    <InputText class="form-control" @bind-Value="@loginDTO.Email" placeholder="              Email" />
-                    <ValidationMessage For="@(() => loginDTO.Email)" />
+                <EditForm Model="loginDTO" OnValidSubmit="LoginAsync">
+                    <DataAnnotationsValidator />
+                    <div class="mb-3">
+                        <div>
+                            <InputText class="form-control" @bind-Value="@loginDTO.Email" placeholder="              Email" />
+                            <ValidationMessage For="@(() => loginDTO.Email)" />
 
-                </div>
-            </div>
-            <div class="mb-3">
+                        </div>
+                    </div>
+                    <div class="mb-3">
 
-                <div>
-                    <InputText type="password" class="form-control" @bind-Value="@loginDTO.Password" placeholder="           Password" />
-                    <ValidationMessage For="@(() => loginDTO.Password)" />
-                </div>
-            </div>
-            <div class="mb-3 px-5">
-                <div>
+                        <div>
+                            <InputText type="password" class="form-control" @bind-Value="@loginDTO.Password" placeholder="           Password" />
+                            <ValidationMessage For="@(() => loginDTO.Password)" />
+                        </div>
+                    </div>
+                    <div class="mb-3 px-5">
+                        <div>
                             <button class="btn btn-success" type="Submit"><i class="bi bi-box-arrow-right"></i> Login &nbsp; &nbsp; </button>
-                </div>                     
-                        
-            </div>
-                    
+                        </div>
 
-        </EditForm>
+                    </div>
+
+
+                </EditForm>
             </NotAuthorized>
         </AuthorizeView>
 
@@ -63,23 +59,9 @@
 
 
 
-    <AuthorizeView>
-        <Authorized>
 
-            <div class="mb-3 px-5 py-4">
-               
-                <div><button class="btn btn-warning" @onclick="Edit" @onclick:preventDefault><i class="bi bi-person-slash"></i>Edit user</button></div>
-              
-            </div>
 
-            <div class ="mb-3 px-5">
-                
-                <div ><button class="btn btn-info" @onclick="Logout" @onclick:preventDefault><i class="bi bi-box-arrow-left"></i> Logout </button></div>
-            </div>
-        </Authorized>
-    </AuthorizeView>
-
-    @*<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
         <nav class="flex-column">
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
@@ -127,9 +109,9 @@
 
 
 
-    </nav>
+        </nav>
 
-    </div>*@
+    </div>
 
     <div class="bottom-row">
         <div class="icon-menu-arrow">
@@ -197,19 +179,8 @@
         }
     }
 
-    private async Task Logout()
-    {
-        await loginService.LogoutAsync();
-        navigationManager.NavigateTo("/", true);
-    }
 
-    private async Task Edit()
-    {
-      
-        navigationManager.NavigateTo("/edituser", true);
-    }
 
 
 
 }
-

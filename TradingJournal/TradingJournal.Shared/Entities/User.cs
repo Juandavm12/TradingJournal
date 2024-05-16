@@ -28,13 +28,13 @@ namespace TradingJournal.Shared.Entities
 
         public string Address { get; set; }
 
-        public UserType UserType { get; set; }
- 
-
-        public string FullName => $"{FirstName} {LastName}";
-
-        [Display(Name = "Photo")]
+        [Display(Name = "Foto")]
         public string Photo { get; set; }
+        public UserType UserType { get; set; }
+
+
+        public string FullName => $"{FirstName}{LastName}";
+
 
 
     }

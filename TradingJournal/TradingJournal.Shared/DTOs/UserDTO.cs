@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TradingJournal.Shared.Entities;
-
 namespace TradingJournal.Shared.DTOs
 {
     public class UserDTO : User

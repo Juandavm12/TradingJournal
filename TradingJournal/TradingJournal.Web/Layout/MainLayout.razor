@@ -1,10 +1,4 @@
-﻿@using Microsoft.AspNetCore.Components.Authorization
-@using Microsoft.AspNetCore.Authorization;
-@using TradingJournal.Shared.Entities
-@using TradingJournal.Web.Repositories
-@using TradingJournal.Web.Shared
-@using TradingJournal.Web.Auth
-@attribute [Authorize(Roles = "Admin")]
+﻿@attribute [Authorize(Roles = "Admin")]
 @inject IRepository Repository
 @inject SweetAlertService sweetAlertService
 @inject NavigationManager navigationManager
@@ -40,12 +34,11 @@
             </AuthorizeView>
 
 
-          
-            <AuthorizeView>
+
+            <AuthorizeView Roles="User">
                 <Authorized>
                     <li><a href=""><i class="bi bi-person-slash"></i>&nbsp; Test </a></li>
                     <div class="d-flex justify-content-end">
-
                     </div>
                 </Authorized>
             </AuthorizeView>
@@ -64,17 +57,47 @@
             <Authorized>
 
                 <div class="d-flex justify-content-end">
-                    <div class="p-2"><button class="btn btn-dark" disabled> @context.User.Identity!.Name <i class="bi bi-person"></i></button></div>
                     @if (!string.IsNullOrEmpty(photoUser))
                     {
-                        <div class="mx-2">
-                            <img src="@photoUser" width="50" height="50" style="border-radius:50%" />
+                        <div>
+
+                            <Dropdown TItem="int" OnSelected="@OnSelected">
+                                <InitialTip>@context.User.Identity!.Name  <img src="@photoUser" width="50" height="50" style="border-radius:50%" /></InitialTip>
+                                <ChildContent>
+
+                                    <DropdownListItem Context="dropContext" Item="1"><i class="bi bi-person-slash"></i>&nbsp; &nbsp; Edit User</DropdownListItem>
+                                    <DropdownListItem Context="dropContext" Item="2"><i class="bi bi-box-arrow-left"></i>&nbsp; &nbsp; Logout</DropdownListItem>
+
+
+                                </ChildContent>
+                            </Dropdown>
                         </div>
+
                     }
-                 </div>
+
+                    @if (string.IsNullOrEmpty(photoUser))
+                    {
+                        <div>
+
+                            <Dropdown TItem="int" OnSelected="@OnSelected">
+                                <InitialTip>@context.User.Identity!.Name <i class="bi bi-person"></i></InitialTip>
+                                <ChildContent>
+
+                                    <DropdownListItem Context="dropContext" Item="1"><i class="bi bi-person-slash"></i>&nbsp; &nbsp; Edit User</DropdownListItem>
+                                    <DropdownListItem Context="dropContext" Item="2"><i class="bi bi-box-arrow-left"></i>&nbsp; &nbsp; Logout</DropdownListItem>
+
+
+                                </ChildContent>
+                            </Dropdown>
+                        </div>
+
+                    }
+                  
+                </div>
+
             </Authorized>
         </AuthorizeView>
-    
+
 
         <article class="content px-4">
             @Body
@@ -84,22 +107,24 @@
 
 @code {
     private string photoUser;
-    private string UserName;
+   
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; } = null!;
+    protected async override Task OnParametersSetAsync()
 
-
-    public List<User> Users { get; set; } = new List<User>();
-
-
-    protected async override Task OnInitializedAsync()
     {
-        var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
-        var user = authstate.User;
-        UserName = user.Identity.Name;
+        var authenticationState = await authenticationStateTask;
 
-        await PhotoGet();
+        var photoClaim = authenticationState.User.Claims.FirstOrDefault(x => x.Type == "Photo"); ;  
+              
+        if (photoClaim is not null)
+
+        {
+            photoUser = photoClaim.Value;
+            
+        }
+
     }
-
-
 
 
 
@@ -124,22 +149,20 @@
         navigationManager.NavigateTo("/Register");
     }
 
-    private async Task PhotoGet()
+   
+
+    private async Task OnSelected(int selection)
     {
-        if (!string.IsNullOrEmpty(UserName)){
-            var responseHTTP = await Repository.GetAsync<List<User>>("/api/users");
-            Users = responseHTTP.Response!;
-
-            photoUser = "";
-            foreach (var username in Users!)
-            {
-                if (UserName.Equals(username.Email))
-                {
-                    photoUser = username.Photo;
-                }
-            }
-
+        if (selection == 1)
+        {
+            navigationManager.NavigateTo("/edituser", true);
         }
+        else if (selection == 2)
+        {
+            await loginService.LogoutAsync();
+            navigationManager.NavigateTo("/", true);
+        }
+
     }
 
 }

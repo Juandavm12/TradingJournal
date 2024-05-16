@@ -6,45 +6,59 @@
     <DataAnnotationsValidator />
 
     
-    <div>
-
-        <label>Broker</label>
-        <Dropdown TItem="int" OnSelected="@OnSelected">
-            <InitialTip>Select a Broker</InitialTip>
-            <ChildContent>
-                @foreach (var broker in Brokers!)
+    <div class="w-25 py-2">
+        <label>Broker:</label>
+        <div>
+            <select class="form-select"  @bind="@Account.BrokersId">
+                <option value="0">-- Select a Broker --</option>
+                @if (Brokers is not null)
                 {
-                    <DropdownListItem Context="dropContext" Item="@broker.Id">@broker.Name </DropdownListItem>
+                    @foreach (var obj in Brokers)
+                    {
+                        <option value="@obj.Id">@obj.Name</option>
+                    }
                 }
-            </ChildContent>
-        </Dropdown>
+            </select>
+            <ValidationMessage For="@(() => @Account.BrokersId)" />
+        </div>
     </div>
 
-    <div>
-        <label>Trader</label>
-        <Dropdown TItem="int" OnSelected="@OnSelected2">
-            <InitialTip>Select a Trader</InitialTip>
-            <ChildContent>
-                @foreach (var trader in Traders!)
+
+    <div class="w-25 py-2">
+        <label>Trader:</label>
+        <div>
+            <select class="form-select" @bind="@Account.TradersId">
+                <option value="0">-- Select a Trader --</option>
+                @if (Traders is not null)
                 {
-                    <DropdownListItem Context="dropContext" Item="@trader.Id">@trader.Name (@trader.Id)</DropdownListItem>
+                    @foreach (var obj in Traders)
+                    {
+                        <option value="@obj.Id">@obj.Name</option>
+                    }
                 }
-            </ChildContent>
-        </Dropdown>
+            </select>
+            <ValidationMessage For="@(() => @Account.TradersId)" />
+        </div>
     </div>
 
-    <div>
+    <div class="w-25 py-2">
         <label>Account Type</label>
-        <Dropdown TItem="int" OnSelected="@OnSelected3">
-            <InitialTip>Select a Account Type</InitialTip>
-            <ChildContent>
-                @foreach (var acctype in AccTypes!)
+        <div>
+            <select class="form-select" @bind="@Account.AccTypesId">
+                <option value="0">-- Select a Account Type --</option>
+                @if (AccTypes is not null)
                 {
-                    <DropdownListItem Context="dropContext" Item="@acctype.Id">@acctype.Name</DropdownListItem>
+                    @foreach (var obj in AccTypes)
+                    {
+                        <option value="@obj.Id">@obj.Name</option>
+                    }
                 }
-            </ChildContent>
-        </Dropdown>
+            </select>
+            <ValidationMessage For="@(() => @Account.AccTypesId)" />
+        </div>
     </div>
+
+    
 
     <div class="mb-3">
         <label>Creation Date</label>
@@ -62,6 +76,8 @@
     </div>
 
 
+    
+
     <button class="btn btn-primary" type="submit">Save <i class="bi bi-floppy2"></i></button>
 
 
@@ -76,49 +92,32 @@
 
 
 @code {
+    private List<Broker> Brokers;
 
-    private List<Broker> Brokers { get; set; } = new List<Broker>();
- 
-    private List<Trader> Traders { get; set; } = new List<Trader>();
+    private List<Trader> Traders;
 
-    private List<AccType> AccTypes { get; set; } = new List<AccType>();
-
-    private void OnSelected(int selection)
-    {
-        Account.BrokersId = selection;
-
-    }
-
-    private void OnSelected2(int selection)
-    {
-        Account.TradersId = selection;
-
-    }
-
-    private void OnSelected3(int selection)
-    {
-        Account.AccTypesId = selection;
-
-    }
+    private List<AccType> AccTypes;
 
 
     protected async override Task OnInitializedAsync()
     {
         await Charging();
+        
 
     }
 
     private async Task Charging()
     {
 
-       var responseHTTP = await Repository.GetAsync<List<Broker>>("/api/brokers");
+        var responseHTTP = await Repository.GetAsync<List<Broker>>("/api/brokers/combo");
         Brokers = responseHTTP.Response!;
 
-        var response2HTTP = await Repository.GetAsync<List<Trader>>("/api/traders");
+        var response2HTTP = await Repository.GetAsync<List<Trader>>("/api/traders/combo");
         Traders = response2HTTP.Response!;
 
-        var response3HTTP = await Repository.GetAsync<List<AccType>>("/api/acctypes");
+        var response3HTTP = await Repository.GetAsync<List<AccType>>("/api/acctypes/combo");
         AccTypes = response3HTTP.Response!;
+            
 
     }
 
