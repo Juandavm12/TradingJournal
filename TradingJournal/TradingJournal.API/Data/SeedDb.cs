@@ -71,6 +71,22 @@ namespace TradingJournal.API.Data
                     AccTypesId = 2,
                     InitialBalance = 800000
                 });
+
+                _context.Accounts.Add(new Account
+                {
+                    BrokersId = 3,
+                    TradersId = 1,
+                    AccTypesId = 3,
+                    InitialBalance = 100000
+                });
+
+                _context.Accounts.Add(new Account
+                {
+                    BrokersId = 4,
+                    TradersId = 2,
+                    AccTypesId = 1,
+                    InitialBalance = 200000
+                });
             }
             await _context.SaveChangesAsync();
         }
