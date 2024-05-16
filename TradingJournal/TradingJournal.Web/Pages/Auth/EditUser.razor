@@ -1,10 +1,4 @@
 ﻿@page "/EditUser"
-@using Microsoft.AspNetCore.Components.Authorization
-@using Microsoft.AspNetCore.Authorization;
-@using TradingJournal.Shared.Entities
-@using TradingJournal.Web.Repositories
-@using TradingJournal.Web.Shared
-@using TradingJournal.Web.Auth
 @attribute [Authorize(Roles = "Admin")]
 @inject IRepository repository
 @inject SweetAlertService sweetAlertService
@@ -12,7 +6,6 @@
 @inject ILoginService loginService
 @inherits LayoutComponentBase
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
-
 
 
 @if (user is null) 
@@ -26,16 +19,8 @@ else
     <h3><i class="bi bi-person-slash" /> Edit User</h3>
     <EditForm Model="user" OnValidSubmit="SaveUserAsync">
 
-        <DataAnnotationsValidator />
+        <DataAnnotationsValidator />      
 
-
-
-        
-
-           
-                               
-
-     
 
             <div class="card-body">
 

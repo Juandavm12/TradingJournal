@@ -1,9 +1,4 @@
-﻿@using TradingJournal.Shared.Entities
-@using TradingJournal.Web.Repositories
-@inject IRepository Repository
-@using Microsoft.AspNetCore.Components.Authorization
-@using Microsoft.AspNetCore.Authorization;
-@using TradingJournal.Web.Shared
+﻿@inject IRepository Repository
 @attribute [Authorize(Roles = "Admin")]
 
 <EditForm Model="Account" OnValidSubmit="OnValidSubmit">

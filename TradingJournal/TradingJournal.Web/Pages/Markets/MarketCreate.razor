@@ -1,11 +1,7 @@
 ﻿@page "/Markets/create"
-@using TradingJournal.Shared.Entities
-@using TradingJournal.Web.Repositories
 @inject IRepository repository
 @inject NavigationManager navigationManager
 @inject SweetAlertService sweetAlertService
-@using Microsoft.AspNetCore.Components.Authorization
-@using Microsoft.AspNetCore.Authorization;
 @attribute [Authorize(Roles = "Admin")]
 
 

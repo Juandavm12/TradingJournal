@@ -1,11 +1,7 @@
 ﻿@page "/AccTypes/edit/{AccTypeId:int}"
-@using TradingJournal.Shared.Entities
-@using TradingJournal.Web.Repositories
 @inject NavigationManager navigationManager
 @inject IRepository repository
-@inject SweetAlertService sweetAlertService
-@using Microsoft.AspNetCore.Components.Authorization
-@using Microsoft.AspNetCore.Authorization;
+@inject SweetAlertService sweetAlertService;
 @attribute [Authorize(Roles = "Admin")]
 
 <h3>Edit Account Type</h3>

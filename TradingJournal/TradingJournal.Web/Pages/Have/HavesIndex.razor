@@ -1,15 +1,8 @@
 ﻿@page "/Haves"
-@using Microsoft.AspNetCore.Components.Authorization
-@using Microsoft.AspNetCore.Authorization;
 @attribute [Authorize(Roles = "Admin")]
-@using TradingJournal.Shared.Entities
-@using TradingJournal.Web.Repositories
-@using TradingJournal.Web.Shared
 @inject IRepository Repository
 @inject SweetAlertService sweetAlertService
 @inject NavigationManager navigationManager
-
-
 
 @if (Haves is null) 
 

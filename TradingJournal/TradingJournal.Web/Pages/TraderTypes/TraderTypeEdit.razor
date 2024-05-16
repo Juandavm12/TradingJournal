@@ -1,11 +1,7 @@
 ﻿@page "/tradertypes/edit/{TraderTypeId:int}"
-@using TradingJournal.Shared.Entities
-@using TradingJournal.Web.Repositories
 @inject NavigationManager navigationManager
 @inject IRepository repository
 @inject SweetAlertService sweetAlertService
-@using Microsoft.AspNetCore.Components.Authorization
-@using Microsoft.AspNetCore.Authorization;
 @attribute [Authorize(Roles = "Admin")]
 
 <h3>Edit Trader Type</h3>
