@@ -94,6 +94,7 @@
 
 @code {
 
+
     public string tradertype { get; set; }
 
     public List<Trader> Traders { get; set; }
@@ -114,7 +115,7 @@
         Traders = responseHTTP.Response!;
 
         var response2HTTP = await Repository.GetAsync<List<TraderType>>("/api/TraderTypes");
-        TraderTypes = response2HTTP.Response!;
+        TraderTypes = response2HTTP.Response!;  
 
     }
 
