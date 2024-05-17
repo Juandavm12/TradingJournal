@@ -1,0 +1,141 @@
+﻿@page "/users"
+@inject IRepository repository
+@inject NavigationManager navigationManager
+@inject SweetAlertService sweetAlertService
+@attribute [Authorize(Roles = "Admin")]
+
+@if (Users is null)
+
+{
+
+<div class="spinner" />
+
+}
+
+else
+
+{
+
+<GenericList MyList="Users">
+
+<Body>
+
+<div class="card">
+
+<div class="card-header">
+
+<span>
+
+<i class="bi bi-people"></i> Users
+
+<a class="btn btn-sm btn-primary float-end" href="/register/?IsAdmin=true"><i class="bi bi-plus"></i> Add Admin</a>
+
+</span>
+
+</div>
+
+<div class="card-body">
+
+<div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
+
+<div>
+
+
+
+</div>
+
+<div class="mx-1">
+
+
+
+</div>
+
+</div>
+
+
+
+<table class="table table-striped">
+
+<thead>
+
+<tr>
+
+<th>Photo</th>
+
+<th>User</th>
+
+<th>Document</th>
+
+<th>Phone</th>
+
+<th>Email</th>
+
+<th>Adress</th>
+
+<th>Confirm</th>
+
+<th>User Type</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+@foreach (var user in Users)
+
+{
+
+<tr>
+
+<td><img src="@user.Photo" width="80" height="80" style="border-radius:50%" /></td>
+
+<td>@user.FullName</td>
+
+<td>@user.Document</td>
+
+<td>@user.PhoneNumber</td>
+
+<td>@user.Email</td>
+
+<td>@user.Address</td>
+
+<td>@user.EmailConfirmed</td>
+
+<td>@user.UserType</td>
+
+</tr>
+
+}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</Body>
+
+</GenericList>
+
+}
+
+@code {
+
+    public List<User> Users { get; set; }
+    
+    protected async override Task OnInitializedAsync()
+    {
+        await LoadAsync();
+    }
+    
+    private async Task LoadAsync()
+    {       
+            var responseHTTP = await repository.GetAsync<List<User>>("/api/users");
+            Users = responseHTTP.Response!;
+
+        }
+    }
+   

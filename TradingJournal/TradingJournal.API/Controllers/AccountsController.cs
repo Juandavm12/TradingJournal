@@ -59,7 +59,7 @@ namespace TradingJournal.API.Controllers
             var response = _mailHelper.SendMail(user.FullName, user.Email!,
                 $"Trading Journal - Password Recovery",
                 $"<h1>Trading Journal - Password Recovery</h1>" +
-                $"<p>\r\n72 / 5.000\r\nTo recover your password, please click 'Recover Password'':</p>" +
+                $"<p>To recover your password, please click 'Recover Password'':</p>" +
                 $"<b><a href ={tokenLink}>Recover Password</a></b>");
 
             if (response.IsSuccess)
@@ -252,10 +252,10 @@ namespace TradingJournal.API.Controllers
 
             if (result.IsNotAllowed)
             {
-                return BadRequest("The user has not been enabled, you must follow the instructions in the email sent to enable the user.");
+                return BadRequest(" The user has not been enabled, you must follow the instructions in the email sent to you, to enable the user.<br><a class=\"bbtn btn-link\" href=\"/ResendToken\">Resend Account Activation Email</a>");
             }
 
-            return BadRequest("Wrong email or password.");
+            return BadRequest("Wrong email or password.<br><p><a class=\"bbtn btn-link\" href=\"/RecoverPassword\">Forgot your password?</a></p>");
         }
 
         private TokenDTO BuildToken(User user)
@@ -288,5 +288,37 @@ namespace TradingJournal.API.Controllers
                 Expiration = expiration
             };
         }
+
+        [HttpPost("ResetPassword")]
+
+        public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordDTO model)
+
+        {
+
+            User user = await _userHelper.GetUserAsync(model.Email);
+
+            if (user == null)
+
+            {
+
+                return NotFound();
+
+            }
+
+            var result = await _userHelper.ResetPasswordAsync(user, model.Token, model.Password);
+
+            if (result.Succeeded)
+
+            {
+
+                return NoContent();
+
+            }
+
+            return BadRequest(result.Errors.FirstOrDefault()!.Description);
+
+        }
+
+
     }
 }

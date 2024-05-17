@@ -17,19 +17,24 @@
 }
 else
 {
-    <h3><i class="bi bi-person-slash" /> Edit User</h3>
+    
     <EditForm Model="user" OnValidSubmit="SaveUserAsync">
 
         <DataAnnotationsValidator />      
 
 
-            <div class="card-body">
-
-                <div class="row">
-
-                    <div class="col-6">
-
-                        <div class="mb-3">
+           <div class="card">
+        <div class="card-header">
+            <span>
+                    <i class="bi bi-person-slash" /> Edit User
+                    <button class="btn btn-sm btn-primary  mx-2  float-end" type="submit"><i class="bi bi-floppy2" /> Save Changes</button>
+                    <a class="btn btn-sm btn-warning float-end" href="/changePassword"><i class="bi bi-key" /> Change Password</a>
+            </span>
+                        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-6">
+            <div class="mb-3">
                             <label>First Name:</label>
                             <div>
                                 <InputText class="form-control" @bind-Value="@user.FirstName" />
@@ -68,25 +73,27 @@ else
                                 <ValidationMessage For="@(() => user.Address)" />
                             </div>
                         </div>
+                    </div>
 
-                       
 
+
+                    <div class="col-6">
                         <div class="mb-3">
-
+                            <div>
                             <InputImg Label="Photo" ImageSelected="ImageSelected" ImageURL="@imageUrl" />
 
                         </div>
-
-
+                        </div>
+                    </div>
                     </div>
                 </div>
             </div>
             <span>
 
 
-            <a class="btn btn-sm btn-warning " href="/changePassword"><i class="bi bi-pencil-square" /> Change Password</a>
+         
 
-            <button class="btn btn-sm btn-primary  mx-2" type="submit"><i class="bi bi-floppy2" /> Save Changes</button>
+          
 
             </span>
        
