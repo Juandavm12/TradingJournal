@@ -47,8 +47,8 @@ namespace TradingJournal.API.Data
 
             await CheckRoleAsync();
 
-            await CheckUserAsync("111111", "Super", "Admin", "EDWINRAMIREZGON@GMAIL.COM", "3137778067", "CARRERA 42A 78A 17", "https://tradingjournalphotos.blob.core.windows.net/users/dd747d07-7961-45f4-8f5c-5cd954a1a3a7.jpg",  UserType.Admin);
-            await CheckUserAsync("1112", "Super", "Admin", "JUANDAV12@GMAIL.COM", "3005216416", "CARRERA 33 65 66", "https://tradingjournalphotos.blob.core.windows.net/users/dd747d07-7961-45f4-8f5c-5cd954a1a3a7.jpg",  UserType.Admin);
+            await CheckUserAsync("111111", "Super", "Admin", "EDWINRAMIREZGON@GMAIL.COM", "3137778067", "CARRERA 42A 78A 17", "https://tradingjournalphotos.blob.core.windows.net/users/5f466e68-fc01-4b23-ad34-e297afbebf90.jpg",  UserType.Admin);
+            await CheckUserAsync("1112", "Super", "Admin", "JUANDAV12@GMAIL.COM", "3005216416", "CARRERA 33 65 66", "https://tradingjournalphotos.blob.core.windows.net/users/cf276c98-b4a1-4e7d-9624-f91c8c9b7166.jpg",  UserType.Admin);
         }
 
         //------------------  Methods indivuals by entities whit default values  ---------------//
@@ -288,6 +288,8 @@ namespace TradingJournal.API.Data
 
                 await _userHelper.AddUserAsync(user, "123456");
                 await _userHelper.AddUserToRoleAsync(user, userType.ToString());
+                var token = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                await _userHelper.ConfirmEmailAsync(user, token);
             }
             return user;
         }

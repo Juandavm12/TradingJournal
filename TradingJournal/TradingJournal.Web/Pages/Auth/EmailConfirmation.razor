@@ -1,0 +1,37 @@
+﻿@page "/api/accounts/ConfirmEmail"
+@inject NavigationManager navigationManager
+@inject IRepository repository
+@inject SweetAlertService sweetAlertService
+
+<h3>Email Confirm</h3>
+
+<p>Press the button to confirm your email</p>
+<button class="btn btn-primary" @onclick="ConfirmAccountAsync">Confirm Account</button>
+
+
+
+@code {
+    private string? message;
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string UserId { get; set; } = "";
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Token { get; set; } = "";
+    protected async Task ConfirmAccountAsync()
+    {
+        var responseHttp = await repository.Get($"/api/accounts/ConfirmEmail/?userId={UserId}&token={Token}");
+        if (responseHttp.Error)
+        {
+            message = await responseHttp.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            navigationManager.NavigateTo("/");
+        }
+        else
+        {
+
+            await sweetAlertService.FireAsync("Confirm", "Thanks for your email confirmation, you can now log in to the system.", SweetAlertIcon.Info);
+            navigationManager.NavigateTo("/");
+        }
+    }
+    }

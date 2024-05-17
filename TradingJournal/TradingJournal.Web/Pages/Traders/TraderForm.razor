@@ -27,20 +27,26 @@
             <ValidationMessage For="@(() => @Trader.CellNumber)" />
         </div>
     </div>
-        <div>
-        <label>Trader Type</label>
-        <Dropdown TItem="int" OnSelected="@OnSelected">
-            <InitialTip>Select a Trader Type</InitialTip>
-            <ChildContent>
-                @foreach (var tradertype in TraderTypes!)
-                {
-                    <DropdownListItem Context="dropContext" Item="@tradertype.Id">@tradertype.Name</DropdownListItem>
-                }
-            </ChildContent>
-        </Dropdown>
-    </div>
-    
 
+
+    <div class="w-25 py-2">
+        <label>Trader Type</label>
+        <div>
+            <select class="form-select" @bind="@Trader.TraderTypesId">
+                <option value="0">-- Select a Trader Type --</option>
+                @if (TraderTypes is not null)
+                {
+                    @foreach (var obj in TraderTypes)
+                    {
+                        <option value="@obj.Id">@obj.Name</option>
+                    }
+                }
+            </select>
+            <ValidationMessage For="@(() => @Trader.TraderTypesId)" />
+        </div>
+    </div>
+
+      
 
     <button class="btn btn-primary" type="submit">Save <i class="bi bi-floppy2"></i></button>
 
@@ -56,15 +62,9 @@
 
 
 @code {
+    private List<TraderType> TraderTypes;
 
-    private List<TraderType> TraderTypes { get; set; } = new List<TraderType>();
-
-    private void OnSelected(int selection)
-    {
-        Trader.TraderTypesId = selection;
-
-    }
-
+   
     [EditorRequired]
     [Parameter]
     public Trader Trader { get; set; }

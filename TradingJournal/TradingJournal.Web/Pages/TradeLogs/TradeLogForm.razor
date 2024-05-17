@@ -69,20 +69,25 @@
         </div>
     </div>
 
-    <div>
-    <label>Account Number</label>
-        <Dropdown TItem="int" OnSelected="@OnSelected">
-            <InitialTip>Select a Account</InitialTip>
-            <ChildContent>
-                @foreach (var account in Accounts!)
+
+    <div class="w-25 py-2">
+        <label>Account Number</label>
+        <div>
+            <select class="form-select" @bind="@TradeLog.AccountsAccNumber">
+                <option value="0">-- Select a Account --</option>
+                @if (Accounts is not null)
                 {
-                    <DropdownListItem Context="dropContext" Item="@account.AccNumber">@account.AccNumber </DropdownListItem>
+                    @foreach (var obj in Accounts)
+                    {
+                        <option value="@obj.AccNumber">@obj.AccNumber</option>
+                    }
                 }
-            </ChildContent>
-        </Dropdown>
+            </select>
+            <ValidationMessage For="@(() => @TradeLog.AccountsAccNumber)" />
+        </div>
     </div>
 
-
+    
     <button class="btn btn-primary" type="submit">Save <i class="bi bi-floppy2"></i></button>
 
 
@@ -98,6 +103,8 @@
 
 @code {
 
+    private List<Account> Accounts;
+
     protected async override Task OnInitializedAsync()
     {
         await Charging();
@@ -107,20 +114,11 @@
     private async Task Charging()
     {
 
-        var responseHTTP = await Repository.GetAsync<List<Account>>("/api/account");
+        var responseHTTP = await Repository.GetAsync<List<Account>>("/api/account/combo");
         Accounts = responseHTTP.Response!;
 
 
     }
-
-    private List<Account> Accounts { get; set; } = new List<Account>();
-
-    private void OnSelected(int selection)
-    {
-        TradeLog.AccountsAccNumber = selection;
-
-    }
-
 
     [EditorRequired]
     [Parameter]

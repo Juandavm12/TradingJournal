@@ -61,15 +61,25 @@ builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer("name = WindowsSe
 //this is for the required parameters for the security of users
 builder.Services.AddIdentity<User, IdentityRole>(x =>
 {
+    x.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
+    x.SignIn.RequireConfirmedEmail = true;
     x.User.RequireUniqueEmail = true;
     x.Password.RequireDigit = false;
-    x.Password.RequiredUniqueChars = 0;
-    x.Password.RequireUppercase = false;
+x.Password.RequiredUniqueChars = 0;
     x.Password.RequireLowercase = false;
     x.Password.RequireNonAlphanumeric = false;
-}).AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders();
+    x.Password.RequireUppercase = false;
+    x.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    x.Lockout.MaxFailedAccessAttempts = 3;
+    x.Lockout.AllowedForNewUsers = true;
+})
+.AddEntityFrameworkStores<DataContext>()
+.AddDefaultTokenProviders();
+
 
 builder.Services.AddScoped<IUserHelper, UserHelper>();
+
+builder.Services.AddScoped<IMailHelper, MailHelper>();
 
 builder.Services.AddScoped<IFileStorage, FileStorage>();
 

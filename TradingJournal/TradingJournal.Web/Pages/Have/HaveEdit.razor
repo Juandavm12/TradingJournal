@@ -2,13 +2,12 @@
 @inject NavigationManager navigationManager
 @inject IRepository repository
 @inject SweetAlertService sweetAlertService
-@attribute [Authorize(Roles = "Admin")]
 
 <h3>Edit Have</h3>
 
 @if (have is null)
 {
-    <p>the have is null</p>
+    <div class="spinner" />
 }
 else
 {

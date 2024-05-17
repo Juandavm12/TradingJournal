@@ -11,8 +11,8 @@ namespace TradingJournal.Shared.DTOs
     {
 
         [Display(Name = "Email")]
-        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        [EmailAddress(ErrorMessage = "Debes ingresar un correo válido.")]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        [EmailAddress(ErrorMessage = "You must enter a valid email.")]
         public string Email { get; set; } = null!;
     }
 }

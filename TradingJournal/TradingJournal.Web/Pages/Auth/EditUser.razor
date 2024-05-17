@@ -188,7 +188,7 @@ else
 
     {
 
-        var responseHttp = await repository.PutAsync<User>("/api/accounts", user!);
+        var responseHttp = await repository.Put<User, TokenDTO>("/api/accounts", user!);
 
         if (responseHttp.Error)
 
@@ -202,10 +202,7 @@ else
 
         }
 
-        await loginService.LogoutAsync();
-
-
-
+        await loginService.LoginAsync(responseHttp.Response!.Token);
         navigationManager.NavigateTo("/" , true);
 
     }

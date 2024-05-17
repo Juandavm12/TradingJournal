@@ -5,31 +5,43 @@
 
     <DataAnnotationsValidator />
 
-     <div>
-        <label>Trader</label>
-        <Dropdown TItem="int" OnSelected="@OnSelected2">
-            <InitialTip>Select a Trader</InitialTip>
-            <ChildContent>
-                @foreach (var trader in Traders!)
+
+
+    <div class="w-25 py-2">
+        <label>Trader:</label>
+        <div>
+            <select class="form-select" @bind="@Have.TradersId">
+                <option value="0">-- Select a Trader --</option>
+                @if (Traders is not null)
                 {
-                    <DropdownListItem Context="dropContext" Item="@trader.Id">@trader.Name (@trader.Id)</DropdownListItem>
+                    @foreach (var obj in Traders)
+                    {
+                        <option value="@obj.Id">@obj.Name</option>
+                    }
                 }
-            </ChildContent>
-        </Dropdown>
+            </select>
+            <ValidationMessage For="@(() => @Have.TradersId)" />
+        </div>
     </div>
 
-    <div>
-        <label>Strategy</label>
-        <Dropdown TItem="int" OnSelected="@OnSelected">
-            <InitialTip>Select a Strategy</InitialTip>
-            <ChildContent>
-                @foreach (var strategy in Strategies!)
+    <div class="w-25 py-2">
+        <label>Strategy:</label>
+        <div>
+            <select class="form-select" @bind="@Have.StrategiesCode">
+                <option value="0">-- Select a Strategy --</option>
+                @if (Strategies is not null)
                 {
-                    <DropdownListItem Context="dropContext" Item="@strategy.Code">@strategy.Name</DropdownListItem>
+                    @foreach (var obj in Strategies)
+                    {
+                        <option value="@obj.Code">@obj.Name</option>
+                    }
                 }
-            </ChildContent>
-        </Dropdown>
+            </select>
+            <ValidationMessage For="@(() => @Have.StrategiesCode)" />
+        </div>
     </div>
+     
+        
          
 
     <button class="btn btn-primary" type="submit">Save <i class="bi bi-floppy2"></i></button>
@@ -44,23 +56,11 @@
 </EditForm>
 
 @code {
+    private List<Trader> Traders;
 
-    private List<Trader> Traders { get; set; } = new List<Trader>();
+    private List<Strategy> Strategies;
 
-    private List<Strategy> Strategies { get; set; } = new List<Strategy>();
-
-    private void OnSelected(int selection)
-    {
-        Have.StrategiesCode = selection;
-
-    }
-
-    private void OnSelected2(int selection)
-    {
-        Have.TradersId = selection;
-
-    }
-
+   
     protected async override Task OnInitializedAsync()
     {
         await Charging();
@@ -69,14 +69,12 @@
 
     private async Task Charging()
     {
-        var responseHTTP = await Repository.GetAsync<List<Strategy>>("/api/Strategies");
+        var responseHTTP = await Repository.GetAsync<List<Strategy>>("/api/Strategies/combo");
         Strategies = responseHTTP.Response!;
 
-        var response2HTTP = await Repository.GetAsync<List<Trader>>("/api/traders");
+        var response2HTTP = await Repository.GetAsync<List<Trader>>("/api/traders/combo");
         Traders = response2HTTP.Response!;
-
-
-
+        
     }
 
 
