@@ -19,7 +19,7 @@
                     }
                 }
             </select>
-            <ValidationMessage For="@(() => @Account.BrokersId)" />
+
         </div>
     </div>
 
@@ -27,17 +27,16 @@
     <div class="w-25 py-2">
         <label>Trader:</label>
         <div>
-            <select class="form-select" @bind="@Account.TradersId">
+            <select class="form-select" @bind="@Account.UsersId">
                 <option value="0">-- Select a Trader --</option>
-                @if (Traders is not null)
+                @if (Users is not null)
                 {
-                    @foreach (var obj in Traders)
+                    @foreach (var obj in Users)
                     {
-                        <option value="@obj.Id">@obj.Name</option>
+                        <option value="@obj.Id">@obj.Email</option>
                     }
                 }
-            </select>
-            <ValidationMessage For="@(() => @Account.TradersId)" />
+            </select>      
         </div>
     </div>
 
@@ -54,7 +53,7 @@
                     }
                 }
             </select>
-            <ValidationMessage For="@(() => @Account.AccTypesId)" />
+
         </div>
     </div>
 
@@ -94,7 +93,7 @@
 @code {
     private List<Broker> Brokers;
 
-    private List<Trader> Traders;
+    private List<User> Users;
 
     private List<AccType> AccTypes;
 
@@ -112,8 +111,8 @@
         var responseHTTP = await Repository.GetAsync<List<Broker>>("/api/brokers/combo");
         Brokers = responseHTTP.Response!;
 
-        var response2HTTP = await Repository.GetAsync<List<Trader>>("/api/traders/combo");
-        Traders = response2HTTP.Response!;
+        var response2HTTP = await Repository.GetAsync<List<User>>("/api/Users/combo");
+        Users = response2HTTP.Response!;
 
         var response3HTTP = await Repository.GetAsync<List<AccType>>("/api/acctypes/combo");
         AccTypes = response3HTTP.Response!;

@@ -9,8 +9,9 @@ using TradingJournal.Shared.Entities;
 namespace TradingJournal.API.Controllers
 {
 
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("/api/Haves")]
     public class HaveControllers : ControllerBase
     {

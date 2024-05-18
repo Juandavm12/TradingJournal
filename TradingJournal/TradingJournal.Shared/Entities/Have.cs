@@ -13,10 +13,10 @@ namespace TradingJournal.Shared.Entities
         public int Id { get; set; }
 
         //Foreign Keys
-        [ForeignKey("TradersId")]
+        [ForeignKey("UsersId")]
         [JsonIgnore]
-        public Trader Traders { get; set; }
-        public int TradersId { get; set; }
+        public User Users { get; set; }
+        public string UsersId { get; set; }
 
         [ForeignKey("StrategiesCode")]
         [JsonIgnore]

@@ -9,12 +9,13 @@ using TradingJournal.Shared.Entities;
 namespace TradingJournal.API.Controllers
 {
 
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("/api/Account")]
     public class AccountControllers : ControllerBase
     {
-
+        
         private readonly DataContext _context;
 
         //Constructor

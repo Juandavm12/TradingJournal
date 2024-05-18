@@ -53,7 +53,7 @@ main[b-r04c6vpjxr] {
     }
 
     .sidebar[b-r04c6vpjxr] {
-        width: 220px;
+        width: 200px;
         height: 100vh;
         position: sticky;
         top: 0;
@@ -89,10 +89,10 @@ main[b-r04c6vpjxr] {
 .bottom-row {
     position: absolute;
     bottom: 0;
-    padding-bottom: 10px;
+    padding-bottom: 15px;
     text-align: right;
     width: 100%;
-    padding-right: 28px;
+    padding-right: 10px;
 }
 
 .navbar-brand[b-hk7u9em2mg] {
@@ -143,10 +143,10 @@ main[b-r04c6vpjxr] {
         line-height: 3rem;
     }
 
-/*.nav-item[b-hk7u9em2mg]  a.active {
+/nav-item[b-hk7u9em2mg]  a.active {
     background-color: rgba(255,255,255,0.37);
     color: white;
-}*/
+}
 
 .nav-item[b-hk7u9em2mg]  a:hover {
     background-color: rgba(255,255,255,0.1);
@@ -171,7 +171,7 @@ main[b-r04c6vpjxr] {
 
 }
 
-ul {
+/*ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -231,7 +231,7 @@ li {
 .dropdown:hover .dropdown-content {
     display: block;
     color: black;
-}
+}*/
 
 .oi {
     color: black;
@@ -266,4 +266,6 @@ li {
     100% {
         transform: rotate(360deg)
     }
-} 
+}
+
+

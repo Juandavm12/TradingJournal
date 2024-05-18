@@ -1,42 +1,179 @@
-﻿@page "/User/edit/{UserId}"
-@inject NavigationManager navigationManager
+﻿@page "/Users/edit/{UserId}"
+@attribute [Authorize(Roles = "Admin")]
 @inject IRepository repository
 @inject SweetAlertService sweetAlertService
-@attribute [Authorize(Roles = "Admin")]
+@inject NavigationManager navigationManager
+@inject ILoginService loginService
+@inherits LayoutComponentBase
+@inject AuthenticationStateProvider GetAuthenticationStateAsync
 
-<h3>Edit User</h3>
 
-@if (user is null)
-{
+
+@if (user is null) 
+
+{ 
     <div class="spinner" />
+
 }
 else
 {
-    <UserForm User="user" OnValidSubmit="Editar" ReturnAction="Return" />
     
+    <EditForm Model="user" OnValidSubmit="SaveUserAsync">
+
+        <DataAnnotationsValidator />      
+
+
+           <div class="card">
+        <div class="card-header">
+            <span>
+                    <i class="bi bi-person-slash" /> Edit User
+                    <button class="btn btn-sm btn-primary  mx-2  float-end" type="submit"><i class="bi bi-floppy2" /> Save Changes</button>                   
+            </span>
+                        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-6">
+
+                        <div class="w-25 py-2">
+                            <label>User Type</label>
+                            <div>
+                                <select class="form-select" @bind="@user.UserType">
+                                    <option value="0">-- Select a User Type --</option>
+                                    <option value="User">User</option>
+                                    <option value="Admin">Admin</option>
+                                  
+                                </select>
+                                <ValidationMessage For="@(() => @user.UserType)" />
+                            </div>
+                        </div>
+            <div class="mb-3">
+                            <label>First Name:</label>
+                            <div>
+                                <InputText class="form-control" @bind-Value="@user.FirstName" />
+                                <ValidationMessage For="@(() => user.FirstName)" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Last Name:</label>
+                            <div>
+                                <InputText class="form-control" @bind-Value="@user.LastName" />
+                                <ValidationMessage For="@(() => user.LastName)" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Document:</label>
+                            <div>
+                                <InputText class="form-control" @bind-Value="@user.Document" />
+                                <ValidationMessage For="@(() => user.Document)" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Phone:</label>
+                            <div>
+                                <InputText class="form-control" @bind-Value="@user.PhoneNumber" />
+                                <ValidationMessage For="@(() => user.PhoneNumber)" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Address:</label>
+                            <div>
+                                <InputText class="form-control" @bind-Value="@user.Address" />
+                                <ValidationMessage For="@(() => user.Address)" />
+                            </div>
+                        </div>
+                    </div>
+
+   
+
+
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <div>
+                            <InputImg Label="Photo" ImageSelected="ImageSelected" ImageURL="@imageUrl" />
+
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <span>
+
+
+         
+
+          
+
+            </span>
+       
+                        
+
+    </EditForm>
+
+
 }
 
-@code {
-    [Parameter] 
-    public string UserId { get; set; }
-    private User user = new();
 
-    
+   
+
+ 
+
+@code {
+
+    [Parameter]
+    public string UserId { get; set; } 
+
+    private User user;
+
+    private string imageUrl;
+
+
+
     protected override async Task OnInitializedAsync()
+
     {
 
-        var responseHTTP = await repository.GetAsync<User>($"api/Users/{UserId}");
+        await LoadUserAsyc();
+
+   
+
+        if (!string.IsNullOrEmpty(user!.Photo))
+
+        {
+
+            imageUrl = user.Photo;
+
+            user.Photo = null;
+
+        }
+
+
+
+    }
+
+
+
+    private async Task LoadUserAsyc()
+
+    {
+        
+
+        var responseHTTP = await repository.GetAsync<User>($"api/users/{UserId}");
 
         if (responseHTTP.Error)
         {
             if (responseHTTP.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
             {
-               
+
                 navigationManager.NavigateTo("users");
                 return;
             }
             else
-            {  
+            {
                 var mensajeError = await responseHTTP.GetErrorMessageAsync();
                 await sweetAlertService.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
                 return;
@@ -44,46 +181,47 @@ else
         }
         else
         {
-            
+
             user = responseHTTP.Response;
         }
+
+        user = responseHTTP.Response;
+
     }
 
-    private async Task Editar()
+
+
+
+    private void ImageSelected(string imagenBase64)
+
     {
 
-        var responseHTTP = await repository.PutAsync("api/users", user);
+        user!.Photo = imagenBase64;
 
-        if (responseHTTP.Error)
-        {
-            
-            var mensajeError = await responseHTTP.GetErrorMessageAsync();
-            await sweetAlertService.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
-        }
-        else
-        {
-            Return();
+        imageUrl = null;
 
-           
-            var Toast = sweetAlertService.Mixin(new SweetAlertOptions
-                {
-
-                    Toast = true,
-                    Position = SweetAlertPosition.BottomEnd,
-                    ShowConfirmButton = true,
-                    Timer = 3000
-
-                });
-
-            await Toast.FireAsync(icon: SweetAlertIcon.Success, message: "User modified successfully");
-
-        }
     }
-       
+
+
+
+    private async Task SaveUserAsync()
+    {
+
+        var responseHttp = await repository.PutAsync<User>("/api/accounts/admin", user!);
+        if (responseHttp.Error)
+        {
+            var message = await responseHttp.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+
+            return;
+        }
+        navigationManager.NavigateTo("/users");
+    }
+
     
-    private void Return()
-    {
-        navigationManager.NavigateTo("users");
-
-    }
 }
+    
+ 
+
+   
+

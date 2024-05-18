@@ -91,34 +91,21 @@ else
             <span>
 
 
-         
-
-          
 
             </span>
        
-                        
-
     </EditForm>
 
 
 }
 
 
-   
-
- 
 
 @code {
 
     private User user;
 
-    private List<User>? Users;
-
     private string imageUrl;
-
-    private LoginDTO loginDTO = new();
-
 
 
     protected override async Task OnInitializedAsync()
@@ -192,30 +179,16 @@ else
 
 
     private async Task SaveUserAsync()
-
     {
-
-        var responseHttp = await repository.Put<User, TokenDTO>("/api/accounts", user!);
-
+        var responseHttp = await repository.PutAsync<User>("/api/accounts", user!);
         if (responseHttp.Error)
-
         {
-
             var message = await responseHttp.GetErrorMessageAsync();
-
             await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
-
-            return;
-
+         
+    return;
         }
-
-        await loginService.LoginAsync(responseHttp.Response!.Token);
-        navigationManager.NavigateTo("/" , true);
-
+     
     }
-    
- 
+}
 
-   
-
-} 

@@ -56,7 +56,7 @@ else
                         </tr>
                         @foreach (var have in Haves!)
                         {
-                            TraderName(have.TradersId);
+                            TraderName(have.UsersId);
                             StrategyName(have.StrategiesCode);
 
 
@@ -97,7 +97,7 @@ else
     public string strategyname { get; set; }
 
 
-    public List<Trader> Traders { get; set; }
+    public List<User> Users { get; set; }
 
     public List<Strategy> Strategies { get; set; }
 
@@ -119,8 +119,8 @@ else
         var response2HTTP = await Repository.GetAsync<List<Strategy>>("/api/Strategies");
         Strategies = response2HTTP.Response!;
 
-        var response3HTTP = await Repository.GetAsync<List<Trader>>("/api/traders");
-        Traders = response3HTTP.Response!;
+        var response3HTTP = await Repository.GetAsync<List<User>>("/api/Users");
+        Users = response3HTTP.Response!;
     }
 
 
@@ -173,15 +173,15 @@ else
         }
     }
 
-    private void TraderName(int? selection)
+    private void TraderName(string? selection)
 
     {
         tradername = "";
-        foreach (var trader in Traders!)
+        foreach (var trader in Users!)
         {
             if (selection == trader.Id)
             {
-                tradername = trader.Name;
+                tradername = trader.Email;
             }
 
         }

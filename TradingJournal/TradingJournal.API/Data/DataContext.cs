@@ -20,7 +20,6 @@ namespace TradingJournal.API.Data
         public DbSet<Strategy> Strategies { get; set; }
         public DbSet<Trade> Trades { get; set; }
         public DbSet<TradeLog> TradeLogs { get; set; }
-        public DbSet<Trader> Traders { get; set; }
         public DbSet<TraderType> TraderTypes { get; set; }
 
 

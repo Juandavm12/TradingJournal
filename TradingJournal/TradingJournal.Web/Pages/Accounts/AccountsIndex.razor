@@ -32,11 +32,8 @@
                             <td>
                                 <b>Broker</b>
                             </td>
-                            <td>
-                                <b>Trader Id</b>
-                            </td>
-                            <td>
-                                <b>Trader Name</b>
+                                                        <td>
+                                <b>Trader</b>
                             </td>
                             <td>
                                 <b>Account Type</b>
@@ -56,7 +53,7 @@
                         @foreach (var account in Accounts!)
                         {
                             Brokername(@account.BrokersId);
-                            TraderName(@account.TradersId);
+                            TraderName(@account.UsersId);
                             AccTypeName(@account.AccTypesId);
 
                             <tr>
@@ -66,10 +63,7 @@
                                 <td>
                                     @brokername
                                 </td>
-                                <td>
-                                    @account.TradersId
-                                </td>
-                                <td>
+                                                                <td>
                                     @tradername
                                 </td>
                                 <td>
@@ -115,7 +109,7 @@
 
     public List<Broker> Brokers { get; set; }
 
-    public List<Trader> Traders { get; set; }
+    public List<User> Users { get; set; }
 
     public List<AccType> AccTypes { get; set; }
 
@@ -136,8 +130,8 @@
         var response2HTTP = await Repository.GetAsync<List<Broker>>("/api/brokers");
         Brokers = response2HTTP.Response!;
 
-        var response3HTTP = await Repository.GetAsync<List<Trader>>("/api/traders");
-        Traders = response3HTTP.Response!;
+        var response3HTTP = await Repository.GetAsync<List<User>>("/api/Users");
+        Users = response3HTTP.Response!;
 
         var response4HTTP = await Repository.GetAsync<List<AccType>>("/api/acctypes");
         AccTypes = response4HTTP.Response!;
@@ -207,15 +201,15 @@
 
         }
     }
-    private void TraderName(int? selection)
+    private void TraderName(string selection)
 
     {
         tradername = "";
-        foreach (var trader in Traders!)
+        foreach (var trader in Users!)
         {
             if (selection == trader.Id)
             {
-                tradername = trader.Name;
+                tradername = trader.Email;
             }
 
         }

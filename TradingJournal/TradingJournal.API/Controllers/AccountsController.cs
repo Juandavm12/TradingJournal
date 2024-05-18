@@ -15,15 +15,17 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using TradingJournal.API.Data;
 using Microsoft.EntityFrameworkCore;
+using Azure.Storage.Blobs.Models;
 
 
 namespace TradingJournal.API.Controllers
 {
+   
     [ApiController]
-    [Route("/api/accounts")]
+    [Route("/api/accounts")]   
     public class AccountsController : ControllerBase
     {
-        private readonly IUserHelper _userHelper;
+            private readonly IUserHelper _userHelper;
         private readonly IConfiguration _configuration;
         private readonly IFileStorage _fileStorage;
         private readonly IMailHelper _mailHelper;
@@ -120,7 +122,8 @@ namespace TradingJournal.API.Controllers
                 currentUser.Address = user.Address;
                 currentUser.PhoneNumber = user.PhoneNumber;
                 currentUser.Photo = !string.IsNullOrEmpty(user.Photo) && user.Photo != currentUser.Photo ? user.Photo : currentUser.Photo;
-      
+              
+
 
                 var result = await _userHelper.UpdateUserAsync(currentUser);
                 if (result.Succeeded)
@@ -136,6 +139,49 @@ namespace TradingJournal.API.Controllers
             }
         }
 
+        [HttpPut("admin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult> Putadmin(User user)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(user.Photo))
+                {
+                    var photoUser = Convert.FromBase64String(user.Photo);
+                    user.Photo = await _fileStorage.SaveFileAsync(photoUser, ".jpg", _container);
+                }
+
+                var currentUser = await _userHelper.GetUserAsync(user.Email!);
+                if (currentUser == null)
+                {
+                    return NotFound();
+                }
+
+                currentUser.Document = user.Document;
+                currentUser.FirstName = user.FirstName;
+                currentUser.LastName = user.LastName;
+                currentUser.Address = user.Address;
+                currentUser.PhoneNumber = user.PhoneNumber;
+                currentUser.Photo = !string.IsNullOrEmpty(user.Photo) && user.Photo != currentUser.Photo ? user.Photo : currentUser.Photo;
+                currentUser.UserType = user.UserType;
+
+
+                var result = await _userHelper.UpdateUserAsync(currentUser);
+                if (result.Succeeded)
+                {
+                    return Ok(BuildToken(currentUser));
+                }
+
+                return BadRequest(result.Errors.FirstOrDefault());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> Get()
@@ -150,6 +196,7 @@ namespace TradingJournal.API.Controllers
         [HttpPost("CreateUser")]
         public async Task<ActionResult> CreateUser([FromBody] UserDTO model)
         {
+            
             User user = model;
             if (!string.IsNullOrEmpty(model.Photo))
             {
@@ -161,7 +208,7 @@ namespace TradingJournal.API.Controllers
             if (result.Succeeded)
             {
                 await _userHelper.AddUserToRoleAsync(user, user.UserType.ToString());
-                var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+               var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
                 var tokenLink = Url.Action("ConfirmEmail", "accounts", new
                 {
                     userid = user.Id,
@@ -176,6 +223,7 @@ namespace TradingJournal.API.Controllers
 
                 if (response.IsSuccess)
                 {
+   
                     return NoContent();
                 }
 

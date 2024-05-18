@@ -35,20 +35,18 @@ namespace TradingJournal.API.Data
 
             await CheckTraderTypesAsync();
 
-            await CheckTradersAsync();
-
             await CheckTradesAsync();
 
             await CheckHavesAsync();
 
-            await CheckAccountsAsync();
+            await CheckAccountsAsync(); 
 
             await CheckTradeLogsAsync();
 
             await CheckRoleAsync();
 
-            await CheckUserAsync("111111", "Super", "Admin", "EDWINRAMIREZGON@GMAIL.COM", "3137778067", "CARRERA 42A 78A 17", "https://tradingjournalphotos.blob.core.windows.net/users/5f466e68-fc01-4b23-ad34-e297afbebf90.jpg",  UserType.Admin);
-            await CheckUserAsync("1112", "Super", "Admin", "JUANDAV12@GMAIL.COM", "3005216416", "CARRERA 33 65 66", "https://tradingjournalphotos.blob.core.windows.net/users/cf276c98-b4a1-4e7d-9624-f91c8c9b7166.jpg",  UserType.Admin);
+            await CheckUserAsync("98764597", "Edwin", "Ramirez", "EDWINRAMIREZGON@GMAIL.COM", "3137778067", "CARRERA 42A 78A 17",1, "https://tradingjournalphotos.blob.core.windows.net/users/5f466e68-fc01-4b23-ad34-e297afbebf90.jpg",  UserType.Admin);
+            await CheckUserAsync("101715698", "Juan David", "Velasquez", "JUANDAV12@GMAIL.COM", "3005216416", "CARRERA 33 65 66", 2,"https://tradingjournalphotos.blob.core.windows.net/users/cf276c98-b4a1-4e7d-9624-f91c8c9b7166.jpg",  UserType.Admin);
         }
 
         //------------------  Methods indivuals by entities whit default values  ---------------//
@@ -59,23 +57,20 @@ namespace TradingJournal.API.Data
                 _context.Accounts.Add(new Account
                 {
                     BrokersId = 1,
-                    TradersId = 1,
-                    AccTypesId = 1,
+                  AccTypesId = 1,
                     InitialBalance = 500000
                 });
 
                 _context.Accounts.Add(new Account
                 {
                     BrokersId = 2,
-                    TradersId = 2,
-                    AccTypesId = 2,
+                        AccTypesId = 2,
                     InitialBalance = 800000
                 });
 
                 _context.Accounts.Add(new Account
                 {
                     BrokersId = 3,
-                    TradersId = 1,
                     AccTypesId = 3,
                     InitialBalance = 100000
                 });
@@ -83,7 +78,6 @@ namespace TradingJournal.API.Data
                 _context.Accounts.Add(new Account
                 {
                     BrokersId = 4,
-                    TradersId = 2,
                     AccTypesId = 1,
                     InitialBalance = 200000
                 });
@@ -118,11 +112,11 @@ namespace TradingJournal.API.Data
         {
             if (!_context.Haves.Any())
             {
-                _context.Haves.Add(new Have { TradersId = 1, StrategiesCode = 10 });
-                _context.Haves.Add(new Have { TradersId = 2, StrategiesCode = 20 });
-                _context.Haves.Add(new Have { TradersId = 1, StrategiesCode = 20 });
-                _context.Haves.Add(new Have { TradersId = 2, StrategiesCode = 30 });
-                _context.Haves.Add(new Have { TradersId = 1, StrategiesCode = 40 });
+                _context.Haves.Add(new Have {  StrategiesCode = 10 });
+                _context.Haves.Add(new Have { StrategiesCode = 20 });
+                _context.Haves.Add(new Have { StrategiesCode = 20 });
+                _ = _context.Haves.Add(new Have { StrategiesCode = 30 });
+                _context.Haves.Add(new Have { StrategiesCode = 40 });
             }
             await _context.SaveChangesAsync();
         }
@@ -184,14 +178,14 @@ namespace TradingJournal.API.Data
         {
             if (!_context.Trades.Any())
             {
-                _context.Trades.Add(new Trade { TradersId = 1, MarketsCode = 100 });
-                _context.Trades.Add(new Trade { TradersId = 1, MarketsCode = 200 });
-                _context.Trades.Add(new Trade { TradersId = 1, MarketsCode = 300 });
-                _context.Trades.Add(new Trade { TradersId = 1, MarketsCode = 301 });
-                _context.Trades.Add(new Trade { TradersId = 2, MarketsCode = 101 });
-                _context.Trades.Add(new Trade { TradersId = 2, MarketsCode = 201 });
-                _context.Trades.Add(new Trade { TradersId = 2, MarketsCode = 301 });
-                _context.Trades.Add(new Trade { TradersId = 2, MarketsCode = 100 });
+                _context.Trades.Add(new Trade { MarketsCode = 100 });
+                _context.Trades.Add(new Trade { MarketsCode = 200 });
+                _context.Trades.Add(new Trade { MarketsCode = 300 });
+                _context.Trades.Add(new Trade { MarketsCode = 301 });
+                _context.Trades.Add(new Trade { MarketsCode = 101 });
+                _context.Trades.Add(new Trade { MarketsCode = 201 });
+                _context.Trades.Add(new Trade { MarketsCode = 301 });
+                _context.Trades.Add(new Trade { MarketsCode = 100 });
             }
             await _context.SaveChangesAsync();
         }
@@ -239,15 +233,7 @@ namespace TradingJournal.API.Data
             await _context.SaveChangesAsync();
         }
 
-        private async Task CheckTradersAsync()
-        {
-            if (!_context.Traders.Any())
-            {
-                _context.Traders.Add(new Trader { Name = "Juan David", TraderTypesId = 1 });
-                _context.Traders.Add(new Trader { Name = "Edwin", TraderTypesId = 2 });
-            }
-            await _context.SaveChangesAsync();
-        }
+        
 
         private async Task CheckTraderTypesAsync()
         {
@@ -266,7 +252,7 @@ namespace TradingJournal.API.Data
             await _userHelper.CheckRoleAsync(UserType.User.ToString());
         }
 
-        private async Task<User> CheckUserAsync(string document, string firstname, string lastname, string email, string phone, string address, string photo,  UserType userType)
+        private async Task<User> CheckUserAsync(string document, string firstname, string lastname, string email, string phone, string address, int tradertype, string photo,  UserType userType)
         {
             var user = await _userHelper.GetUserAsync(email);
             if (user == null)
@@ -281,6 +267,7 @@ namespace TradingJournal.API.Data
                     PhoneNumber = phone,
                     UserName = email,
                     Address = address,
+                    TraderTypesId = tradertype,
                     Photo = photo,
                     UserType = userType,
                    

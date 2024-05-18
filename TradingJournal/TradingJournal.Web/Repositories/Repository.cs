@@ -2,6 +2,7 @@
 using System.Text.Json;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TradingJournal.Web.Repositories
 {
@@ -35,7 +36,7 @@ namespace TradingJournal.Web.Repositories
             return new HttpResponseWrapper<T>(default, true, responseHttp);
         }
 
-        //method create
+        [AllowAnonymous]
         public async Task<HttpResponseWrapper<object>> PostAsync<T>(string url, T model)
         {
             var mesageJSON = JsonSerializer.Serialize(model);
@@ -43,7 +44,7 @@ namespace TradingJournal.Web.Repositories
             var responseHttp = await _httpClient.PostAsync(url, messageContet);
             return new HttpResponseWrapper<object>(null, !responseHttp.IsSuccessStatusCode, responseHttp);
         }
-        //method create
+        [AllowAnonymous]
         public async Task<HttpResponseWrapper<TResponse>> PostAsync<T, TResponse>(string url, T model)
         {
             var messageJSON = JsonSerializer.Serialize(model);

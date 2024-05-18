@@ -8,17 +8,16 @@
  <div class="w-25 py-2">
         <label>Trader:</label>
         <div>
-            <select class="form-select" @bind="@Trade.TradersId">
-                <option value="0">-- Select a Trader --</option>
-                @if (Traders is not null)
+            <select class="form-select" @bind="@Trade.UsersId">
+                <option value="0">-- Select a User --</option>
+                @if (Users is not null)
                 {
-                    @foreach (var obj in Traders)
+                    @foreach (var obj in Users)
                     {
-                        <option value="@obj.Id">@obj.Name</option>
+                        <option value="@obj.Id">@obj.Email</option>
                     }
                 }
-            </select>
-            <ValidationMessage For="@(() => @Trade.TradersId)" />
+            </select>       
         </div>
     </div>
 
@@ -36,7 +35,7 @@
                         }
                     }
                 </select>
-                <ValidationMessage For="@(() => @Trade.MarketsCode)" />
+             
             </div>
         </div>
 
@@ -55,7 +54,7 @@
 
 
 @code {
-    private List<Trader> Traders;
+    private List<User> Users;
 
     private List<Market> Markets;
 
@@ -72,8 +71,8 @@
         var responseHTTP = await Repository.GetAsync<List<Market>>("/api/Markets");
         Markets = responseHTTP.Response!;
 
-        var response2HTTP = await Repository.GetAsync<List<Trader>>("/api/traders");
-        Traders = response2HTTP.Response!;
+        var response2HTTP = await Repository.GetAsync<List<User>>("/api/Users");
+        Users = response2HTTP.Response!;
 
 
     }

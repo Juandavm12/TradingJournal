@@ -22,7 +22,7 @@
             <div class="mb-3">
                 <label>First Name :</label>
                 <div>
-                    <InputText class="form-control" @bind-Value="@userDTO.FirstName" />
+                            <InputText class="form-control" @bind-Value="@userDTO.FirstName"  />
                     <ValidationMessage For="@(() => userDTO.FirstName)" />
                 </div>
             </div>
@@ -64,8 +64,8 @@
             <div class="mb-3">
                 <label>Email :</label>
                 <div>
-                    <InputText class="form-control" @bind-Value="@userDTO.Email" />
-                    <ValidationMessage For="@(() => userDTO.Email)" />
+                            <InputText class="form-control" @bind-Value="@userDTO.Email" />
+                            <ValidationMessage For="@(() => userDTO.Email)" />
                 </div>
             </div>
 
@@ -83,6 +83,22 @@
                     <ValidationMessage For="@(() => userDTO.PasswordConfirm)" />
                 </div>
             </div>
+                    <div class="w-25 py-2">
+                        <label>Trader Type</label>
+                        <div>
+                            <select class="form-select" @bind="@userDTO.TraderTypesId">
+                                <option value="0">-- Select a Trader Type --</option>
+                                @if (TraderTypes is not null)
+                                {
+                                    @foreach (var obj in TraderTypes)
+                                    {
+                                        <option value="@obj.Id">@obj.Name</option>
+                                    }
+                                }
+                            </select>
+                            <ValidationMessage For="@(() => @userDTO.TraderTypesId)" />
+                        </div>
+                    </div>
                     
                 </div>
     </div>
@@ -94,8 +110,24 @@
 </EditForm>
 @code {
 
+ 
+
+    private async Task Charging()
+    {
+
+        var responseHTTP = await Repository.GetAsync<List<TraderType>>("/api/TraderTypes/combo");
+        TraderTypes = responseHTTP.Response!;
+
+
+    }
+
+
+    private List<TraderType> TraderTypes;
+    private User Users = new();
+
     protected override async Task OnInitializedAsync()
     {
+        await Charging();
         if (!string.IsNullOrEmpty(userDTO.Photo))
         {
             imageUrl = userDTO.Photo;
@@ -121,7 +153,7 @@
     public bool IsAdmin { get; set; }
     private async Task CreateUserAsync()
     {
-
+        
         userDTO.UserName = userDTO.Email;
         if (IsAdmin)
         {
@@ -138,9 +170,12 @@
             await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
             return;
         }
-
+        
+     
         await sweetAlertService.FireAsync("confirm", "Your account has been successfully created. An email has been sent to you with instructions on how to activate your username.", SweetAlertIcon.Info);
         navigationManager.NavigateTo("/",true);
 
     }
+
+    
 }

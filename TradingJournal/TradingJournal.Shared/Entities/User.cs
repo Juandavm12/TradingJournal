@@ -3,6 +3,9 @@ using TradingJournal.Shared.Enums;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace TradingJournal.Shared.Entities
 {
@@ -10,6 +13,7 @@ namespace TradingJournal.Shared.Entities
     public class User : IdentityUser
     {
 
+  
 
         [MaxLength(20, ErrorMessage = "More than 20 charachters are not allowed")]
         [Required(ErrorMessage = "The field {0} is mandatory")]
@@ -32,8 +36,20 @@ namespace TradingJournal.Shared.Entities
         public string Photo { get; set; }
         public UserType UserType { get; set; }
 
+        [ForeignKey("TraderTypesId")]
+        [JsonIgnore]
+        public TraderType TraderTypes { get; set; }
+        public int TraderTypesId { get; set; }
 
-        public string FullName => $"{FirstName}{LastName}";
+        //Reference to M*M table
+        [JsonIgnore]
+        public ICollection<Have> Haves { get; set; }
+
+        [JsonIgnore]
+        public ICollection<Trade> Trades { get; set; }
+
+
+        public string FullName => $"{FirstName} {LastName}";
 
 
 
