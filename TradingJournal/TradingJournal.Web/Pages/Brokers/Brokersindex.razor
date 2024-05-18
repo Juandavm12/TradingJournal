@@ -5,6 +5,10 @@
 @inject NavigationManager navigationManager
 
 <h3><i class="bi bi-piggy-bank-fill" /> Brokers</h3>
+
+<Pagination CurrentPage="currentPage"
+            TotalPages="totalPages"
+            SelectedPage="SelectedPage" />
 <div class="card">
     <div class="card-header">
         <span>
@@ -66,8 +70,8 @@
                                     @broker.LicenseNumber
                                 </td>
                                 <td>
-                                    <a href="/brokers/edit/@broker.Id" class="btn btn-warning">Edit <i class="bi bi-pencil-square"></i></a>
-                                    <button class="btn btn-danger" @onclick=@(() => Delete(broker))>Delete <i class="bi bi-trash3"></i></button>
+                                    <a href="/brokers/edit/@broker.Id" class="btn btn-outline-primary ">Edit <i class="bi bi-pencil-square"></i></a>
+                                    <button class="btn btn-outline-danger" @onclick=@(() => Delete(broker))>Delete <i class="bi bi-trash3"></i></button>
                                 </td>
 
                             </tr>
@@ -97,11 +101,33 @@
 
 
 
-    private async Task Charging()
+
+    private int currentPage = 1;
+    private int totalPages;
+
+
+
+
+    private async Task SelectedPage(int page)
     {
-        var responseHTTP = await Repository.GetAsync<List<Broker>>("/api/Brokers");
-        Brokers = responseHTTP.Response!;
+        currentPage = page;
+        await Charging(page);
     }
+
+
+    private async Task Charging(int page = 1)
+    {
+        string url1 = $"api/Brokers?page={page}";
+        string url2 = $"api/Brokers/totalPages";
+        var responseHppt = await Repository.GetAsync<List<Broker>>(url1);
+        var responseHppt2 = await Repository.GetAsync<int>(url2);
+        Brokers = responseHppt.Response!;
+        totalPages = responseHppt2.Response!;
+
+
+    }
+
+   
 
 
     private async Task Delete(Broker broker)

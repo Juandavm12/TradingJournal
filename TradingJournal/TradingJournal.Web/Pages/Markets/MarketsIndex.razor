@@ -5,6 +5,9 @@
 @inject NavigationManager navigationManager
 
 <h3><i class="bi-graph-up-arrow" /> Markets</h3>
+<Pagination CurrentPage="currentPage"
+            TotalPages="totalPages"
+            SelectedPage="SelectedPage" />
 <div class="card">
     <div class="card-header">
         <span>
@@ -48,8 +51,8 @@
                                     @market.Name
                                 </td>                                
                                 <td>
-                                    <a href="/Markets/edit/@market.Code" class="btn btn-warning">Edit <i class="bi bi-pencil-square"></i></a>
-                                    <button class="btn btn-danger" @onclick=@(() => Delete(market))>Delete <i class="bi bi-trash3"></i></button>
+                                    <a href="/Markets/edit/@market.Code" class="btn btn-outline-primary">Edit <i class="bi bi-pencil-square"></i></a>
+                                    <button class="btn btn-outline-danger" @onclick=@(() => Delete(market))>Delete <i class="bi bi-trash3"></i></button>
                                 </td>
 
                             </tr>
@@ -79,11 +82,40 @@
 
 
 
-    private async Task Charging()
+
+    private int currentPage = 1;
+    private int totalPages;
+
+
+
+
+    private async Task SelectedPage(int page)
     {
-        var responseHTTP = await Repository.GetAsync<List<Market>>("/api/Markets");
-        Markets = responseHTTP.Response!;
+        currentPage = page;
+        await Charging(page);
     }
+
+
+
+
+
+
+    private async Task Charging(int page = 1)
+    {
+
+        string url1 = $"api/Markets?page={page}";
+        string url2 = $"api/Markets/totalPages";
+        var responseHppt = await Repository.GetAsync<List<Market>>(url1);
+        var responseHppt2 = await Repository.GetAsync<int>(url2);
+        Markets = responseHppt.Response!;
+        totalPages = responseHppt2.Response!;
+
+
+
+
+    }
+
+
 
 
     private async Task Delete(Market market)

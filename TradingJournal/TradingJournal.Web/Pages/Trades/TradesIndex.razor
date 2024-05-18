@@ -5,6 +5,9 @@
 @inject NavigationManager navigationManager
 
 <h3><i class="bi bi-bar-chart-line-fill" /> Trades</h3>
+<Pagination CurrentPage="currentPage"
+            TotalPages="totalPages"
+            SelectedPage="SelectedPage" />
 <div class="card">
     <div class="card-header">
         <span>
@@ -55,8 +58,8 @@
 
 
                                 <td>
-                                    <a href="/Trades/edit/@trade.Id" class="btn btn-warning">Edit <i class="bi bi-pencil-square"></i></a>
-                                    <button class="btn btn-danger" @onclick=@(() => Delete(trade))>Delete <i class="bi bi-trash3"></i></button>
+                                    <a href="/Trades/edit/@trade.Id" class="btn btn-outline-primary ">Edit <i class="bi bi-pencil-square"></i></a>
+                                    <button class="btn btn-outline-danger" @onclick=@(() => Delete(trade))>Delete <i class="bi bi-trash3"></i></button>
                                 </td>
 
                             </tr>
@@ -92,12 +95,33 @@
         await Charging();
     }
 
+    private int currentPage = 1;
+    private int totalPages;
 
 
-    private async Task Charging()
+
+
+    private async Task SelectedPage(int page)
     {
-        var responseHTTP = await Repository.GetAsync<List<Trade>>("/api/Trades");
-        Trades = responseHTTP.Response!;
+        currentPage = page;
+        await Charging(page);
+    }
+
+
+
+
+
+
+
+    private async Task Charging(int page = 1)
+
+    {
+        string url1 = $"api/Trades?page={page}";
+        string url2 = $"api/Trades/totalPages";
+        var responseHppt = await Repository.GetAsync<List<Trade>>(url1);
+        var responseHppt2 = await Repository.GetAsync<int>(url2);
+        Trades = responseHppt.Response!;
+        totalPages = responseHppt2.Response!;
 
         var response2HTTP = await Repository.GetAsync<List<Market>>("/api/Markets");
         Markets = response2HTTP.Response!;

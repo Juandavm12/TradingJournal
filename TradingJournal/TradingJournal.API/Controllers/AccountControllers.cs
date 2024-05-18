@@ -2,8 +2,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using TradingJournal.API.Data;
+using TradingJournal.API.Helpers;
+using TradingJournal.Shared.DTOs;
 using TradingJournal.Shared.Entities;
 
 namespace TradingJournal.API.Controllers
@@ -24,12 +28,7 @@ namespace TradingJournal.API.Controllers
             _context = context;
         }
 
-        //Method Get - List (Read all)
-        [HttpGet]
-        public async Task<ActionResult> GetAsync()
-        {
-            return Ok(await _context.Accounts.ToListAsync());
-        }
+
 
         //Method Create
         [HttpPost]
@@ -80,13 +79,36 @@ namespace TradingJournal.API.Controllers
             return NoContent();
         }
 
-        [AllowAnonymous]
+
         [HttpGet("combo")]
         public async Task<ActionResult> GetCombo()
         {
             return Ok(await _context.Accounts.ToListAsync());
         }
 
+ 
+        [HttpGet]
+        public async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
+        {
+            var queryable = _context.Accounts
+             .AsQueryable();
+            return Ok(await queryable
+            .OrderBy(x => x.AccNumber)
+            .Paginate(pagination)
+            .ToListAsync());
+        }
 
+        [HttpGet("totalPages")]
+        public async Task<ActionResult> GetPages([FromQuery] PaginationDTO pagination)
+
+{
+ var queryable = _context.Accounts.AsQueryable();
+        double count = await queryable.CountAsync();
+        double totalPages = Math.Ceiling(count / pagination.RecordsNumber);
+ return Ok(totalPages);
     }
+
+
+}
+
 }

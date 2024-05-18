@@ -2,9 +2,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System;
 using System.Threading.Tasks;
 using TradingJournal.API.Data;
+using TradingJournal.Shared.DTOs;
 using TradingJournal.Shared.Entities;
+using TradingJournal.API.Helpers;
 
 namespace TradingJournal.API.Controllers
 {
@@ -24,11 +28,25 @@ namespace TradingJournal.API.Controllers
             _context = context;
         }
 
-        //Method Get - List (Read all)
         [HttpGet]
-        public async Task<ActionResult> GetAsync()
+        public async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
         {
-            return Ok(await _context.Markets.ToListAsync());
+            var queryable = _context.Markets
+             .AsQueryable();
+            return Ok(await queryable
+            .OrderBy(x => x.Code)
+            .Paginate(pagination)
+            .ToListAsync());
+        }
+
+        [HttpGet("totalPages")]
+        public async Task<ActionResult> GetPages([FromQuery] PaginationDTO pagination)
+
+        {
+            var queryable = _context.Markets.AsQueryable();
+            double count = await queryable.CountAsync();
+            double totalPages = Math.Ceiling(count / pagination.RecordsNumber);
+            return Ok(totalPages);
         }
 
         //Method Create

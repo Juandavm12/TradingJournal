@@ -5,6 +5,10 @@
 @inject NavigationManager navigationManager
 
 <h3><i class="bi bi-person-rolodex" /> Accounts</h3>
+
+<Pagination CurrentPage="currentPage"
+            TotalPages="totalPages"
+            SelectedPage="SelectedPage" />
 <div class="card">
     <div class="card-header">
         <span>
@@ -27,7 +31,7 @@
                         <tr>
 
                             <td>
-                                <b>Account Number</b>
+                                <b>@totalPages</b>
                             </td>
                             <td>
                                 <b>Broker</b>
@@ -77,8 +81,8 @@
                                 </td>
 
                                 <td>
-                                    <a href="/account/edit/@account.AccNumber" class="btn btn-warning">Edit <i class="bi bi-pencil-square"></i></a>
-                                    <button class="btn btn-danger" @onclick=@(() => Delete(account))>Delete <i class="bi bi-trash3"></i></button>
+                                    <a href="/account/edit/@account.AccNumber" class="btn btn-outline-primary ">Edit <i class="bi bi-pencil-square"></i></a>
+                                    <button class="btn btn-outline-danger" @onclick=@(() => Delete(account))>Delete <i class="bi bi-trash3"></i></button>
                                 </td>
 
                             </tr>
@@ -97,6 +101,9 @@
 
 
 @code {
+
+    private int currentPage = 1;
+    private int totalPages;
 
     public string brokername { get; set; }
 
@@ -120,12 +127,24 @@
         await Charging();
     }
 
-
-
-    private async Task Charging()
+    private async Task SelectedPage(int page)
     {
-        var responseHTTP = await Repository.GetAsync<List<Account>>("/api/account");
-        Accounts = responseHTTP.Response!;
+        currentPage = page;
+        await Charging(page);
+}
+
+
+    private async Task Charging(int page = 1)
+    {
+
+        string url1 = $"api/account?page={page}";
+        string url2 = $"api/account/totalPages";
+        var responseHppt = await Repository.GetAsync<List<Account>>(url1);
+        var responseHppt2 = await Repository.GetAsync<int>(url2);
+        Accounts = responseHppt.Response!;
+        totalPages = responseHppt2.Response!;
+
+            
 
         var response2HTTP = await Repository.GetAsync<List<Broker>>("/api/brokers");
         Brokers = response2HTTP.Response!;

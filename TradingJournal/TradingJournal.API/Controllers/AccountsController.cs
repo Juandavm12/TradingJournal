@@ -22,7 +22,7 @@ namespace TradingJournal.API.Controllers
 {
    
     [ApiController]
-    [Route("/api/accounts")]   
+     [Route("/api/accounts")]   
     public class AccountsController : ControllerBase
     {
             private readonly IUserHelper _userHelper;
@@ -140,7 +140,7 @@ namespace TradingJournal.API.Controllers
         }
 
         [HttpPut("admin")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(Roles ="Admin")]
         public async Task<ActionResult> Putadmin(User user)
         {
             try

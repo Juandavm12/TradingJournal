@@ -5,6 +5,9 @@
 @inject NavigationManager navigationManager
 
 <h3><i class="bi-clipboard-data" /> Strategies</h3>
+<Pagination CurrentPage="currentPage"
+            TotalPages="totalPages"
+            SelectedPage="SelectedPage" />
 <div class="card">
     <div class="card-header">
         <span>
@@ -66,8 +69,8 @@
                                     @strategy.Description
                                 </td>
                                 <td>
-                                    <a href="/strategies/edit/@strategy.Code" class="btn btn-warning">Edit <i class="bi bi-pencil-square"></i></a>
-                                    <button class="btn btn-danger" @onclick=@(() => Delete(strategy))>Delete <i class="bi bi-trash3"></i></button>
+                                    <a href="/strategies/edit/@strategy.Code" class="btn btn-outline-primary">Edit <i class="bi bi-pencil-square"></i></a>
+                                    <button class="btn btn-outline-danger" @onclick=@(() => Delete(strategy))>Delete <i class="bi bi-trash3"></i></button>
                                 </td>
 
                             </tr>
@@ -97,12 +100,39 @@
 
 
 
-    private async Task Charging()
+    private int currentPage = 1;
+    private int totalPages;
+
+
+
+
+    private async Task SelectedPage(int page)
     {
-        var responseHTTP = await Repository.GetAsync<List<Strategy>>("/api/Strategies");
-        Strategies = responseHTTP.Response!;
+        currentPage = page;
+        await Charging(page);
     }
 
+
+
+
+
+
+    private async Task Charging(int page = 1)
+    {
+
+        string url1 = $"api/Strategies?page={page}";
+        string url2 = $"api/Strategies/totalPages";
+        var responseHppt = await Repository.GetAsync<List<Strategy>>(url1);
+        var responseHppt2 = await Repository.GetAsync<int>(url2);
+        Strategies = responseHppt.Response!;
+        totalPages = responseHppt2.Response!;
+
+
+
+
+    }
+
+    
 
     private async Task Delete(Strategy strategy)
     {
