@@ -12,21 +12,25 @@
 
 
 @code {
+  
+
     private Account account = new();
 
+    [CascadingParameter]
+    BlazoredModalInstance BlazoredModal { get; set; } = default!;
     private async Task Create()
     {
         var responseHttp = await repository.PostAsync("/api/account", account);
 
         if (responseHttp.Error)
         {
-           
+
             var message = await responseHttp.GetErrorMessageAsync();
             await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
         }
         else
         {
-            
+            await BlazoredModal.CloseAsync(ModalResult.Ok());
             Return();
 
             var Toast = sweetAlertService.Mixin(new SweetAlertOptions
@@ -38,7 +42,8 @@
                     Timer = 3000
 
                 });
-
+           
+           
             await Toast.FireAsync(icon: SweetAlertIcon.Success, message: "Account successfully created");
         }
     }

@@ -27,8 +27,8 @@ else
         <div class="card-header">
             <span>
                     <i class="bi bi-person-slash" /> Edit User
-                    <button class="btn btn-sm btn-primary  mx-2  float-end" type="submit"><i class="bi bi-floppy2" /> Save Changes</button>
-                    <a class="btn btn-sm btn-warning float-end" href="/changePassword"><i class="bi bi-key" /> Change Password</a>
+                    <button class="btn btn-sm btn-dark  mx-2  float-end" type="submit"><i class="bi bi-floppy2" /> Save Changes</button>
+                    <a class="btn btn-sm btn-outline-primary float-end" @onclick=@(() => ShowModal2())><i class="bi bi-key" /> Change Password</a>
             </span>
                         </div>
         <div class="card-body">
@@ -102,6 +102,24 @@ else
 
 
 @code {
+
+    [CascadingParameter]
+    IModalService Modal { get; set; } = default!;
+
+    private async Task ShowModal2()
+
+    {
+        IModalReference modalReference;
+
+
+        modalReference = Modal.Show<ChangePassword>();
+
+        var result = await modalReference.Result;
+        if (result.Confirmed)
+        {
+            await LoadUserAsyc();
+        }
+    }
 
     private User user;
 

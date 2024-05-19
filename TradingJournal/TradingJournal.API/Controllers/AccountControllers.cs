@@ -92,6 +92,10 @@ namespace TradingJournal.API.Controllers
         {
             var queryable = _context.Accounts
              .AsQueryable();
+            if (!string.IsNullOrWhiteSpace(pagination.Filter))
+            {
+                queryable = queryable.Where(x => x.AccNumber.ToString().Contains(pagination.Filter.ToLower()));
+            }
             return Ok(await queryable
             .OrderBy(x => x.AccNumber)
             .Paginate(pagination)
@@ -103,7 +107,11 @@ namespace TradingJournal.API.Controllers
 
 {
  var queryable = _context.Accounts.AsQueryable();
-        double count = await queryable.CountAsync();
+            if (!string.IsNullOrWhiteSpace(pagination.Filter))
+            {
+                queryable = queryable.Where(x => x.AccNumber.ToString().Contains(pagination.Filter.ToLower()));
+            }
+            double count = await queryable.CountAsync();
         double totalPages = Math.Ceiling(count / pagination.RecordsNumber);
  return Ok(totalPages);
     }

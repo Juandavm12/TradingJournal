@@ -34,6 +34,10 @@ namespace TradingJournal.API.Controllers
         {
             var queryable = _context.AccTypes
              .AsQueryable();
+            if (!string.IsNullOrWhiteSpace(pagination.Filter))
+            {
+                queryable = queryable.Where(x => x.Name.ToLower().Contains(pagination.Filter.ToLower()));
+            }
             return Ok(await queryable
             .OrderBy(x => x.Id)
             .Paginate(pagination)
@@ -45,6 +49,10 @@ namespace TradingJournal.API.Controllers
 
         {
             var queryable = _context.AccTypes.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(pagination.Filter))
+            {
+                queryable = queryable.Where(x => x.Name.ToLower().Contains(pagination.Filter.ToLower()));
+            }
             double count = await queryable.CountAsync();
             double totalPages = Math.Ceiling(count / pagination.RecordsNumber);
             return Ok(totalPages);

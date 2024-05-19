@@ -30,11 +30,28 @@ else
                         <Pagination CurrentPage="currentPage"
                                     TotalPages="totalPages"
                                     SelectedPage="SelectedPage" />
-<a class="btn btn-sm btn-primary float-end" href="/register/?IsAdmin=true"><i class="bi bi-plus"></i> Add Admin</a>
+
+                        <a class="btn btn-sm btn-dark float-end" @onclick=@(() => ShowModal2())><i class="bi bi-plus"></i> Add Admin</a>
 
 </span>
 
 </div>
+
+<div class="mx-2">
+
+    <tr>
+
+            <th><input style="width: 400px;" type="text" class="form-control" id="titulo" placeholder="Search User by Email" @bind-value="Filter" /></th>
+
+            <th>    <button type="button" class="btn btn-outline-success" @onclick="ApplyFilterAsync">Filter</button></th>
+
+            <th>  <button type="button" class="btn btn-outline-warning" @onclick="CleanFilterAsync">Clean</button></th>
+        </tr>
+               
+                
+                  
+    </div>
+
 
 <div class="card-body">
 
@@ -115,7 +132,9 @@ else
 <td>@user.UserType</td>
 
    <td>
-                                        <a href="/users/edit/@user.Id" class="btn btn-outline-primary ">Edit <i class="bi bi-pencil-square"></i></a>
+
+                     <a @onclick=@(() => ShowModal(user.Id, true)) class="btn btn-outline-primary ">Edit <i class="bi bi-pencil-square"></i></a>
+                                       
    <button class="btn btn-outline-danger" @onclick=@(() => Delete(user))>Delete <i class="bi bi-trash3"></i></button>
   </td>
 </tr>
@@ -137,6 +156,45 @@ else
 }
 
 @code {
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Page { get; set; } = "";
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Filter { get; set; } = "";
+
+    [CascadingParameter]
+    IModalService Modal { get; set; } = default!;
+
+    private async Task ShowModal(string id = "", bool isEdit = false)
+
+    {
+        IModalReference modalReference;
+            modalReference = Modal.Show<UserEdit>(string.Empty, new ModalParameters().Add("UserId", id));     
+  
+        var result = await modalReference.Result;
+        if (result.Confirmed)
+        {
+            await LoadAsync();
+        }
+    }
+
+    private async Task ShowModal2()
+
+    {
+        IModalReference modalReference;
+       
+    
+        modalReference = Modal.Show<Auth.Register>();
+            
+        var result = await modalReference.Result;
+        if (result.Confirmed)
+        {
+            await LoadAsync();
+        }
+    }
+
 
     public string tradertype { get; set; }
 
@@ -169,8 +227,23 @@ else
     private async Task LoadAsync(int page = 1)
     {
 
-        string url1 = $"api/Users?page={page}";
-        string url2 = $"api/Users/totalPages";
+        if (!string.IsNullOrWhiteSpace(Page))
+        {
+            page = Convert.ToInt32(Page);
+        }
+        string url1 = string.Empty;
+        string url2 = string.Empty;
+        if (string.IsNullOrEmpty(Filter))
+        {
+            url1 = $"api/Users?page={page}";
+            url2 = $"api/Users/totalPages";
+        }
+        else
+        {
+            url1 = $"api/Users?page={page}&filter={Filter}";
+            url2 = $"api/Users/totalPages?filter={Filter}";
+        }
+           
         var responseHppt = await repository.GetAsync<List<User>>(url1);
         var responseHppt2 = await repository.GetAsync<int>(url2);
         Users = responseHppt.Response!;
@@ -245,6 +318,18 @@ else
             }
 
         }
+    }
+
+    private async Task CleanFilterAsync()
+    {
+        Filter = string.Empty;
+        await ApplyFilterAsync();
+    }
+    private async Task ApplyFilterAsync()
+    {
+        int page = 1;
+        await LoadAsync(page);
+        await SelectedPage(page);
     }
 }
    

@@ -32,8 +32,14 @@ namespace TradingJournal.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
         {
+
             var queryable = _context.Users
              .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(pagination.Filter))
+            {
+                queryable = queryable.Where(x => x.Email.ToLower().Contains(pagination.Filter.ToLower()));
+            }
             return Ok(await queryable
             .OrderBy(x => x.Id)
             .Paginate(pagination)
@@ -45,6 +51,10 @@ namespace TradingJournal.API.Controllers
 
         {
             var queryable = _context.Users.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(pagination.Filter))
+            {
+                queryable = queryable.Where(x => x.Email.ToLower().Contains(pagination.Filter.ToLower()));
+            }
             double count = await queryable.CountAsync();
             double totalPages = Math.Ceiling(count / pagination.RecordsNumber);
             return Ok(totalPages);

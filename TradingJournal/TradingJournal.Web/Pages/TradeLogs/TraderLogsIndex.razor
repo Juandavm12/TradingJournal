@@ -11,9 +11,24 @@
 <div class="card">
     <div class="card-header">
         <span>
-            <a class="btn btn-primary btn-sm float-start" href="/TradeLogs/create"><i class="bi bi-plus-circle" /> New Trade Log</a>
+            <a class="btn btn-dark btn-sm float-start" @onclick=@(() => ShowModal2())><i class="bi bi-plus-circle" /> New Trade Log</a>
 
         </span>
+    </div>
+
+    <div class="mx-2">
+
+        <tr>
+
+            <th><input style="width: 400px;" type="text" class="form-control" id="titulo" placeholder="Search Tradelog by Id" @bind-value="Filter" /></th>
+
+            <th>    <button type="button" class="btn btn-outline-success" @onclick="ApplyFilterAsync">Filter</button></th>
+
+            <th>  <button type="button" class="btn btn-outline-warning" @onclick="CleanFilterAsync">Clean</button></th>
+        </tr>
+
+
+
     </div>
 
     <div class="card-body">
@@ -108,7 +123,7 @@
 
 
                                 <td>
-                                    <a href="/TradeLogs/edit/@tradelog.TradeNumber" class="btn btn-outline-primary ">Edit <i class="bi bi-pencil-square"></i></a>
+                                    <a @onclick=@(() => ShowModal(tradelog.TradeNumber, true)) class="btn btn-outline-primary ">Edit <i class="bi bi-pencil-square"></i></a>
                                     <button class="btn btn-outline-danger" @onclick=@(() => Delete(tradelog))>Delete <i class="bi bi-trash3"></i></button>
                                 </td>
 
@@ -128,6 +143,45 @@
 
 
 @code {
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Page { get; set; } = "";
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Filter { get; set; } = "";
+
+
+    [CascadingParameter]
+    IModalService Modal { get; set; } = default!;
+
+    private async Task ShowModal(int id = 0, bool isEdit = false)
+
+    {
+        IModalReference modalReference;
+        modalReference = Modal.Show<TradeLogEdit>(string.Empty, new ModalParameters().Add("TradeLogTradeNumber", id));
+
+        var result = await modalReference.Result;
+        if (result.Confirmed)
+        {
+            await Charging();
+        }
+    }
+
+    private async Task ShowModal2()
+
+    {
+        IModalReference modalReference;
+
+
+        modalReference = Modal.Show<TradeLogCreate>();
+
+        var result = await modalReference.Result;
+        if (result.Confirmed)
+        {
+            await Charging();
+        }
+    }
 
     public List<TradeLog> TradeLogs { get; set; }
 
@@ -157,8 +211,23 @@
     private async Task Charging(int page = 1)
     {
 
-        string url1 = $"api/TradeLogs?page={page}";
-        string url2 = $"api/TradeLogs/totalPages";
+        if (!string.IsNullOrWhiteSpace(Page))
+        {
+            page = Convert.ToInt32(Page);
+        }
+        string url1 = string.Empty;
+        string url2 = string.Empty;
+        if (string.IsNullOrEmpty(Filter))
+        {
+            url1 = $"api/TradeLogs?page={page}";
+            url2 = $"api/TradeLogs/totalPages";
+        }
+        else
+        {
+            url1 = $"api/TradeLogs?page={page}&filter={Filter}";
+            url2 = $"api/TradeLogs/totalPages?filter={Filter}";
+        }
+
         var responseHppt = await Repository.GetAsync<List<TradeLog>>(url1);
         var responseHppt2 = await Repository.GetAsync<int>(url2);
         TradeLogs = responseHppt.Response!;
@@ -167,6 +236,18 @@
 
 
 
+    }
+
+    private async Task CleanFilterAsync()
+    {
+        Filter = string.Empty;
+        await ApplyFilterAsync();
+    }
+    private async Task ApplyFilterAsync()
+    {
+        int page = 1;
+        await Charging(page);
+        await SelectedPage(page);
     }
 
 

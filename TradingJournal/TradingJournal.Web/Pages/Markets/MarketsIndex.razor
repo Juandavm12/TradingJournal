@@ -11,9 +11,24 @@
 <div class="card">
     <div class="card-header">
         <span>
-            <a class="btn btn-primary btn-sm float-start" href="/Markets/create"><i class="bi bi-plus-circle" /> New Market</a>
+            <a class="btn btn-dark btn-sm float-start" @onclick=@(() => ShowModal2())><i class="bi bi-plus-circle" /> New Market</a>
 
         </span>
+    </div>
+
+    <div class="mx-2">
+
+        <tr>
+
+            <th><input style="width: 400px;" type="text" class="form-control" id="titulo" placeholder="Search Market by Name" @bind-value="Filter" /></th>
+
+            <th>    <button type="button" class="btn btn-outline-success" @onclick="ApplyFilterAsync">Filter</button></th>
+
+            <th>  <button type="button" class="btn btn-outline-warning" @onclick="CleanFilterAsync">Clean</button></th>
+        </tr>
+
+
+
     </div>
 
     <div class="card-body">
@@ -51,7 +66,7 @@
                                     @market.Name
                                 </td>                                
                                 <td>
-                                    <a href="/Markets/edit/@market.Code" class="btn btn-outline-primary">Edit <i class="bi bi-pencil-square"></i></a>
+                                    <a @onclick=@(() => ShowModal(market.Code, true)) class="btn btn-outline-primary">Edit <i class="bi bi-pencil-square"></i></a>
                                     <button class="btn btn-outline-danger" @onclick=@(() => Delete(market))>Delete <i class="bi bi-trash3"></i></button>
                                 </td>
 
@@ -71,6 +86,43 @@
 
 
 @code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Page { get; set; } = "";
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Filter { get; set; } = "";
+
+    [CascadingParameter]
+    IModalService Modal { get; set; } = default!;
+
+    private async Task ShowModal(int id = 0, bool isEdit = false)
+
+    {
+        IModalReference modalReference;
+        modalReference = Modal.Show<MarketEdit>(string.Empty, new ModalParameters().Add("MarketCode", id));
+
+        var result = await modalReference.Result;
+        if (result.Confirmed)
+        {
+            await Charging();
+        }
+    }
+
+    private async Task ShowModal2()
+
+    {
+        IModalReference modalReference;
+
+
+        modalReference = Modal.Show<MarketCreate>();
+
+        var result = await modalReference.Result;
+        if (result.Confirmed)
+        {
+            await Charging();
+        }
+    }
 
     public List<Market> Markets { get; set; }
 
@@ -102,9 +154,24 @@
 
     private async Task Charging(int page = 1)
     {
+        if (!string.IsNullOrWhiteSpace(Page))
+        {
+            page = Convert.ToInt32(Page);
+        }
+        string url1 = string.Empty;
+        string url2 = string.Empty;
+        if (string.IsNullOrEmpty(Filter))
+        {
+            url1 = $"api/Markets?page={page}";
+            url2 = $"api/Markets/totalPages";
+        }
+        else
+        {
+            url1 = $"api/Markets?page={page}&filter={Filter}";
+            url2 = $"api/Markets/totalPages?filter={Filter}";
+        }
 
-        string url1 = $"api/Markets?page={page}";
-        string url2 = $"api/Markets/totalPages";
+
         var responseHppt = await Repository.GetAsync<List<Market>>(url1);
         var responseHppt2 = await Repository.GetAsync<int>(url2);
         Markets = responseHppt.Response!;
@@ -113,6 +180,18 @@
 
 
 
+    }
+
+    private async Task CleanFilterAsync()
+    {
+        Filter = string.Empty;
+        await ApplyFilterAsync();
+    }
+    private async Task ApplyFilterAsync()
+    {
+        int page = 1;
+        await Charging(page);
+        await SelectedPage(page);
     }
 
 

@@ -9,6 +9,7 @@
 
 
 
+
 @if (user is null) 
 
 { 
@@ -203,7 +204,9 @@ else
     }
 
 
+    [CascadingParameter]
 
+    BlazoredModalInstance BlazoredModal { get; set; } = default!;
     private async Task SaveUserAsync()
     {
 
@@ -215,6 +218,7 @@ else
 
             return;
         }
+        await BlazoredModal.CloseAsync(ModalResult.Ok());
         navigationManager.NavigateTo("/users");
     }
 

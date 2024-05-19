@@ -49,6 +49,9 @@ else
         }
     }
 
+
+    [CascadingParameter]
+    BlazoredModalInstance BlazoredModal { get; set; } = default!;
     private async Task Edit()
     {
 
@@ -62,6 +65,7 @@ else
         }
         else
         {
+            await BlazoredModal.CloseAsync(ModalResult.Ok());
             Return();
 
         

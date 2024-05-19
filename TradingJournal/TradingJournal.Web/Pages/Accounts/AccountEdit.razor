@@ -17,11 +17,13 @@ else
 }
 
 @code {
+    
+
     [Parameter] 
     public int AccountAccNumber { get; set; }
     private Account account = new();
 
-    
+
     protected override async Task OnInitializedAsync()
     {
 
@@ -31,7 +33,7 @@ else
         {
             if (responseHTTP.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
             {
-              
+
                 navigationManager.NavigateTo("account");
                 return;
             }
@@ -44,11 +46,12 @@ else
         }
         else
         {
-            
+
             account = responseHTTP.Response;
         }
     }
-
+    [CascadingParameter]
+    BlazoredModalInstance BlazoredModal { get; set; } = default!;
     private async Task Editar()
     {
 
@@ -56,15 +59,16 @@ else
 
         if (responseHTTP.Error)
         {
-           
+
             var mensajeError = await responseHTTP.GetErrorMessageAsync();
             await sweetAlertService.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
         }
         else
         {
+            await BlazoredModal.CloseAsync(ModalResult.Ok());
             Return();
 
-            
+
             var Toast = sweetAlertService.Mixin(new SweetAlertOptions
                 {
 
@@ -74,7 +78,8 @@ else
                     Timer = 3000
 
                 });
-
+            
+          
             await Toast.FireAsync(icon: SweetAlertIcon.Success, message: "Account modified successfully");
 
         }
@@ -83,7 +88,7 @@ else
     
     private void Return()
     {
-        navigationManager.NavigateTo("account");
+        navigationManager.NavigateTo("/account");
 
     }
 }

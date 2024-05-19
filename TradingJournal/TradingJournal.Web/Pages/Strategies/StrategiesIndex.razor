@@ -11,9 +11,24 @@
 <div class="card">
     <div class="card-header">
         <span>
-            <a class="btn btn-primary btn-sm float-start" href="/Strategies/create"><i class="bi bi-plus-circle" /> New Strategy</a>
+            <a class="btn btn-dark btn-sm float-start" @onclick=@(() => ShowModal2())><i class="bi bi-plus-circle" /> New Strategy</a>
 
         </span>
+    </div>
+
+    <div class="mx-2">
+
+        <tr>
+
+            <th><input style="width: 400px;" type="text" class="form-control" id="titulo" placeholder="Search Strategy by Name" @bind-value="Filter" /></th>
+
+            <th>    <button type="button" class="btn btn-outline-success" @onclick="ApplyFilterAsync">Filter</button></th>
+
+            <th>  <button type="button" class="btn btn-outline-warning" @onclick="CleanFilterAsync">Clean</button></th>
+        </tr>
+
+
+
     </div>
 
     <div class="card-body">
@@ -69,7 +84,7 @@
                                     @strategy.Description
                                 </td>
                                 <td>
-                                    <a href="/strategies/edit/@strategy.Code" class="btn btn-outline-primary">Edit <i class="bi bi-pencil-square"></i></a>
+                                    <a @onclick=@(() => ShowModal(strategy.Code, true)) class="btn btn-outline-primary">Edit <i class="bi bi-pencil-square"></i></a>
                                     <button class="btn btn-outline-danger" @onclick=@(() => Delete(strategy))>Delete <i class="bi bi-trash3"></i></button>
                                 </td>
 
@@ -89,6 +104,44 @@
 
 
 @code {
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Page { get; set; } = "";
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Filter { get; set; } = "";
+
+    [CascadingParameter]
+    IModalService Modal { get; set; } = default!;
+
+    private async Task ShowModal(int id = 0, bool isEdit = false)
+
+    {
+        IModalReference modalReference;
+        modalReference = Modal.Show<StrategyEdit>(string.Empty, new ModalParameters().Add("StrategyCode", id));
+
+        var result = await modalReference.Result;
+        if (result.Confirmed)
+        {
+            await Charging();
+        }
+    }
+
+    private async Task ShowModal2()
+
+    {
+        IModalReference modalReference;
+
+
+        modalReference = Modal.Show<StrategyCreate>();
+
+        var result = await modalReference.Result;
+        if (result.Confirmed)
+        {
+            await Charging();
+        }
+    }
 
     public List<Strategy> Strategies { get; set; }
 
@@ -120,8 +173,25 @@
     private async Task Charging(int page = 1)
     {
 
-        string url1 = $"api/Strategies?page={page}";
-        string url2 = $"api/Strategies/totalPages";
+        if (!string.IsNullOrWhiteSpace(Page))
+        {
+            page = Convert.ToInt32(Page);
+        }
+        string url1 = string.Empty;
+        string url2 = string.Empty;
+        if (string.IsNullOrEmpty(Filter))
+        {
+            url1 = $"api/Strategies?page={page}";
+            url2 = $"api/Strategies/totalPages";
+        }
+        else
+        {
+            url1 = $"api/Strategies?page={page}&filter={Filter}";
+            url2 = $"api/Strategies/totalPages?filter={Filter}";
+        }
+
+
+
         var responseHppt = await Repository.GetAsync<List<Strategy>>(url1);
         var responseHppt2 = await Repository.GetAsync<int>(url2);
         Strategies = responseHppt.Response!;
@@ -133,6 +203,18 @@
     }
 
     
+    private async Task CleanFilterAsync()
+    {
+        Filter = string.Empty;
+        await ApplyFilterAsync();
+    }
+    private async Task ApplyFilterAsync()
+    {
+        int page = 1;
+        await Charging(page);
+        await SelectedPage(page);
+    }
+
 
     private async Task Delete(Strategy strategy)
     {

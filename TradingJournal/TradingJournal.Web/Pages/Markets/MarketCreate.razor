@@ -14,6 +14,9 @@
 @code {
     private Market market = new();
 
+
+    [CascadingParameter]
+    BlazoredModalInstance BlazoredModal { get; set; } = default!;
     private async Task Create()
     {
         var responseHttp = await repository.PostAsync("/api/Markets", market);
@@ -26,7 +29,7 @@
         }
         else
         {
-            
+            await BlazoredModal.CloseAsync(ModalResult.Ok());
             Return();
 
             var Toast = sweetAlertService.Mixin(new SweetAlertOptions

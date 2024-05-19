@@ -24,7 +24,7 @@
             <NotAuthorized Context="NotAuthorizedContext">
 
                 <div class="px-4 py-4">
-                    <button class="btn btn-outline-info" @onclick="Registrar"><i class="bi bi-card-checklist"></i> Register</button>
+                <button class="btn btn-outline-info" @onclick=@(() => ShowModal2())><i class="bi bi-card-checklist"></i> Register</button>
                 </div>
 
                 <div class="dropdown-center py-3 px-4">
@@ -35,12 +35,12 @@
                     <EditForm Model="loginDTO" OnValidSubmit="LoginAsync">
                     <DataAnnotationsValidator />
                         <div class="mb-3">
-                                <label class="form-label">&nbsp; &nbsp&nbsp; &nbsp&nbsp; &nbsp&nbsp;  Email address</label>
+                                <label class="form-label">   Email address</label>
                             <InputText type="email" class="form-control" @bind-Value="@loginDTO.Email" placeholder="email@example.com" />
                                 <ValidationMessage For="@(() => loginDTO.Email)" />
                         </div>
                         <div class="mb-3">
-                                <label class="form-label">&nbsp; &nbsp&nbsp; &nbsp&nbsp; &nbsp&nbsp; &nbsp&nbsp;  Password</label>
+                                <label class="form-label">   Password</label>
                             <InputText type="password" class="form-control" @bind-Value="@loginDTO.Password" placeholder="Password" />
                                 <ValidationMessage For="@(() => loginDTO.Password)" />
                         </div>
@@ -167,10 +167,25 @@
     }
 
 
-    private async Task Registrar()
+   
+    [CascadingParameter]
+    IModalService Modal { get; set; } = default!;
+
+
+
+    private async Task ShowModal2()
+
     {
-        await loginService.LogoutAsync();
-        navigationManager.NavigateTo("/Register");
+        IModalReference modalReference;
+
+
+        modalReference = Modal.Show<Pages.Auth.Register>();
+
+        var result = await modalReference.Result;
+        if (result.Confirmed)
+        {
+           
+        }
     }
 
 

@@ -110,6 +110,10 @@
 </EditForm>
 @code {
 
+    [CascadingParameter]
+
+    BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
  
 
     private async Task Charging()
@@ -170,7 +174,8 @@
             await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
             return;
         }
-        
+
+        await BlazoredModal.CloseAsync(ModalResult.Ok());        
      
         await sweetAlertService.FireAsync("confirm", "Your account has been successfully created. An email has been sent to you with instructions on how to activate your username.", SweetAlertIcon.Info);
         navigationManager.NavigateTo("/",true);

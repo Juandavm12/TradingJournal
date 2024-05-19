@@ -139,8 +139,7 @@ namespace TradingJournal.API.Controllers
             }
         }
 
-        [HttpPut("admin")]
-        [Authorize(Roles ="Admin")]
+        [HttpPut("admin")]       
         public async Task<ActionResult> Putadmin(User user)
         {
             try
