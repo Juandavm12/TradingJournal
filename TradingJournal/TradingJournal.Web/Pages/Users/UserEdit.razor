@@ -28,14 +28,14 @@ else
         <div class="card-header">
             <span>
                     <i class="bi bi-person-slash" /> Edit User
-                    <button class="btn btn-sm btn-primary  mx-2  float-end" type="submit"><i class="bi bi-floppy2" /> Save Changes</button>                   
+                    <button class="btn btn-sm btn-dark  mx-2  float-end" type="submit"><i class="bi bi-floppy2" /> Save Changes</button>                   
             </span>
                         </div>
         <div class="card-body">
             <div class="row">
                 <div class="col-6">
 
-                        <div class="w-25 py-2">
+                        <div class="w-100 py-2">
                             <label>User Type</label>
                             <div>
                                 <select class="form-select" @bind="@user.UserType">
@@ -94,7 +94,8 @@ else
                     <div class="col-6">
                         <div class="mb-3">
                             <div>
-                            <InputImg Label="Photo" ImageSelected="ImageSelected" ImageURL="@imageUrl" />
+                                <InputImg  Label="Photo" ImageSelected="ImageSelected" ImageURL="@imageUrl"   />                             
+
 
                         </div>
                         </div>
@@ -131,6 +132,7 @@ else
     private User user;
 
     private string imageUrl;
+    
 
 
 

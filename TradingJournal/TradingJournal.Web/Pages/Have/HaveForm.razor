@@ -7,11 +7,11 @@
 
 
 
-    <div class="w-25 py-2">
+    <div class="w-100 py-2">
         <label>Trader:</label>
         <div>
             <select class="form-select" @bind="@Have.UsersId">
-                <option value="0">-- Select a User --</option>
+                <option value="0">-- Select a Trader --</option>
                 @if (Users is not null)
                 {
                     @foreach (var obj in Users)
@@ -23,7 +23,7 @@
         </div>
     </div>
 
-    <div class="w-25 py-2">
+    <div class="w-100 py-2">
         <label>Strategy:</label>
         <div>
             <select class="form-select" @bind="@Have.StrategiesCode">
@@ -42,7 +42,7 @@
         
          
 
-    <button class="btn btn-primary" type="submit">Save <i class="bi bi-floppy2"></i></button>
+    <button class="btn btn-dark" type="submit">Save <i class="bi bi-floppy2"></i></button>
 
 
     <button class="btn btn-info" type="reset">Clean <i class="bi bi-x-octagon"></i></button>

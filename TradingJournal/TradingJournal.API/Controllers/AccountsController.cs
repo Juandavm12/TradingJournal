@@ -21,7 +21,7 @@ using Azure.Storage.Blobs.Models;
 namespace TradingJournal.API.Controllers
 {
    
-    [ApiController]
+        [ApiController]
      [Route("/api/accounts")]   
     public class AccountsController : ControllerBase
     {
@@ -139,7 +139,8 @@ namespace TradingJournal.API.Controllers
             }
         }
 
-        [HttpPut("admin")]       
+        [HttpPut("admin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> Putadmin(User user)
         {
             try
@@ -190,7 +191,7 @@ namespace TradingJournal.API.Controllers
 
 
 
-       
+
 
         [HttpPost("CreateUser")]
         public async Task<ActionResult> CreateUser([FromBody] UserDTO model)
@@ -204,10 +205,11 @@ namespace TradingJournal.API.Controllers
             }
 
             var result = await _userHelper.AddUserAsync(user, model.Password);
+
             if (result.Succeeded)
             {
                 await _userHelper.AddUserToRoleAsync(user, user.UserType.ToString());
-               var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
                 var tokenLink = Url.Action("ConfirmEmail", "accounts", new
                 {
                     userid = user.Id,
@@ -222,15 +224,27 @@ namespace TradingJournal.API.Controllers
 
                 if (response.IsSuccess)
                 {
-   
                     return NoContent();
-                }
-
-                return BadRequest(response.Message);
+                }                
+                return BadRequest(response.Message);              
+            } 
+            if (result.Errors.FirstOrDefault().Code.Contains(("Duplicate"))) {
+                
+                return BadRequest("There is already an account associated with this email");
             }
+            else if (result.Errors.FirstOrDefault().Code.Contains(("Lower")))
+            {
 
-            return BadRequest(result.Errors.FirstOrDefault());
+                return BadRequest("Passwords must have at least one lowercase");
+            }
+            else if (result.Errors.FirstOrDefault().Code.Contains(("Upper")))
+            {
+
+                return BadRequest("Passwords must have at least one uppercase");
+            }
+            return BadRequest(result.Errors.FirstOrDefault());           
         }
+        
 
         [HttpPost("ResedToken")]
         public async Task<ActionResult> ResedToken([FromBody] EmailDto model)

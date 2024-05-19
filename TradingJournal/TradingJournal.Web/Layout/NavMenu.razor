@@ -15,8 +15,6 @@
     </div>
 </div>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
-
 
     @if (!@IconMenuActive)
     {
@@ -24,11 +22,11 @@
             <NotAuthorized Context="NotAuthorizedContext">
 
                 <div class="px-4 py-4">
-                <button class="btn btn-outline-info" @onclick=@(() => ShowModal2())><i class="bi bi-card-checklist"></i> Register</button>
+                <button class="btn btn-outline-dark" @onclick=@(() => ShowModal2())><i class="bi bi-card-checklist"></i> Register</button>
                 </div>
 
                 <div class="dropdown-center py-3 px-4">
-                    <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                    <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
                         <i class="bi bi-box-arrow-right"></i> Sign in
                     </button>
                     <form class="dropdown-menu dropdown-menu-start">
