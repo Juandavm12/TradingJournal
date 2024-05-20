@@ -63,8 +63,27 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PostAsync(Broker broker)
         {
             _context.Add(broker);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
             return Ok(broker);
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
+                    
+                {
+                    return BadRequest("A broker with that license number already exists!.");
+                }
+        else
+                {
+                    return BadRequest(dbUpdateException.InnerException.Message);
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         //Method Get by ID (Read)
@@ -86,8 +105,28 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PutAsync(Broker broker)
         {
             _context.Update(broker);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
             return Ok(broker);
+
+        }
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
+
+                {
+                    return BadRequest("A broker with that license number already exists!.");
+                }
+                else
+                {
+                    return BadRequest(dbUpdateException.InnerException.Message);
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         //Metod Delete

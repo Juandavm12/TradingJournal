@@ -62,8 +62,26 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PostAsync(Market market)
         {
             _context.Add(market);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
             return Ok(market);
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
+                {
+                    return BadRequest("A Market with that code already exists.");
+                }
+                else
+                {
+                    return BadRequest(dbUpdateException.InnerException.Message);
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         //Method Get by ID (Read)
@@ -85,8 +103,25 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PutAsync(Market market)
         {
             _context.Update(market);
+            try { 
             await _context.SaveChangesAsync();
             return Ok(market);
+        }
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
+                {
+                    return BadRequest("A Market with that code already exists.");
+    }
+                else
+                {
+                    return BadRequest(dbUpdateException.InnerException.Message);
+}
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         //Metod Delete

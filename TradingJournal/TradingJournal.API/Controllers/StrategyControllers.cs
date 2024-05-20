@@ -63,8 +63,25 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PostAsync(Strategy strategy)
         {
             _context.Add(strategy);
+            try { 
             await _context.SaveChangesAsync();
             return Ok(strategy);
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
+                {
+                    return BadRequest("A Strategy with that code already exists.");
+                }
+                else
+                {
+                    return BadRequest(dbUpdateException.InnerException.Message);
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         //Method Get by ID (Read)
@@ -86,8 +103,25 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PutAsync(Strategy strategy)
         {
             _context.Update(strategy);
+            try { 
             await _context.SaveChangesAsync();
             return Ok(strategy);
+        }
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
+                {
+                    return BadRequest("A Strategy with that code already exists.");
+    }
+                else
+                {
+                    return BadRequest(dbUpdateException.InnerException.Message);
+}
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         //Metod Delete

@@ -63,8 +63,26 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PostAsync(AccType acctype)
         {
             _context.Add(acctype);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
             return Ok(acctype);
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
+                {
+                    return BadRequest("An account type with that name already exists.");
+                }
+                else
+                {
+                    return BadRequest(dbUpdateException.InnerException.Message);
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         //Method Get by ID (Read)
@@ -86,8 +104,26 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PutAsync(AccType acctype)
         {
             _context.Update(acctype);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
             return Ok(acctype);
+        }
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
+                {
+                    return BadRequest("An account type with that name already exists.");
+                }
+                else
+                {
+                    return BadRequest(dbUpdateException.InnerException.Message);
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         //Metod Delete
