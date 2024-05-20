@@ -61,8 +61,27 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PostAsync(TradeLog tradelog)
         {
             _context.Add(tradelog);
-            await _context.SaveChangesAsync();
-            return Ok(tradelog);
+            try
+            {
+                await _context.SaveChangesAsync();
+                return Ok(tradelog);
+            }
+
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException!.Message.Contains("AccountsAccNumber"))
+                {
+                    return BadRequest("You must chose a Account Number");
+                }
+                else
+                {
+                    return BadRequest(dbUpdateException.InnerException.Message);
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         //Method Get by ID (Read)
@@ -84,8 +103,27 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PutAsync(TradeLog tradelog)
         {
             _context.Update(tradelog);
-            await _context.SaveChangesAsync();
-            return Ok(tradelog);
+            try
+            {
+                await _context.SaveChangesAsync();
+                return Ok(tradelog);
+            }
+
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException!.Message.Contains("AccountsAccNumber"))
+                {
+                    return BadRequest("You must chose a Account Number");
+                }
+                else
+                {
+                    return BadRequest(dbUpdateException.InnerException.Message);
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         //Metod Delete

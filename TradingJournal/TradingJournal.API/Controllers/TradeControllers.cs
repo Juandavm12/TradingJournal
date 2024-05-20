@@ -62,8 +62,30 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PostAsync(Trade trade)
         {
             _context.Add(trade);
-            await _context.SaveChangesAsync();
-            return Ok(trade);
+            try
+            {
+                await _context.SaveChangesAsync();
+                return Ok(trade);
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException!.Message.Contains("Markets"))
+                {
+                    return BadRequest("You must choose a Market.");
+                }
+                else if (dbUpdateException.InnerException!.Message.Contains("UsersId"))
+                {
+                    return BadRequest("You must choose a Trader.");
+                }
+                else
+                {
+                    return BadRequest(dbUpdateException.InnerException.Message);
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         //Method Get by ID (Read)
@@ -85,8 +107,30 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PutAsync(Trade trade)
         {
             _context.Update(trade);
-            await _context.SaveChangesAsync();
-            return Ok(trade);
+            try
+            {
+                await _context.SaveChangesAsync();
+                return Ok(trade);
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException!.Message.Contains("Markets"))
+                {
+                    return BadRequest("You must choose a Market.");
+                }
+                else if (dbUpdateException.InnerException!.Message.Contains("UsersId"))
+                {
+                    return BadRequest("You must choose a Trader.");
+                }
+                else
+                {
+                    return BadRequest(dbUpdateException.InnerException.Message);
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         //Metod Delete

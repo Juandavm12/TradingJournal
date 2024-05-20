@@ -69,9 +69,13 @@ namespace TradingJournal.API.Controllers
             }
             catch (DbUpdateException dbUpdateException)
             {
-                if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
+                if (dbUpdateException.InnerException!.Message.Contains("PK_Strategies"))
                 {
-                    return BadRequest("A Strategy with that code already exists.");
+                    return BadRequest("A Strategy with that Code already exists!.");
+                }
+                else if (dbUpdateException.InnerException!.Message.Contains("Name"))
+                {
+                    return BadRequest("A Strategy with that Name already exists!.");
                 }
                 else
                 {
@@ -109,10 +113,13 @@ namespace TradingJournal.API.Controllers
         }
             catch (DbUpdateException dbUpdateException)
             {
-                if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
+                if (dbUpdateException.InnerException!.Message.Contains("PK_Strategies"))
                 {
-                    return BadRequest("A Strategy with that code already exists.");
-    }
+                    return BadRequest("A Strategy with that Code already exists!.");
+    }else if (dbUpdateException.InnerException!.Message.Contains("Name"))
+                {
+                    return BadRequest("A Strategy with that Name already exists!.");
+                }
                 else
                 {
                     return BadRequest(dbUpdateException.InnerException.Message);

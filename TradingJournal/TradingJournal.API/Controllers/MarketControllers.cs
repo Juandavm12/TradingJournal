@@ -69,9 +69,13 @@ namespace TradingJournal.API.Controllers
             }
             catch (DbUpdateException dbUpdateException)
             {
-                if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
+                if (dbUpdateException.InnerException!.Message.Contains("PK_Markets"))
                 {
-                    return BadRequest("A Market with that code already exists.");
+                    return BadRequest("A Market with that Code already exists!.");
+                }
+                else if (dbUpdateException.InnerException!.Message.Contains("Name"))
+                {
+                    return BadRequest("A Market with that Name already exists!.");
                 }
                 else
                 {
@@ -109,14 +113,18 @@ namespace TradingJournal.API.Controllers
         }
             catch (DbUpdateException dbUpdateException)
             {
-                if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
+                if (dbUpdateException.InnerException!.Message.Contains("PK_Markets"))
                 {
-                    return BadRequest("A Market with that code already exists.");
-    }
+                    return BadRequest("A Market with that Code already exists!.");
+                }
+                else if (dbUpdateException.InnerException!.Message.Contains("Name"))
+                {
+                    return BadRequest("A Market with that Name already exists!.");
+                }
                 else
                 {
                     return BadRequest(dbUpdateException.InnerException.Message);
-}
+                }
             }
             catch (Exception exception)
             {

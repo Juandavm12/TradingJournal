@@ -35,8 +35,36 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PostAsync(Account account)
         {
             _context.Add(account);
+            try {
             await _context.SaveChangesAsync();
             return Ok(account);
+        }
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException!.Message.Contains("AccTypesId"))
+
+                {
+                    return BadRequest("You must chose an Account Type");
+                }
+                else if (dbUpdateException.InnerException!.Message.Contains("BrokersId"))
+
+                {
+                    return BadRequest("You must chose a Broker");
+                }
+                else if (dbUpdateException.InnerException!.Message.Contains("UsersId"))
+
+                {
+                    return BadRequest("You must chose a Trader");
+                }
+                else
+                {
+                    return BadRequest(dbUpdateException.InnerException.Message);
+}
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         //Method Get by ID (Read)
@@ -58,8 +86,36 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PutAsync(Account account)
         {
             _context.Update(account);
+            try { 
             await _context.SaveChangesAsync();
             return Ok(account);
+        }
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException!.Message.Contains("AccTypesId"))
+
+                {
+                    return BadRequest("You must chose an Account Type");
+    }
+                else if (dbUpdateException.InnerException!.Message.Contains("BrokersId"))
+
+                {
+                    return BadRequest("You must chose a Broker");
+}
+                else if (dbUpdateException.InnerException!.Message.Contains("UsersId"))
+
+{
+    return BadRequest("You must chose a Trader");
+}
+else
+{
+    return BadRequest(dbUpdateException.InnerException.Message);
+}
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         //Metod Delete

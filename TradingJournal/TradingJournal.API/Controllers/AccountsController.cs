@@ -196,7 +196,7 @@ namespace TradingJournal.API.Controllers
         [HttpPost("CreateUser")]
         public async Task<ActionResult> CreateUser([FromBody] UserDTO model)
         {
-            
+
             User user = model;
             if (!string.IsNullOrEmpty(model.Photo))
             {
@@ -205,45 +205,63 @@ namespace TradingJournal.API.Controllers
             }
 
             var result = await _userHelper.AddUserAsync(user, model.Password);
-
-            if (result.Succeeded)
+            try
             {
-                await _userHelper.AddUserToRoleAsync(user, user.UserType.ToString());
-                var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-                var tokenLink = Url.Action("ConfirmEmail", "accounts", new
+                if (result.Succeeded)
                 {
-                    userid = user.Id,
-                    token = myToken
-                }, HttpContext.Request.Scheme, _configuration["UrlWEB"]);
+                    await _userHelper.AddUserToRoleAsync(user, user.UserType.ToString());
+                    var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                    var tokenLink = Url.Action("ConfirmEmail", "accounts", new
+                    {
+                        userid = user.Id,
+                        token = myToken
+                    }, HttpContext.Request.Scheme, _configuration["UrlWEB"]);
 
-                var response = _mailHelper.SendMail(user.FullName, user.Email!,
-                    $"Trading Journal - Account Confirmation",
-                    $"<h1>Trading Journal - Account Confirmation</h1>" +
-                    $"<p>To enable the user, please click 'Confirm Email'':</p>" +
-                    $"<b><a href ={tokenLink}>Confirm Email</a></b>");
+                    var response = _mailHelper.SendMail(user.FullName, user.Email!,
+                        $"Trading Journal - Account Confirmation",
+                        $"<h1>Trading Journal - Account Confirmation</h1>" +
+                        $"<p>To enable the user, please click 'Confirm Email'':</p>" +
+                        $"<b><a href ={tokenLink}>Confirm Email</a></b>");
 
-                if (response.IsSuccess)
+                    if (response.IsSuccess)
+                    {
+                        return NoContent();
+                    }
+                    return BadRequest(response.Message);
+                }
+                if (result.Errors.FirstOrDefault().Code.Contains(("Duplicate")))
                 {
-                    return NoContent();
-                }                
-                return BadRequest(response.Message);              
-            } 
-            if (result.Errors.FirstOrDefault().Code.Contains(("Duplicate"))) {
-                
-                return BadRequest("There is already an account associated with this email");
-            }
-            else if (result.Errors.FirstOrDefault().Code.Contains(("Lower")))
-            {
 
-                return BadRequest("Passwords must have at least one lowercase");
-            }
-            else if (result.Errors.FirstOrDefault().Code.Contains(("Upper")))
-            {
+                    return BadRequest("There is already an account associated with this email");
+                }
+                else if (result.Errors.FirstOrDefault().Code.Contains(("Lower")))
+                {
 
-                return BadRequest("Passwords must have at least one uppercase");
+                    return BadRequest("Passwords must have at least one lowercase");
+                }
+                else if (result.Errors.FirstOrDefault().Code.Contains(("Upper")))
+                {
+
+                    return BadRequest("Passwords must have at least one uppercase");
+                }
+                return BadRequest(result.Errors.FirstOrDefault());
             }
-            return BadRequest(result.Errors.FirstOrDefault());           
-        }
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
+                {
+                    return BadRequest("An account type with that name already exists.");
+                }
+                else
+                {
+                    return BadRequest(dbUpdateException.InnerException.Message);
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+            }
         
 
         [HttpPost("ResedToken")]

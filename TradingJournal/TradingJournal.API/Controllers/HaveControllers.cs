@@ -61,8 +61,28 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PostAsync(Have have)
         {
             _context.Add(have);
+            try { 
             await _context.SaveChangesAsync();
             return Ok(have);
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException!.Message.Contains("Strategies"))
+                {
+                    return BadRequest("You must choose a strategy.");
+                }else if (dbUpdateException.InnerException!.Message.Contains("UsersId"))
+                {
+                    return BadRequest("You must choose a Trader.");
+                }
+                else
+                {
+                    return BadRequest(dbUpdateException.InnerException.Message);
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         //Method Get by ID (Read)
@@ -84,8 +104,28 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PutAsync(Have have)
         {
             _context.Update(have);
+            try { 
             await _context.SaveChangesAsync();
             return Ok(have);
+        }
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException!.Message.Contains("Strategies"))
+                {
+                    return BadRequest("You must choose a strategy.");
+    }else if (dbUpdateException.InnerException!.Message.Contains("UsersId"))
+                {
+                    return BadRequest("You must choose a Trader.");
+}
+                else
+{
+    return BadRequest(dbUpdateException.InnerException.Message);
+}
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         //Metod Delete

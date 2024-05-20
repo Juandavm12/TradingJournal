@@ -26,13 +26,15 @@ namespace TradingJournal.API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);      
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<AccType>().HasIndex(c => c.Name).IsUnique();
             modelBuilder.Entity<Broker>().HasIndex(c => c.LicenseNumber).IsUnique();
-          modelBuilder.Entity<Market>().HasIndex(c => c.Code).IsUnique();
+            modelBuilder.Entity<Market>().HasIndex(c => c.Code).IsUnique();
+            modelBuilder.Entity<Market>().HasIndex(c => c.Name).IsUnique();
             modelBuilder.Entity<Strategy>().HasIndex(c => c.Code).IsUnique();
+            modelBuilder.Entity<Strategy>().HasIndex(c => c.Name).IsUnique();
             modelBuilder.Entity<TraderType>().HasIndex(c => c.Name).IsUnique();
-        
-                    }
+
+        }
     }
 }
