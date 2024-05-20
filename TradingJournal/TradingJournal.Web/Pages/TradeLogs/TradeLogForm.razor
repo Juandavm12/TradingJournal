@@ -2,122 +2,99 @@
 @attribute [Authorize(Roles = "Admin")]
 
 <EditForm Model="TradeLog" OnValidSubmit="OnValidSubmit">
-
     <DataAnnotationsValidator />
 
-    <div class="mb-3">
-        <label>Start Time</label>
-        <div>
-            <InputDate width="10" @bind-Value="@TradeLog.StartTime"></InputDate>
-            <ValidationMessage For="@(() => @TradeLog.StartTime)" />
-        </div>
+
+    <div class="form-floating mb-3">
+        <InputDate class="form-control" id="floatingInput" placeholder="Start Time" @bind-Value="@TradeLog.StartTime" />
+        <label for="floatingInput">Start Time :</label>
+        <ValidationMessage For="@(() => TradeLog.StartTime)" />
     </div>
-    <div class="mb-3">
-        <label>End Time</label>
-        <div>
-            <InputDate width="10" @bind-Value="@TradeLog.EndTime"></InputDate>
-            <ValidationMessage For="@(() => @TradeLog.EndTime)" />
-        </div>
+
+    <div class="form-floating mb-3">
+        <InputDate class="form-control" id="floatingInput2" placeholder="End Time" @bind-Value="@TradeLog.EndTime" />
+        <label for="floatingInput2">End Time :</label>
+        <ValidationMessage For="@(() => TradeLog.EndTime)" />
     </div>
-    <div class="mb-3">
-        <label>Asset</label>
-        <div>
-            <InputText width="10" @bind-Value="@TradeLog.Asset"></InputText>
-            <ValidationMessage For="@(() => @TradeLog.Asset)" />
-        </div>
-            </div>
-    <div class="mb-3">
-        <label>Risk</label>
-        <div>
-            <InputNumber width="10" @bind-Value="@TradeLog.Risk"></InputNumber>
-            <ValidationMessage For="@(() => @TradeLog.Risk)" />
-        </div>
+
+    <div class="form-floating mb-3">
+        <InputText class="form-control" id="floatingInput3" placeholder="Asset" @bind-Value="@TradeLog.Asset" />
+        <label for="floatingInput3">Asset :</label>
+        <ValidationMessage For="@(() => TradeLog.Asset)" />
     </div>
-    <div class="mb-3">
-        <label>Pnl</label>
-        <div>
-            <InputNumber width="10" @bind-Value="@TradeLog.Pnl"></InputNumber>
-            <ValidationMessage For="@(() => @TradeLog.Pnl)" />
-        </div>
-    </div>
-    <div class="mb-3">
-        <label>Win Rate</label>
-        <div>
-            <InputNumber width="10" @bind-Value="@TradeLog.WinRate"></InputNumber>
-            <ValidationMessage For="@(() => @TradeLog.WinRate)" />
-        </div>
-    </div>
-    <div class="mb-3">
-        <label>Risk Reward Ratio</label>
-        <div>
-            <InputNumber width="10" @bind-Value="@TradeLog.RiskRewardRatio"></InputNumber>
-            <ValidationMessage For="@(() => @TradeLog.RiskRewardRatio)" />
-        </div>
-    </div>
-    <div class="mb-3">
-        <label>Comission</label>
-        <div>
-            <InputNumber width="10" @bind-Value="@TradeLog.Comission"></InputNumber>
-            <ValidationMessage For="@(() => @TradeLog.Comission)" />
-        </div>
-    </div>
-    <div class="mb-3">
-        <label>NetPnl</label>
-        <div>
-            <InputNumber width="10" @bind-Value="@TradeLog.NetPnl"></InputNumber>
-            <ValidationMessage For="@(() => @TradeLog.NetPnl)" />
-        </div>
+
+    <div class="form-floating mb-3">
+        <InputNumber class="form-control" id="floatingInput4" placeholder="Risk" @bind-Value="@TradeLog.Risk" />
+        <label for="floatingInput4">Risk :</label>
+        <ValidationMessage For="@(() => TradeLog.Risk)" />
     </div>
 
 
-    <div class="w-100 py-2">
-        <label>Account Number</label>
-        <div>
-            <select class="form-select" @bind="@TradeLog.AccountsAccNumber">
-                <option value="0">-- Select a Account --</option>
-                @if (Accounts is not null)
+    <div class="form-floating mb-3">
+        <InputNumber class="form-control" id="floatingInput5" placeholder="Pnl" @bind-Value="@TradeLog.Pnl" />
+        <label for="floatingInput5">Pnl :</label>
+        <ValidationMessage For="@(() => TradeLog.Pnl)" />
+    </div>
+
+    <div class="form-floating mb-3">
+        <InputNumber class="form-control" id="floatingInput6" placeholder="Win Rate" @bind-Value="@TradeLog.WinRate" />
+        <label for="floatingInput6">Win Rate :</label>
+        <ValidationMessage For="@(() => TradeLog.WinRate)" />
+    </div>
+
+    <div class="form-floating mb-3">
+        <InputNumber class="form-control" id="floatingInput7" placeholder="Risk Reward Ratio" @bind-Value="@TradeLog.RiskRewardRatio" />
+        <label for="floatingInput7">Risk Reward Ratio :</label>
+        <ValidationMessage For="@(() => TradeLog.RiskRewardRatio)" />
+    </div>
+
+    <div class="form-floating mb-3">
+        <InputNumber class="form-control" id="floatingInput8" placeholder="Comission" @bind-Value="@TradeLog.Comission" />
+        <label for="floatingInput8">Comission :</label>
+        <ValidationMessage For="@(() => TradeLog.Comission)" />
+    </div>
+
+    <div class="form-floating mb-3">
+        <InputNumber class="form-control" id="floatingInput9" placeholder="Net Pnl" @bind-Value="@TradeLog.NetPnl" />
+        <label for="floatingInput9">Net Pnl :</label>
+        <ValidationMessage For="@(() => TradeLog.NetPnl)" />
+    </div>
+
+
+
+    <div class="form-floating mb-3">
+        <select class="form-select" id="floatingInput10" placeholder="Account Number " @bind="@TradeLog.AccountsAccNumber">
+            <option value="0">-- Select a Account --</option>
+            @if (Accounts is not null)
+            {
+                @foreach (var obj in Accounts)
                 {
-                    @foreach (var obj in Accounts)
-                    {
-                        <option value="@obj.AccNumber">@obj.AccNumber</option>
-                    }
+                    <option value="@obj.AccNumber">@obj.AccNumber</option>
                 }
-            </select>
-            <ValidationMessage For="@(() => @TradeLog.AccountsAccNumber)" />
-        </div>
+            }
+        </select>
+        <label for="floatingInput10">Account Number:</label>
+        <ValidationMessage For="@(() => TradeLog.AccountsAccNumber)" />
     </div>
 
-    
+       
+        
     <button class="btn btn-dark" type="submit">Save <i class="bi bi-floppy2"></i></button>
-
-
     <button class="btn btn-info" type="reset">Clean <i class="bi bi-x-octagon"></i></button>
-
-
     <button class="btn btn-secondary" @onclick="ReturnAction">Return <i class="bi bi-arrow-clockwise"></i></button>
-
 </EditForm>
 
-
-
-
 @code {
-
     private List<Account> Accounts;
-
     protected async override Task OnInitializedAsync()
     {
         await Charging();
-
     }
 
     private async Task Charging()
     {
-
         var responseHTTP = await Repository.GetAsync<List<Account>>("/api/account/combo");
         Accounts = responseHTTP.Response!;
-
-
     }
 
     [EditorRequired]

@@ -29,6 +29,7 @@ namespace TradingJournal.Shared.Entities
 
 
         [Display(Name = "License Number")]
+        [Required(ErrorMessage = "The field {0} is mandatory")]
         [MaxLength(50, ErrorMessage = "More than 50 charachters are not allowed")]
         public string LicenseNumber { get; set; }
 

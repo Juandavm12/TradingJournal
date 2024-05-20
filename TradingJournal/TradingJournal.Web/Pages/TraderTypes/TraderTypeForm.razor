@@ -2,33 +2,19 @@
 @attribute [Authorize(Roles = "Admin")]
 
 <EditForm Model="TraderType" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator />
 
-    <DataAnnotationsValidator />
-
-
-    <DataAnnotationsValidator />
-
-    <div class="mb-3">
-        <label>Name</label>
-        <div>
-            <InputText width="10" @bind-Value="@TraderType.Name"></InputText>
-            <ValidationMessage For="@(() => @TraderType.Name)" />
-        </div>
-    </div>
-
+    <div class="form-floating mb-3">
+        <InputText class="form-control" id="floatingInput" placeholder="Name" @bind-Value="@TraderType.Name" />
+        <label for="floatingInput">Name :</label>
+        <ValidationMessage For="@(() => TraderType.Name)" />
+    </div>    
 
     <button class="btn btn-dark" type="submit">Save <i class="bi bi-floppy2"></i></button>
-
-
     <button class="btn btn-info" type="reset">Clean <i class="bi bi-x-octagon"></i></button>
-
-
     <button class="btn btn-secondary" @onclick="ReturnAction">Return <i class="bi bi-arrow-clockwise"></i></button>
 
 </EditForm>
-
-
-
 
 @code {
 

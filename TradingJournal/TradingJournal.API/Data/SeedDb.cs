@@ -100,10 +100,10 @@ namespace TradingJournal.API.Data
         {
             if (!_context.Brokers.Any())
             {
-                _context.Brokers.Add(new Broker { Name = "Tickmill" });
-                _context.Brokers.Add(new Broker { Name = "Libertex" });
-                _context.Brokers.Add(new Broker { Name = "Oanda" });
-                _context.Brokers.Add(new Broker { Name = "FTMO" });
+                _context.Brokers.Add(new Broker { Name = "Tickmill", LicenseNumber="154785" });
+                _context.Brokers.Add(new Broker { Name = "Libertex", LicenseNumber = "141258" });
+                _context.Brokers.Add(new Broker { Name = "Oanda" , LicenseNumber = "134755" });
+                _context.Brokers.Add(new Broker { Name = "FTMO", LicenseNumber = "159685" });
             }
             await _context.SaveChangesAsync();
         }

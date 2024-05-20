@@ -16,95 +16,101 @@
 </div>
 
 
-    @if (!@IconMenuActive)
-    {
-        <AuthorizeView>
-            <NotAuthorized Context="NotAuthorizedContext">
+@if (!@IconMenuActive)
+{
+    <AuthorizeView>
+        <NotAuthorized Context="NotAuthorizedContext">
 
-                <div class="px-4 py-4">
+            <div class="px-4 py-4">
                 <button class="btn btn-outline-dark" @onclick=@(() => ShowModal2())><i class="bi bi-card-checklist"></i> Register</button>
-                </div>
+            </div>
 
-                <div class="dropdown-center py-3 px-4">
-                    <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-                        <i class="bi bi-box-arrow-right"></i> Sign in
-                    </button>
-                    <form class="dropdown-menu dropdown-menu-start">
+            <div class="dropdown-center py-3 px-4">
+                <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                    <i class="bi bi-box-arrow-right"></i> Sign in
+                </button>
+                <form class="dropdown-menu dropdown-menu-start">
                     <EditForm Model="loginDTO" OnValidSubmit="LoginAsync">
-                    <DataAnnotationsValidator />
-                        <div class="mb-3">
-                                <label class="form-label">   Email address</label>
-                            <InputText type="email" class="form-control" @bind-Value="@loginDTO.Email" placeholder="email@example.com" />
-                                <ValidationMessage For="@(() => loginDTO.Email)" />
+                        <DataAnnotationsValidator />
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                        <div class="form-floating mb-3">
+                                        <InputText type="email" class="form-control" id="floatingInput" placeholder="name@example.com" @bind-Value="@loginDTO.Email" />
+                            <label for="floatingInput">Email address</label>
                         </div>
-                        <div class="mb-3">
-                                <label class="form-label">   Password</label>
-                            <InputText type="password" class="form-control" @bind-Value="@loginDTO.Password" placeholder="Password" />
-                                <ValidationMessage For="@(() => loginDTO.Password)" />
+                                </div>
+                            </div>
+                             <div class="col">
+                        <div class="form-floating">
+                                    <InputText type="password" class="form-control" id="floatingPassword" placeholder="Password" @bind-Value="@loginDTO.Password" />
+                            <label for="floatingPassword">Password</label>
                         </div>
+                            </div>
+                        </div>                      
                         <div class="mb-3">
-                          </div>
-                            <button class="btn btn-success px-5" type="Submit"><i class="bi bi-box-arrow-right"></i> Login &nbsp; &nbsp; </button>
-                        </EditForm>
-                    </form>
-                </div>
-                              
-                
-                   
-            </NotAuthorized>
-        </AuthorizeView>
+                        </div>
+                        <button class="btn btn-success px-5" type="Submit"><i class="bi bi-box-arrow-right"></i> Login &nbsp; &nbsp; </button>
+                    </EditForm>
+                </form>
+            </div>
 
 
 
-    }
-   
+        </NotAuthorized>
+    </AuthorizeView>
 
 
 
-<div class="nav-scrollable" >
-        <nav class="flex-column">           
-            <div class="nav-item px-5">
+}
+
+
+
+
+<div class="nav-scrollable">
+    <nav class="flex-column">
+        <div class="nav-item px-5">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span>
                 @if (!@IconMenuActive)
                 {
                     <label>PRUEBA</label>
                 }
-            </NavLink>                                       
-            </div>   
+            </NavLink>
+        </div>
 
         <div class="nav-item px-5">
-                <NavLink class="nav-link" href="">
-                    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> 
-               
-            
+            <NavLink class="nav-link" href="">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span>
+
+
                 @if (!@IconMenuActive)
                 {
-                <label>Prueba2</label>
+                    <label>Prueba2</label>
 
                 }
             </NavLink>
-            </div>
-
-        </nav>
-
-    </div>
-
-<div class="bottom-row d-flex justify-content-end">
-        <div class="icon-menu-arrow">
-            @if (!@IconMenuActive)
-            {
-                <span class="bi bi-arrow-left" style="color: black;" @onclick="ToggleIconMenu"></span>
-            }
-            else
-            {
-                <span class="bi bi-arrow-right" style="color: black;" @onclick="ToggleIconMenu"></span>
-            }
         </div>
 
+    </nav>
 
+</div>
 
+<div class="bottom-row d-flex justify-content-end">
+    <div class="icon-menu-arrow">
+        @if (!@IconMenuActive)
+        {
+            <span class="bi bi-arrow-left" style="color: white;" @onclick="ToggleIconMenu"></span>
+        }
+        else
+        {
+            <span class="bi bi-arrow-right" style="color: white;" @onclick="ToggleIconMenu"></span>
+        }
     </div>
+
+
+
+</div>
 
 
 
@@ -147,7 +153,7 @@
 
     private async Task LoginAsync()
     {
- 
+
         var responseHttp = await Repository.PostAsync<LoginDTO, TokenDTO>("/api/accounts/Login", loginDTO);
         if (responseHttp.Error)
         {
@@ -158,14 +164,14 @@
         else
         {
             await loginService.LoginAsync(responseHttp.Response!.Token);
-     
 
-             navigationManager.NavigateTo("/", true);
+
+            navigationManager.NavigateTo("/", true);
         }
     }
 
 
-   
+
     [CascadingParameter]
     IModalService Modal { get; set; } = default!;
 
@@ -182,7 +188,7 @@
         var result = await modalReference.Result;
         if (result.Confirmed)
         {
-           
+
         }
     }
 

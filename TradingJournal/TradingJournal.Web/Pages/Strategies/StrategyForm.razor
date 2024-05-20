@@ -5,64 +5,50 @@
 
     <DataAnnotationsValidator />
 
-    <div class="mb-3">
-        <label>Code</label>
-        <div>
-            <InputNumber width="10" @bind-Value="@Strategy.Code"></InputNumber>
-            <ValidationMessage For="@(() => @Strategy.Code)" />
-        </div>
-    </div>
-    <div class="mb-3">
-        <label>Name</label>
-        <div>
-            <InputText width="10" @bind-Value="@Strategy.Name"></InputText>
-            <ValidationMessage For="@(() => Strategy.Name)" />
-        </div>
-    </div>
-    <div class="mb-3">
-        <label>Session</label>
-        <div>
-            <InputText width="10" @bind-Value="@Strategy.Session"></InputText>
-            <ValidationMessage For="@(() => Strategy.Session)" />
-        </div>
-    </div>
-    <div class="mb-3">
-        <label>Type</label>
-        <div>
-            <InputText width="10" @bind-Value="@Strategy.Type"></InputText>
-            <ValidationMessage For="@(() => Strategy.Type)" />
-        </div>
-    </div>
-    <div class="mb-3">
-        <label>Description</label>
-        <div>
-            <InputText width="10" @bind-Value="@Strategy.Description"></InputText>
-            <ValidationMessage For="@(() => Strategy.Description)" />
-        </div>
+    <div class="form-floating mb-3">
+        <InputNumber class="form-control" id="floatingInput" placeholder="Code" @bind-Value="@Strategy.Code" />
+        <label for="floatingInput">Code :</label>
+        <ValidationMessage For="@(() => Strategy.Code)" />
     </div>
 
+    <div class="form-floating mb-3">
+        <InputText class="form-control" id="floatingInput2" placeholder="Name" @bind-Value="@Strategy.Name" />
+        <label for="floatingInput2">Name :</label>
+        <ValidationMessage For="@(() => Strategy.Name)" />
+    </div>
+
+    <div class="form-floating mb-3">
+        <InputText class="form-control" id="floatingInput3" placeholder="Session" @bind-Value="@Strategy.Session" />
+        <label for="floatingInput3">Session :</label>
+        <ValidationMessage For="@(() => Strategy.Session)" />
+    </div>
+
+    <div class="form-floating mb-3">
+        <InputText class="form-control" id="floatingInput4" placeholder="Type" @bind-Value="@Strategy.Type" />
+        <label for="floatingInput4">Type :</label>
+        <ValidationMessage For="@(() => Strategy.Type)" />
+    </div>
+
+    <div class="form-floating mb-3">
+        <InputText class="form-control" id="floatingInput5" placeholder="Description" @bind-Value="@Strategy.Description" />
+        <label for="floatingInput5">Description :</label>
+        <ValidationMessage For="@(() => Strategy.Description)" />
+    </div>
+       
+ 
     <button class="btn btn-dark" type="submit">Save <i class="bi bi-floppy2"></i></button>
-
-
     <button class="btn btn-info" type="reset">Clean <i class="bi bi-x-octagon"></i></button>
-
-
     <button class="btn btn-secondary" @onclick="ReturnAction">Return <i class="bi bi-arrow-clockwise"></i></button>
-
 </EditForm>
 
 @code {
-
-
     [EditorRequired]
     [Parameter]
     public Strategy Strategy { get; set; }
 
-
     [EditorRequired]
     [Parameter]
     public EventCallback OnValidSubmit { get; set; }
-
 
     [EditorRequired]
     [Parameter]

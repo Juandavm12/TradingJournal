@@ -9,7 +9,7 @@
     <DataAnnotationsValidator />
 
 
-        <div class="card">
+    <div class="card">
         <div class="card-header">
             <span>
                 <i class="bi bi-person" /> Register New User
@@ -19,112 +19,86 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-6">
-            <div class="mb-3">
-                <label>First Name :</label>
-                <div>
-                            <InputText class="form-control" @bind-Value="@userDTO.FirstName"  />
-                    <ValidationMessage For="@(() => userDTO.FirstName)" />
-                </div>
-            </div>
-            <div class="mb-3">
-                <label>Last Name :</label>
-                <div>
-                    <InputText class="form-control" @bind-Value="@userDTO.LastName" />
-                    <ValidationMessage For="@(() => userDTO.LastName)" />
-                </div>
-            </div>
-            <div class="mb-3">
-                <label>Identification Number :</label>
-                <div>
-                    <InputText class="form-control" @bind-Value="@userDTO.Document" />
-                    <ValidationMessage For="@(() => userDTO.Document)" />
-                </div>
-            </div>
-            <div class="mb-3">
-                <label>Phone Number :</label>
-                <div>
-                    <InputText class="form-control" @bind-Value="@userDTO.PhoneNumber" />
-                    <ValidationMessage For="@(() => userDTO.PhoneNumber)" />
-                </div>
-            </div>
-                    <div class="mb-3">                        
-                        <div>
-                            <InputImg Label="Photo" ImageSelected="ImageSelected" ImageURL="@imageUrl" />
-                        </div>
+                    <div class="form-floating mb-3">
+                        <InputText class="form-control" id="floatingInput" placeholder="FirstName " @bind-Value="@userDTO.FirstName" />
+                        <label for="floatingInput">First Name:</label>
+                        <ValidationMessage For="@(() => userDTO.FirstName)" />
                     </div>
+                    <div class="form-floating mb-3">
+                        <InputText class="form-control" id="floatingInput2" placeholder="Last Name" @bind-Value="@userDTO.LastName" />
+                        <label for="floatingInput2">Last Name:</label>
+                        <ValidationMessage For="@(() => userDTO.LastName)" />
+                    </div>
+                    <div class="form-floating mb-3">
+                        <InputText class="form-control" id="floatingInput3" placeholder="Identification Number :" @bind-Value="@userDTO.Document" />
+                        <label for="floatingInput3">Identification Number :</label>
+                        <ValidationMessage For="@(() => userDTO.Document)" />
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <InputText class="form-control" id="floatingInput4" placeholder="Phone Number " @bind-Value="@userDTO.PhoneNumber" />
+                        <label for="floatingInput4">Phone Number :</label>
+                        <ValidationMessage For="@(() => userDTO.PhoneNumber)" />
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <select class="form-select" id="floatingInput5" placeholder="Trader Type " @bind="@userDTO.TraderTypesId" >
+                            <option value="0">-- Select a Trader Type --</option>
+                            @if (TraderTypes is not null)
+                            {
+                                @foreach (var obj in TraderTypes)
+                                {
+                                    <option value="@obj.Id">@obj.Name</option>
+                                }
+                            }
+                        </select>
+                        <label for="floatingInput5">Trader Type:</label>
+                        <ValidationMessage For="@(() => userDTO.TraderTypesId)" />
+                    </div>
+
+                   
                 </div>
                 <div class="col-6">
-            <div class="mb-3">
-                <label>Address :</label>
-                <div>
-                    <InputText class="form-control" @bind-Value="@userDTO.Address" />
-                    <ValidationMessage For="@(() => userDTO.Address)" />
-                </div>
-            </div>
-            <div class="mb-3">
-                <label>Email :</label>
-                <div>
-                            <InputText class="form-control" @bind-Value="@userDTO.Email" />
-                            <ValidationMessage For="@(() => userDTO.Email)" />
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label>Password :</label>
-                <div>
-                    <InputText type="password" class="form-control" @bind-Value="@userDTO.Password" />
-                    <ValidationMessage For="@(() => userDTO.Password)" />
-                </div>
-            </div>
-            <div class="mb-3">
-                <label>Password Confirmation :</label>
-                <div>
-                    <InputText type="password" class="form-control" @bind-Value="@userDTO.PasswordConfirm" />
-                    <ValidationMessage For="@(() => userDTO.PasswordConfirm)" />
-                </div>
-            </div>
-                    <div class="w-100 py-2">
-                        <label>Trader Type</label>
-                        <div>
-                            <select class="form-select" @bind="@userDTO.TraderTypesId">
-                                <option value="0">-- Select a Trader Type --</option>
-                                @if (TraderTypes is not null)
-                                {
-                                    @foreach (var obj in TraderTypes)
-                                    {
-                                        <option value="@obj.Id">@obj.Name</option>
-                                    }
-                                }
-                            </select>
-                            <ValidationMessage For="@(() => @userDTO.TraderTypesId)" />
-                        </div>
+                    <div class="form-floating mb-3">
+                        <InputText class="form-control" id="floatingInput5" placeholder="Address" @bind-Value="@userDTO.Address" />
+                        <label for="floatingInput5">Address :</label>
+                        <ValidationMessage For="@(() => userDTO.Address)" />
                     </div>
-                    
+                    <div class="form-floating mb-3">
+                        <InputText type="email" class="form-control" id="floatingInput6" placeholder="Email" @bind-Value="@userDTO.Email" />
+                        <label for="floatingInput6">Email :</label>
+                        <ValidationMessage For="@(() => userDTO.Email)" />
+                    </div>
+                    <div class="form-floating mb-3">
+                        <InputText type="password" class="form-control" id="floatingInput7" placeholder="Password" @bind-Value="@userDTO.Password" />
+                        <label for="floatingInput7">Password :</label>
+                        <ValidationMessage For="@(() => userDTO.Password)" />
+                    </div>
+                    <div class="form-floating mb-3">
+                        <InputText type="password" class="form-control" id="floatingInput7" placeholder="Password Confirmation" @bind-Value="@userDTO.PasswordConfirm" />
+                        <label for="floatingInput7">Password Confirmation :</label>
+                        <ValidationMessage For="@(() => userDTO.PasswordConfirm)" />
+                    </div>
+                    <div class="mb-3">
+                        <InputImg Label="Photo" ImageSelected="ImageSelected" ImageURL="@imageUrl" />
+                    </div>
                 </div>
+            </div>
+        </div>
     </div>
-    </div>
-       </div>
-   
-  
+
+
 
 </EditForm>
 @code {
-
     [CascadingParameter]
-
     BlazoredModalInstance BlazoredModal { get; set; } = default!;
-
- 
 
     private async Task Charging()
     {
-
         var responseHTTP = await Repository.GetAsync<List<TraderType>>("/api/TraderTypes/combo");
         TraderTypes = responseHTTP.Response!;
-
-
     }
-
 
     private List<TraderType> TraderTypes;
     private User Users = new();
@@ -139,11 +113,8 @@
         }
     }
 
-    private string? imageUrl;
-
+    private string imageUrl;
     private UserDTO userDTO = new();
-
-
 
     private void ImageSelected(string imagenBase64)
     {
@@ -151,13 +122,11 @@
         imageUrl = null;
     }
 
-
     [Parameter]
     [SupplyParameterFromQuery]
     public bool IsAdmin { get; set; }
     private async Task CreateUserAsync()
     {
-        
         userDTO.UserName = userDTO.Email;
         if (IsAdmin)
         {
@@ -174,13 +143,17 @@
             await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
             return;
         }
-
-        await BlazoredModal.CloseAsync(ModalResult.Ok());        
-     
-        await sweetAlertService.FireAsync("confirm", "Your account has been successfully created. An email has been sent to you with instructions on how to activate your username.", SweetAlertIcon.Info);
-        navigationManager.NavigateTo("/",true);
-
+        await BlazoredModal.CloseAsync(ModalResult.Ok());
+        if (IsAdmin == true)
+        {
+            navigationManager.NavigateTo("/Users");
+        }
+        else
+        {
+            await sweetAlertService.FireAsync("confirm", "Your account has been successfully created. An email has been sent to you with instructions on how to activate your username.", SweetAlertIcon.Info);
+            navigationManager.NavigateTo("/", true);
+        }
     }
 
-    
+
 }

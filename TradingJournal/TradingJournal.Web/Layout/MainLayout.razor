@@ -5,6 +5,8 @@
 @inject ILoginService loginService
 @inherits LayoutComponentBase
 @inject AuthenticationStateProvider GetAuthenticationStateAsync
+@using Blazored.Modal
+@using Blazored.Modal.Services
 
 <div class="page">
     <div class="sidebar" style="@IconMenuCssClass">
@@ -65,11 +67,11 @@
                         {
                             <div class="btn-group dropstart">
                                 <button type="button" class="dropdown-toggle btn-outline-secondary" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="@photoUser" width="50" height="50" style="border-radius:25%" />
+                                    <img src="@photoUser" width="50" height="50" style="border-radius:20%" />
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="">@context.User.Identity!.Name</a></li>
-                                    <li><button class="dropdown-item" @onclick="Edit" type="button"><i class="bi bi-person-slash"></i>&nbsp; &nbsp; Edit User</button></li>
+                                    <li><button class="dropdown-item" @onclick=@(() => ShowModal()) type="button"><i class="bi bi-person-slash"></i>&nbsp; &nbsp; Edit User</button></li>
                                     <li><button class="dropdown-item" @onclick="Logout" type="button"><i class="bi bi-box-arrow-left"></i>&nbsp; &nbsp; Logout</button></li>
                                 </ul>
                             </div>
@@ -129,6 +131,21 @@
 </div>
 
 @code {
+
+    [CascadingParameter]
+    IModalService Modal { get; set; } = default!;
+
+    private async Task ShowModal()
+    {
+        IModalReference modalReference;
+        modalReference = Modal.Show<Pages.Auth.EditUser>();
+
+        var result = await modalReference.Result;
+        if (result.Confirmed)
+        {
+           
+        }
+    }
 
     private bool _iconMenuActive { get; set; }
     private string IconMenuCssClass => _iconMenuActive ? "width: 80px;" : null;

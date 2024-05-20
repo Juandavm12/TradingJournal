@@ -5,64 +5,49 @@
 
     <DataAnnotationsValidator />
 
-
-
-    <div class="w-100 py-2">
-        <label>Trader:</label>
-        <div>
-            <select class="form-select" @bind="@Have.UsersId">
-                <option value="0">-- Select a Trader --</option>
-                @if (Users is not null)
+    <div class="form-floating mb-3">
+        <select class="form-select" id="floatingInput" placeholder="Trader" @bind="@Have.UsersId">
+            <option value="0">-- Select a Trader --</option>
+            @if (Users is not null)
+            {
+                @foreach (var obj in Users)
                 {
-                    @foreach (var obj in Users)
-                    {
-                        <option value="@obj.Id">@obj.Email</option>
-                    }
+                    <option value="@obj.Id">@obj.Email</option>
                 }
-            </select>    
-        </div>
+            }
+        </select>
+        <label for="floatingInput">Trader :</label>
+        <ValidationMessage For="@(() => Have.UsersId)" />
     </div>
 
-    <div class="w-100 py-2">
-        <label>Strategy:</label>
-        <div>
-            <select class="form-select" @bind="@Have.StrategiesCode">
-                <option value="0">-- Select a Strategy --</option>
-                @if (Strategies is not null)
+
+    <div class="form-floating mb-3">
+        <select class="form-select" id="floatingInput2" placeholder="Strategy" @bind="@Have.StrategiesCode">
+            <option value="0">-- Select a Strategy --</option>
+            @if (Strategies is not null)
+            {
+                @foreach (var obj in Strategies)
                 {
-                    @foreach (var obj in Strategies)
-                    {
-                        <option value="@obj.Code">@obj.Name</option>
-                    }
+                    <option value="@obj.Code">@obj.Name</option>
                 }
-            </select>  
-        </div>
-    </div>
-     
-        
-         
+            }
+        </select>
+        <label for="floatingInput2">Strategy :</label>
+        <ValidationMessage For="@(() => Have.StrategiesCode)" />
+    </div> 
 
     <button class="btn btn-dark" type="submit">Save <i class="bi bi-floppy2"></i></button>
-
-
     <button class="btn btn-info" type="reset">Clean <i class="bi bi-x-octagon"></i></button>
-
-
     <button class="btn btn-secondary" @onclick="ReturnAction">Return <i class="bi bi-arrow-clockwise"></i></button>
-
-
 </EditForm>
 
 @code {
     private List<User> Users;
-
     private List<Strategy> Strategies;
-
-   
+    
     protected async override Task OnInitializedAsync()
     {
         await Charging();
-
     }
 
     private async Task Charging()
@@ -71,8 +56,7 @@
         Strategies = responseHTTP.Response!;
 
         var response2HTTP = await Repository.GetAsync<List<User>>("/api/Users/combo");
-        Users = response2HTTP.Response!;
-        
+        Users = response2HTTP.Response!;        
     }
 
 

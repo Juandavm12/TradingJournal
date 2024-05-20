@@ -7,152 +7,84 @@
 @if (Users is null)
 
 {
-
-<div class="spinner" />
-
+    <div class="spinner" />
 }
 
 else
-
 {
-
-<GenericList MyList="Users">
-
-<Body>
-
-<div class="card">
-
-<div class="card-header">
-
-<span>
-
+    <GenericList MyList="Users">
+        <Body>
+            <div class="card">
+                <div class="card-header">
+                    <span>
                         <i class="bi bi-person-badge"></i> Users
                         <Pagination CurrentPage="currentPage"
                                     TotalPages="totalPages"
                                     SelectedPage="SelectedPage" />
-
                         <a class="btn btn-sm btn-dark float-end" @onclick=@(() => ShowModal2())><i class="bi bi-plus"></i> Add Admin</a>
-
-</span>
-
-</div>
-
-<div class="mx-2">
-
-    <tr>
+                    </span>
+                </div>
+                <div class="mx-2">
+        <tr>
 
             <th><input style="width: 400px;" type="text" class="form-control" id="titulo" placeholder="Search User by Email" @bind-value="Filter" /></th>
-
             <th>    <button type="button" class="btn btn-outline-success" @onclick="ApplyFilterAsync">Filter</button></th>
-
             <th>  <button type="button" class="btn btn-outline-warning" @onclick="CleanFilterAsync">Clean</button></th>
         </tr>
-               
-                
-                  
-    </div>
+        </div>
 
-
-<div class="card-body">
-
-<div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
-
-<div>
-
-
-
-</div>
-
-<div class="mx-1">
+        <div class="card-body">
+            <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
+                <div>
+                </div>
+                <div class="mx-1">
+                </div>
+            </div>
 
 
 
-</div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Photo</th>
+                        <th>User</th>
+                        <th>Document</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Adress</th>
+                        <th>Confirm</th>
+                        <th>Trader Type</th>
+                        <th>User Type</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                            @foreach (var user in Users)
+                            {
+                                Tradertype(user.TraderTypesId);
+                        <tr>
+                            <td><img src="@user.Photo" width="80" height="80" style="border-radius:50%" /></td>
+                            <td>@user.FullName</td>
+                            <td>@user.Document</td>
+                            <td>@user.PhoneNumber</td>
+                            <td>@user.Email</td>
+                            <td>@user.Address</td>
+                            <td>@user.EmailConfirmed</td>
+                            <td>@tradertype</td>
+                            <td>@user.UserType</td>
+                            <td>
 
-</div>
-
-
-
-<table class="table table-striped">
-
-<thead>
-
-<tr>
-
-<th>Photo</th>
-
-<th>User</th>
-
-<th>Document</th>
-
-<th>Phone</th>
-
-<th>Email</th>
-
-<th>Adress</th>
-
-<th>Confirm</th>
-
-<th>Trader Type</th>
-
-<th>User Type</th>
-
- <th>Actions</th>
-                                
-
-</tr>
-
-</thead>
-
-<tbody>
-
-@foreach (var user in Users)
-
-{
- Tradertype(user.TraderTypesId);
- <tr>
-
-<td><img src="@user.Photo" width="80" height="80" style="border-radius:50%" /></td>
-
-<td>@user.FullName</td>
-
-<td>@user.Document</td>
-
-<td>@user.PhoneNumber</td>
-
-<td>@user.Email</td>
-
-<td>@user.Address</td>
-
-<td>@user.EmailConfirmed</td>
-
- <td>@tradertype</td>
-
-
-<td>@user.UserType</td>
-
-   <td>
-
-                     <a @onclick=@(() => ShowModal(user.Id, true)) class="btn btn-outline-primary ">Edit <i class="bi bi-pencil-square"></i></a>
-                                       
-   <button class="btn btn-outline-danger" @onclick=@(() => Delete(user))>Delete <i class="bi bi-trash3"></i></button>
-  </td>
-</tr>
-
-}
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-
-</Body>
-
-</GenericList>
-
+                                <a @onclick=@(() => ShowModal(user.Id, true)) class="btn btn-outline-primary ">Edit <i class="bi bi-pencil-square"></i></a>
+                                <button class="btn btn-outline-danger" @onclick=@(() => Delete(user))>Delete <i class="bi bi-trash3"></i></button>
+                            </td>
+                        </tr>
+                            }
+                </tbody>
+            </table>
+        </div>
+        </div>
+        </Body>
+    </GenericList>
 }
 
 @code {
@@ -171,8 +103,8 @@ else
 
     {
         IModalReference modalReference;
-            modalReference = Modal.Show<UserEdit>(string.Empty, new ModalParameters().Add("UserId", id));     
-  
+        modalReference = Modal.Show<UserEdit>(string.Empty, new ModalParameters().Add("UserId", id));
+
         var result = await modalReference.Result;
         if (result.Confirmed)
         {
@@ -184,10 +116,10 @@ else
 
     {
         IModalReference modalReference;
-       
-    
-        modalReference = Modal.Show<Auth.Register>();
-            
+
+
+        modalReference = Modal.Show<Auth.Register>(new ModalParameters().Add("IsAdmin", true));
+
         var result = await modalReference.Result;
         if (result.Confirmed)
         {
@@ -201,7 +133,7 @@ else
     public List<TraderType> TraderTypes { get; set; }
 
     public List<User> Users { get; set; }
-    
+
     protected async override Task OnInitializedAsync()
     {
         await LoadAsync();
@@ -243,7 +175,7 @@ else
             url1 = $"api/Users?page={page}&filter={Filter}";
             url2 = $"api/Users/totalPages?filter={Filter}";
         }
-           
+
         var responseHppt = await repository.GetAsync<List<User>>(url1);
         var responseHppt2 = await repository.GetAsync<int>(url2);
         Users = responseHppt.Response!;
@@ -254,8 +186,8 @@ else
 
 
     }
-    
-   
+
+
 
     private async Task Delete(User user)
     {
@@ -332,4 +264,4 @@ else
         await SelectedPage(page);
     }
 }
-   
+

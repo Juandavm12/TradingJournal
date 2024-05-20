@@ -7,88 +7,80 @@
 
 {
 
-<div class="spinner" />
+    <div class="spinner" />
 
 }
 
 <div class="row">
 
-<div class="col-6">
+    <div class="col-6">
 
-<EditForm Model="emailDTO" OnValidSubmit="ResendConfirmationEmailTokenAsync">
+        <EditForm Model="emailDTO" OnValidSubmit="ResendConfirmationEmailTokenAsync">
 
-<DataAnnotationsValidator />
+            <DataAnnotationsValidator />
 
-<div class="card">
+            <div class="card">
 
-<div class="card-header">
+                <div class="card-header">
 
-<span>
-
+                    <span>
                         <i class="bi bi-key" /> Resend Account Activation Email
-
                         <button class="btn btn-sm btn-dark float-end mx-2" type="submit"><i class="bi bi-loop-square" /> Resend</button>
+                    </span>
 
-</span>
+                </div>
+                <div class="card-body">
 
-</div>
-
-<div class="card-body">
-
-                    <div class="mb-3">
-                        <label>Email :</label>
-                        <div>
-                            <InputText class="form-control" @bind-Value="@emailDTO.Email" />
-                            <ValidationMessage For="@(() => emailDTO.Email)" />
-                        </div>
+                    <div class="form-floating mb-3">
+                        <InputText class="form-control" id="floatingInput" placeholder="Email " @bind-Value="@emailDTO.Email" />
+                        <label for="floatingInput">Email :</label>
+                        <ValidationMessage For="@(() => emailDTO.Email)" />
                     </div>
 
+ 
+                </div>
+            </div>
 
+        </EditForm>
 
-</div>
-
-</div>
-
-</EditForm>
-
-</div>
+    </div>
 
 </div>
 
 @code {
 
-private EmailDto emailDTO = new();
+    private EmailDto emailDTO = new();
 
-private bool loading;
+    private bool loading;
 
-private async Task ResendConfirmationEmailTokenAsync()
+    private async Task ResendConfirmationEmailTokenAsync()
 
-{
+    {
 
-loading = true;
+        loading = true;
 
-var responseHttp = await repository.PostAsync("/api/accounts/ResedToken", emailDTO);
+        var responseHttp = await repository.PostAsync("/api/accounts/ResedToken", emailDTO);
 
-if (responseHttp.Error)
+        if (responseHttp.Error)
 
-{
+        {
 
-var message = await responseHttp.GetErrorMessageAsync();
+            var message = await responseHttp.GetErrorMessageAsync();
 
-await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
 
-loading = false;
+            loading = false;
 
-return;
+            return;
 
-}
+        }
 
-loading = false;
+        loading = false;
 
         await sweetAlertService.FireAsync("Confirm", "An email has been sent to you with instructions on how to activate your username.", SweetAlertIcon.Info);
 
-navigationManager.NavigateTo("/");
+        navigationManager.NavigateTo("/");
 
-}
+    }
 
 }

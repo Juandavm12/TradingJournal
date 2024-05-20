@@ -64,8 +64,15 @@ namespace TradingJournal.API.Controllers
             _context.Add(market);
             try
             {
-                await _context.SaveChangesAsync();
-            return Ok(market);
+                if (market.Code != 0)
+                {
+                    await _context.SaveChangesAsync();
+                    return Ok(market);
+                }
+                else
+                {
+                    return BadRequest("The Market code cant be null!");
+                }
             }
             catch (DbUpdateException dbUpdateException)
             {
@@ -107,10 +114,18 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PutAsync(Market market)
         {
             _context.Update(market);
-            try { 
-            await _context.SaveChangesAsync();
-            return Ok(market);
-        }
+            try
+            {
+                if (market.Code != 0)
+                {
+                    await _context.SaveChangesAsync();
+                    return Ok(market);
+                }
+                else
+                {
+                    return BadRequest("The Market code can't be null!");
+                }
+            }
             catch (DbUpdateException dbUpdateException)
             {
                 if (dbUpdateException.InnerException!.Message.Contains("PK_Markets"))

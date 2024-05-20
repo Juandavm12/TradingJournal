@@ -61,9 +61,16 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PostAsync(Have have)
         {
             _context.Add(have);
-            try { 
-            await _context.SaveChangesAsync();
+            try {
+                if (have.UsersId != null)
+                {
+                    await _context.SaveChangesAsync();
             return Ok(have);
+                }
+                else
+                {
+                    return BadRequest("You must chose a Trader");
+                }
             }
             catch (DbUpdateException dbUpdateException)
             {
@@ -104,10 +111,17 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PutAsync(Have have)
         {
             _context.Update(have);
-            try { 
-            await _context.SaveChangesAsync();
+            try {
+                if (have.UsersId != null)
+                {
+                    await _context.SaveChangesAsync();
             return Ok(have);
-        }
+                }
+                else
+                {
+                    return BadRequest("You must chose a Trader");
+                }
+            }
             catch (DbUpdateException dbUpdateException)
             {
                 if (dbUpdateException.InnerException!.Message.Contains("Strategies"))

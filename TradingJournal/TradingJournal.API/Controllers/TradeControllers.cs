@@ -64,8 +64,15 @@ namespace TradingJournal.API.Controllers
             _context.Add(trade);
             try
             {
-                await _context.SaveChangesAsync();
+                if (trade.UsersId != null)
+                {
+                    await _context.SaveChangesAsync();
                 return Ok(trade);
+                }
+                else
+                {
+                    return BadRequest("You must chose a Trader");
+                }
             }
             catch (DbUpdateException dbUpdateException)
             {
@@ -109,8 +116,15 @@ namespace TradingJournal.API.Controllers
             _context.Update(trade);
             try
             {
-                await _context.SaveChangesAsync();
+                if (trade.UsersId != null)
+                {
+                    await _context.SaveChangesAsync();
                 return Ok(trade);
+                }
+                else
+                {
+                    return BadRequest("You must chose a Trader");
+                }
             }
             catch (DbUpdateException dbUpdateException)
             {

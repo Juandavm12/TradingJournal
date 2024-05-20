@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Threading.Tasks;
 using TradingJournal.API.Data;
@@ -19,7 +20,7 @@ namespace TradingJournal.API.Controllers
     [Route("/api/Account")]
     public class AccountControllers : ControllerBase
     {
-        
+
         private readonly DataContext _context;
 
         //Constructor
@@ -35,10 +36,24 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PostAsync(Account account)
         {
             _context.Add(account);
-            try {
-            await _context.SaveChangesAsync();
-            return Ok(account);
-        }
+            try
+            {
+                if (account.UsersId == null)
+                {
+
+                    return BadRequest("You must chose a Trader");
+                  
+                }
+                else if (account.InitialBalance==0)
+                {
+                    return BadRequest("Initial balance can't be = 0");
+                }
+                else
+                {
+                    await _context.SaveChangesAsync();
+                    return Ok(account);
+                }
+            }
             catch (DbUpdateException dbUpdateException)
             {
                 if (dbUpdateException.InnerException!.Message.Contains("AccTypesId"))
@@ -51,20 +66,17 @@ namespace TradingJournal.API.Controllers
                 {
                     return BadRequest("You must chose a Broker");
                 }
-                else if (dbUpdateException.InnerException!.Message.Contains("UsersId"))
 
-                {
-                    return BadRequest("You must chose a Trader");
-                }
                 else
                 {
                     return BadRequest(dbUpdateException.InnerException.Message);
-}
+                }
             }
             catch (Exception exception)
             {
                 return BadRequest(exception.Message);
             }
+
         }
 
         //Method Get by ID (Read)
@@ -86,31 +98,39 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PutAsync(Account account)
         {
             _context.Update(account);
-            try { 
-            await _context.SaveChangesAsync();
-            return Ok(account);
-        }
+            try
+            {
+                if (account.UsersId == null)
+                {
+                    return BadRequest("You must chose a Trader");
+                }
+                else if (account.InitialBalance == 0)
+                {
+                    return BadRequest("Initial balance can't be = 0");
+                }
+                else
+                {
+                    await _context.SaveChangesAsync();
+                    return Ok(account);
+                   
+                }
+            }
             catch (DbUpdateException dbUpdateException)
             {
                 if (dbUpdateException.InnerException!.Message.Contains("AccTypesId"))
 
                 {
                     return BadRequest("You must chose an Account Type");
-    }
+                }
                 else if (dbUpdateException.InnerException!.Message.Contains("BrokersId"))
 
                 {
                     return BadRequest("You must chose a Broker");
-}
-                else if (dbUpdateException.InnerException!.Message.Contains("UsersId"))
-
-{
-    return BadRequest("You must chose a Trader");
-}
-else
-{
-    return BadRequest(dbUpdateException.InnerException.Message);
-}
+                }
+                else
+                {
+                    return BadRequest(dbUpdateException.InnerException.Message);
+                }
             }
             catch (Exception exception)
             {
@@ -142,7 +162,7 @@ else
             return Ok(await _context.Accounts.ToListAsync());
         }
 
- 
+
         [HttpGet]
         public async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
         {
@@ -161,18 +181,18 @@ else
         [HttpGet("totalPages")]
         public async Task<ActionResult> GetPages([FromQuery] PaginationDTO pagination)
 
-{
- var queryable = _context.Accounts.AsQueryable();
+        {
+            var queryable = _context.Accounts.AsQueryable();
             if (!string.IsNullOrWhiteSpace(pagination.Filter))
             {
                 queryable = queryable.Where(x => x.AccNumber.ToString().Contains(pagination.Filter.ToLower()));
             }
             double count = await queryable.CountAsync();
-        double totalPages = Math.Ceiling(count / pagination.RecordsNumber);
- return Ok(totalPages);
+            double totalPages = Math.Ceiling(count / pagination.RecordsNumber);
+            return Ok(totalPages);
+        }
+
+
     }
-
-
-}
 
 }

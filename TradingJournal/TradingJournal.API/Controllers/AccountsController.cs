@@ -122,7 +122,8 @@ namespace TradingJournal.API.Controllers
                 currentUser.Address = user.Address;
                 currentUser.PhoneNumber = user.PhoneNumber;
                 currentUser.Photo = !string.IsNullOrEmpty(user.Photo) && user.Photo != currentUser.Photo ? user.Photo : currentUser.Photo;
-              
+                currentUser.TraderTypesId = user.TraderTypesId;
+
 
 
                 var result = await _userHelper.UpdateUserAsync(currentUser);
@@ -139,7 +140,7 @@ namespace TradingJournal.API.Controllers
             }
         }
 
-        [HttpPut("admin")]
+        [HttpPut("User")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> Putadmin(User user)
         {
@@ -164,6 +165,8 @@ namespace TradingJournal.API.Controllers
                 currentUser.PhoneNumber = user.PhoneNumber;
                 currentUser.Photo = !string.IsNullOrEmpty(user.Photo) && user.Photo != currentUser.Photo ? user.Photo : currentUser.Photo;
                 currentUser.UserType = user.UserType;
+                currentUser.TraderTypesId = user.TraderTypesId;
+
 
 
                 var result = await _userHelper.UpdateUserAsync(currentUser);
@@ -198,68 +201,75 @@ namespace TradingJournal.API.Controllers
         {
 
             User user = model;
-            if (!string.IsNullOrEmpty(model.Photo))
+            if (user.TraderTypesId != 0)
             {
-                var photoUser = Convert.FromBase64String(model.Photo);
-                model.Photo = await _fileStorage.SaveFileAsync(photoUser, ".jpg", _container);
-            }
-
-            var result = await _userHelper.AddUserAsync(user, model.Password);
-            try
-            {
-                if (result.Succeeded)
+                if (!string.IsNullOrEmpty(model.Photo))
                 {
-                    await _userHelper.AddUserToRoleAsync(user, user.UserType.ToString());
-                    var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-                    var tokenLink = Url.Action("ConfirmEmail", "accounts", new
-                    {
-                        userid = user.Id,
-                        token = myToken
-                    }, HttpContext.Request.Scheme, _configuration["UrlWEB"]);
+                    var photoUser = Convert.FromBase64String(model.Photo);
+                    model.Photo = await _fileStorage.SaveFileAsync(photoUser, ".jpg", _container);
+                }
 
-                    var response = _mailHelper.SendMail(user.FullName, user.Email!,
-                        $"Trading Journal - Account Confirmation",
-                        $"<h1>Trading Journal - Account Confirmation</h1>" +
-                        $"<p>To enable the user, please click 'Confirm Email'':</p>" +
-                        $"<b><a href ={tokenLink}>Confirm Email</a></b>");
-
-                    if (response.IsSuccess)
+                var result = await _userHelper.AddUserAsync(user, model.Password);
+                try
+                {
+                    if (result.Succeeded)
                     {
-                        return NoContent();
+                        await _userHelper.AddUserToRoleAsync(user, user.UserType.ToString());
+                        var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                        var tokenLink = Url.Action("ConfirmEmail", "accounts", new
+                        {
+                            userid = user.Id,
+                            token = myToken
+                        }, HttpContext.Request.Scheme, _configuration["UrlWEB"]);
+
+                        var response = _mailHelper.SendMail(user.FullName, user.Email!,
+                            $"Trading Journal - Account Confirmation",
+                            $"<h1>Trading Journal - Account Confirmation</h1>" +
+                            $"<p>To enable the user, please click 'Confirm Email'':</p>" +
+                            $"<b><a href ={tokenLink}>Confirm Email</a></b>");
+
+                        if (response.IsSuccess)
+                        {
+                            return NoContent();
+                        }
+                        return BadRequest(response.Message);
                     }
-                    return BadRequest(response.Message);
-                }
-                if (result.Errors.FirstOrDefault().Code.Contains(("Duplicate")))
-                {
+                    if (result.Errors.FirstOrDefault().Code.Contains(("Duplicate")))
+                    {
 
-                    return BadRequest("There is already an account associated with this email");
-                }
-                else if (result.Errors.FirstOrDefault().Code.Contains(("Lower")))
-                {
+                        return BadRequest("There is already an account associated with this email");
+                    }
+                    else if (result.Errors.FirstOrDefault().Code.Contains(("Lower")))
+                    {
 
-                    return BadRequest("Passwords must have at least one lowercase");
-                }
-                else if (result.Errors.FirstOrDefault().Code.Contains(("Upper")))
-                {
+                        return BadRequest("Passwords must have at least one lowercase");
+                    }
+                    else if (result.Errors.FirstOrDefault().Code.Contains(("Upper")))
+                    {
 
-                    return BadRequest("Passwords must have at least one uppercase");
+                        return BadRequest("Passwords must have at least one uppercase");
+                    }
+                    return BadRequest(result.Errors.FirstOrDefault());
                 }
-                return BadRequest(result.Errors.FirstOrDefault());
+                catch (DbUpdateException dbUpdateException)
+                {
+                    if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
+                    {
+                        return BadRequest("An account type with that name already exists.");
+                    }
+                    else
+                    {
+                        return BadRequest(dbUpdateException.InnerException.Message);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    return BadRequest(exception.Message);
+                }
             }
-            catch (DbUpdateException dbUpdateException)
+            else
             {
-                if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
-                {
-                    return BadRequest("An account type with that name already exists.");
-                }
-                else
-                {
-                    return BadRequest(dbUpdateException.InnerException.Message);
-                }
-            }
-            catch (Exception exception)
-            {
-                return BadRequest(exception.Message);
+                return BadRequest("You must Select a Trader Type");
             }
             }
         
@@ -331,10 +341,10 @@ namespace TradingJournal.API.Controllers
 
             if (result.IsNotAllowed)
             {
-                return BadRequest(" The user has not been enabled, you must follow the instructions in the email sent to you, to enable the user.<br><a class=\"bbtn btn-link\" href=\"/ResendToken\">Resend Account Activation Email</a>");
+                return BadRequest(" The username has not been enabled, you must follow the instructions in the email sent to you, to enable this user.<br><br><br><a class=\"btn btn-outline-info\" href=\"/ResendToken\">Resend Account Activation Email</a>");
             }
 
-            return BadRequest("Wrong email or password.<br><p><a class=\"bbtn btn-link\" href=\"/RecoverPassword\">Forgot your password?</a></p>");
+            return BadRequest("Wrong email or password.<br><br><br><p><a class=\"btn btn-outline-info\" href=\"/RecoverPassword\">Forgot your password?</a></p>");
         }
 
         private TokenDTO BuildToken(User user)

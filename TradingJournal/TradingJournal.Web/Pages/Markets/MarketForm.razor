@@ -2,46 +2,34 @@
 @attribute [Authorize(Roles = "Admin")]
 
 <EditForm Model="Market" OnValidSubmit="OnValidSubmit">
-
     <DataAnnotationsValidator />
 
-    <div class="mb-3">
-        <label>Code</label>
-        <div>
-            <InputNumber width="10" @bind-Value="@Market.Code"></InputNumber>
-            <ValidationMessage For="@(() => @Market.Code)" />
-        </div>
+    <div class="form-floating mb-3">
+        <InputNumber class="form-control" id="floatingInput" placeholder="Code" @bind-Value="@Market.Code" />
+        <label for="floatingInput">Code :</label>
+        <ValidationMessage For="@(() => Market.Code)" />
     </div>
-    <div class="mb-3">
-        <label>Name</label>
-        <div>
-            <InputText width="10" @bind-Value="@Market.Name"></InputText>
-            <ValidationMessage For="@(() => Market.Name)" />
-        </div>
-    </div>
+
+    <div class="form-floating mb-3">
+        <InputText class="form-control" id="floatingInput2" placeholder="Name" @bind-Value="@Market.Name" />
+        <label for="floatingInput2">Name :</label>
+        <ValidationMessage For="@(() => Market.Name)" />
+    </div>    
+    
 
     <button class="btn btn-dark" type="submit">Save <i class="bi bi-floppy2"></i></button>
-
-
     <button class="btn btn-info" type="reset">Clean <i class="bi bi-x-octagon"></i></button>
-
-
     <button class="btn btn-secondary" @onclick="ReturnAction">Return <i class="bi bi-arrow-clockwise"></i></button>
-
 </EditForm>
-
 @code {
-
 
     [EditorRequired]
     [Parameter]
     public Market Market { get; set; }
 
-
     [EditorRequired]
     [Parameter]
     public EventCallback OnValidSubmit { get; set; }
-
 
     [EditorRequired]
     [Parameter]

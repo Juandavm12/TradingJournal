@@ -63,9 +63,17 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PostAsync(Strategy strategy)
         {
             _context.Add(strategy);
-            try { 
-            await _context.SaveChangesAsync();
+
+            try {
+                if (strategy.Code != 0)
+                {
+                    await _context.SaveChangesAsync();
             return Ok(strategy);
+                }
+                else
+                {
+                    return BadRequest("The Strategy code can't be null!");
+                }
             }
             catch (DbUpdateException dbUpdateException)
             {
@@ -107,10 +115,18 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PutAsync(Strategy strategy)
         {
             _context.Update(strategy);
-            try { 
-            await _context.SaveChangesAsync();
+            try {
+
+                if (strategy.Code != 0)
+                {
+                    await _context.SaveChangesAsync();
             return Ok(strategy);
-        }
+                }
+                else
+                {
+                    return BadRequest("The Strategy code can't be null!");
+                }
+            }
             catch (DbUpdateException dbUpdateException)
             {
                 if (dbUpdateException.InnerException!.Message.Contains("PK_Strategies"))

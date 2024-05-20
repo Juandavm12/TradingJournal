@@ -2,68 +2,52 @@
 @attribute [Authorize(Roles = "Admin")]
 
 <EditForm Model="Trade" OnValidSubmit="OnValidSubmit">
-
     <DataAnnotationsValidator />
 
- <div class="w-100 py-2">
-        <label>Trader:</label>
-        <div>
-            <select class="form-select" @bind="@Trade.UsersId">
-                <option value="0">-- Select a Trader --</option>
-                @if (Users is not null)
+    <div class="form-floating mb-3">
+        <select class="form-select" id="floatingInput" placeholder="Trader" @bind="@Trade.UsersId">
+            <option value="0">-- Select a Trader --</option>
+            @if (Users is not null)
+            {
+                @foreach (var obj in Users)
                 {
-                    @foreach (var obj in Users)
-                    {
-                        <option value="@obj.Id">@obj.Email</option>
-                    }
+                    <option value="@obj.Id">@obj.Email</option>
                 }
-            </select>       
-        </div>
+            }
+        </select>
+        <label for="floatingInput">Trader:</label>
+        <ValidationMessage For="@(() => Trade.UsersId)" />
     </div>
 
-  
-        <div class="w-100 py-2">
-            <label>Markets:</label>
-            <div>
-                <select class="form-select" @bind="@Trade.MarketsCode">
-                    <option value="0">-- Select a Market --</option>
-                    @if (Markets is not null)
-                    {
-                        @foreach (var obj in Markets)
-                        {
-                            <option value="@obj.Code">@obj.Name</option>
-                        }
-                    }
-                </select>
-             
+    <div class="form-floating mb-3">
+        <select class="form-select" id="floatingInput2" placeholder="Markets" @bind="@Trade.MarketsCode">
+            <option value="0">-- Select a Trader --</option>
+            @if (Markets is not null)
+            {
+                @foreach (var obj in Markets)
+                {
+                    <option value="@obj.Code">@obj.Name</option>
+                }
+            }
+        </select>
+        <label for="floatingInput2">Markets:</label>
+        <ValidationMessage For="@(() => Trade.MarketsCode)" />
             </div>
-        </div>
-
+                
 
     <button class="btn btn-dark" type="submit">Save <i class="bi bi-floppy2"></i></button>
-
-
     <button class="btn btn-info" type="reset">Clean <i class="bi bi-x-octagon"></i></button>
-
-
     <button class="btn btn-secondary" @onclick="ReturnAction">Return <i class="bi bi-arrow-clockwise"></i></button>
-
 </EditForm>
-
-
 
 
 @code {
     private List<User> Users;
-
-    private List<Market> Markets;
-
-    
+    private List<Market> Markets;    
 
     protected async override Task OnInitializedAsync()
     {
         await Charging();
-
     }
 
     private async Task Charging()

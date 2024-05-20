@@ -63,8 +63,17 @@ namespace TradingJournal.API.Controllers
             _context.Add(tradelog);
             try
             {
-                await _context.SaveChangesAsync();
-                return Ok(tradelog);
+                if (tradelog.Risk == 0 || tradelog.Pnl == 0 || tradelog.WinRate == 0 ||
+                    tradelog.RiskRewardRatio == 0 || tradelog.Comission == 0 || tradelog.NetPnl == 0)
+                {
+
+                    return BadRequest("You need to fill in all the numeric fields");
+                }
+                else
+                {
+                    await _context.SaveChangesAsync();
+                    return Ok(tradelog);
+                }
             }
 
             catch (DbUpdateException dbUpdateException)
@@ -105,8 +114,17 @@ namespace TradingJournal.API.Controllers
             _context.Update(tradelog);
             try
             {
-                await _context.SaveChangesAsync();
-                return Ok(tradelog);
+                if (tradelog.Risk == 0 || tradelog.Pnl == 0 || tradelog.WinRate == 0 ||
+                    tradelog.RiskRewardRatio == 0 || tradelog.Comission == 0 || tradelog.NetPnl == 0)
+                {
+
+                    return BadRequest("You need to fill in all the numeric fields");
+                }
+                else
+                {
+                    await _context.SaveChangesAsync();
+                    return Ok(tradelog);
+                }
             }
 
             catch (DbUpdateException dbUpdateException)
