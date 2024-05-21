@@ -16,24 +16,7 @@
 </div>
 
 
-@if (!@IconMenuActive)
-{
-    <AuthorizeView>
-        <NotAuthorized Context="NotAuthorizedContext">
 
-            <div class="px-4 py-4">
-                <button class="btn btn-outline-dark" @onclick=@(() => ShowModal2())><i class="bi bi-card-checklist"></i> Register</button>
-            </div>
-
-            <div class="px-4 py-4">
-                <button class="btn btn-outline-primary" @onclick=@(() => ShowModal())><i class="bi bi-card-checklist"></i> Sign in</button>
-            </div>
-        </NotAuthorized>
-    </AuthorizeView>
-
-
-
-}
 
 
 
@@ -119,36 +102,7 @@
 
 
 
-    [CascadingParameter]
-    IModalService Modal { get; set; } = default!;
-
-
-
-    private async Task ShowModal2()
-    {
-        IModalReference modalReference;
-
-        modalReference = Modal.Show<Pages.Auth.Register>();
-
-        var result = await modalReference.Result;
-        if (result.Confirmed)
-        {
-
-        }
-    }
-
-    private async Task ShowModal()
-    {
-        IModalReference modalReference;
-
-        modalReference = Modal.Show<Pages.Auth.Login>();
-
-        var result = await modalReference.Result;
-        if (result.Confirmed)
-        {
-
-        }
-    }
+  
 
 
 }

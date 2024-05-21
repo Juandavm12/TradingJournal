@@ -13,6 +13,34 @@
         <NavMenu ShowIconMenu="ToggleIconMenu" />
     </div>
     <main>
+
+        <AuthorizeView>
+            <NotAuthorized Context="NotAuthorizedContext">
+
+                <nav class="navbar  navbar-expand-lg bg-secondary  bg-opacity-50">
+                    <div class="container-fluid">
+                       
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">                              
+
+                            </ul>
+                            <div class="d-flex justify-content-end">
+                                <div class="px-2">
+                                    <button class="btn btn-outline-primary" @onclick=@(() => ShowModal3())><i class="bi bi-card-checklist"></i> Sign in</button>
+                                </div>
+                                <div class="px-4">
+                                    <button class="btn btn-outline-dark" @onclick=@(() => ShowModal2())><i class="bi bi-card-checklist"></i> Register</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+            
+
+                </nav>
+
+            </NotAuthorized>
+        </AuthorizeView>
        
             <AuthorizeView Roles="Admin">
                 <Authorized>
@@ -86,8 +114,8 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="">@context.User.Identity!.Name</a></li>
-                                    <li><a class="dropdown-item" href=""><i class="bi bi-person-slash"></i>&nbsp; &nbsp; Edit User</a></li>
-                                    <li><a class="dropdown-item" href=""><i class="bi bi-box-arrow-left"></i>&nbsp; &nbsp; Logout</a></li>
+                                    <li><button class="dropdown-item" @onclick=@(() => ShowModal()) type="button"><i class="bi bi-person-slash"></i>&nbsp; &nbsp; Edit User</button></li>
+                                    <li><button class="dropdown-item" @onclick="Logout" type="button"><i class="bi bi-box-arrow-left"></i>&nbsp; &nbsp; Logout</button></li>
                                 </ul>
                             </div>
 
@@ -156,14 +184,6 @@
            
         
 
-        <AuthorizeView>
-            <Authorized>               
-
-                  
-
-
-            </Authorized>
-        </AuthorizeView>
       
 
         <article class="content px-4">
@@ -234,8 +254,31 @@
         }
 
 
-   
 
-    
 
+    private async Task ShowModal2()
+    {
+        IModalReference modalReference;
+
+        modalReference = Modal.Show<Pages.Auth.Register>();
+
+        var result = await modalReference.Result;
+        if (result.Confirmed)
+        {
+
+        }
     }
+
+    private async Task ShowModal3()
+    {
+        IModalReference modalReference;
+
+        modalReference = Modal.Show<Pages.Auth.Login>();
+
+        var result = await modalReference.Result;
+        if (result.Confirmed)
+        {
+
+        }
+    }
+}

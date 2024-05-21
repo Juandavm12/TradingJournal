@@ -344,7 +344,7 @@ namespace TradingJournal.API.Controllers
                 return BadRequest(" The username has not been enabled, you must follow the instructions in the email sent to you, to enable this user.<br><br><br><a class=\"btn btn-outline-info\" href=\"/ResendToken\">Resend Account Activation Email</a>");
             }
 
-            return BadRequest("Wrong email or password.<br><br><br><p><a class=\"btn btn-outline-info\" href=\"/RecoverPassword\">Forgot your password?</a></p>");
+            return BadRequest("Wrong email or password.");
         }
 
         private TokenDTO BuildToken(User user)
