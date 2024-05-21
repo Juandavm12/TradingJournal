@@ -1,0 +1,88 @@
+﻿@page "/Login"
+@inject SweetAlertService sweetAlertService
+@inject NavigationManager navigationManager
+@inject ILoginService loginService
+@inject IRepository Repository
+
+
+
+          
+
+
+<EditForm Model="loginDTO" OnValidSubmit="LoginAsync">
+    <DataAnnotationsValidator />
+
+    
+    <div class="card">
+        <div class="card-header d-flex align-items-center justify-content-center">
+            <span>
+                <i class="bi bi-person" /> Login
+                
+            </span>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                   
+                    <div class="form-floating">
+                    <InputText type="email" class="form-control" id="floatingInput" placeholder="name@example.com" @bind-Value="@loginDTO.Email" />
+                    <label for="floatingInput">Email address</label>
+                </div>
+
+                    <div class="form-floating">
+                        <InputText type="password" class="form-control" id="floatingPassword" placeholder="Password" @bind-Value="@loginDTO.Password" />
+                        <label for="floatingPassword">Password</label>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <span>
+    </span>
+
+            
+           
+    </div>
+    <div class="d-flex align-items-center justify-content-center py-4">
+    <button class="btn btn-success" type="Submit"><i class="bi bi-box-arrow-right"></i> Login </button>
+    </div>
+    
+</EditForm>
+
+
+
+@code {
+
+    private Task<AuthenticationState> authenticationStateTask { get; set; } = null!;
+
+    private LoginDTO loginDTO = new();
+
+
+    [CascadingParameter]
+    BlazoredModalInstance BlazoredModal { get; set; } = default!;
+    private async Task LoginAsync()
+    {
+        var responseHttp = await Repository.PostAsync<LoginDTO, TokenDTO>("/api/accounts/Login", loginDTO);
+        if (responseHttp.Error)
+        {
+            var message = await responseHttp.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return;
+        }
+        else
+        {
+            await loginService.LoginAsync(responseHttp.Response!.Token);
+            await BlazoredModal.CloseAsync(ModalResult.Ok());
+        }
+    }
+
+
+
+    
+
+
+
+    
+
+
+
+}

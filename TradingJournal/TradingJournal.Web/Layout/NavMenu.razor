@@ -25,38 +25,9 @@
                 <button class="btn btn-outline-dark" @onclick=@(() => ShowModal2())><i class="bi bi-card-checklist"></i> Register</button>
             </div>
 
-            <div class="dropdown-center py-3 px-4">
-                <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-                    <i class="bi bi-box-arrow-right"></i> Sign in
-                </button>
-                <form class="dropdown-menu dropdown-menu-start">
-                    <EditForm Model="loginDTO" OnValidSubmit="LoginAsync">
-                        <DataAnnotationsValidator />
-                        <div class="container">
-                            <div class="row">
-                                <div class="col">
-                        <div class="form-floating mb-3">
-                                        <InputText type="email" class="form-control" id="floatingInput" placeholder="name@example.com" @bind-Value="@loginDTO.Email" />
-                            <label for="floatingInput">Email address</label>
-                        </div>
-                                </div>
-                            </div>
-                             <div class="col">
-                        <div class="form-floating">
-                                    <InputText type="password" class="form-control" id="floatingPassword" placeholder="Password" @bind-Value="@loginDTO.Password" />
-                            <label for="floatingPassword">Password</label>
-                        </div>
-                            </div>
-                        </div>                      
-                        <div class="mb-3">
-                        </div>
-                        <button class="btn btn-success px-5" type="Submit"><i class="bi bi-box-arrow-right"></i> Login &nbsp; &nbsp; </button>
-                    </EditForm>
-                </form>
+            <div class="px-4 py-4">
+                <button class="btn btn-outline-primary" @onclick=@(() => ShowModal())><i class="bi bi-card-checklist"></i> Sign in</button>
             </div>
-
-
-
         </NotAuthorized>
     </AuthorizeView>
 
@@ -118,10 +89,6 @@
 
 @code {
 
-    public List<User> Users { get; set; }
-
-    private Task<AuthenticationState> authenticationStateTask { get; set; } = null!;
-
     private bool showSubMenu = false;
 
     private void ToggleSubMenu()
@@ -149,26 +116,6 @@
         await ShowIconMenu.InvokeAsync(IconMenuActive);
     }
 
-    private LoginDTO loginDTO = new();
-
-    private async Task LoginAsync()
-    {
-
-        var responseHttp = await Repository.PostAsync<LoginDTO, TokenDTO>("/api/accounts/Login", loginDTO);
-        if (responseHttp.Error)
-        {
-            var message = await responseHttp.GetErrorMessageAsync();
-            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
-            return;
-        }
-        else
-        {
-            await loginService.LoginAsync(responseHttp.Response!.Token);
-
-
-            navigationManager.NavigateTo("/", true);
-        }
-    }
 
 
 
@@ -178,12 +125,23 @@
 
 
     private async Task ShowModal2()
-
     {
         IModalReference modalReference;
 
-
         modalReference = Modal.Show<Pages.Auth.Register>();
+
+        var result = await modalReference.Result;
+        if (result.Confirmed)
+        {
+
+        }
+    }
+
+    private async Task ShowModal()
+    {
+        IModalReference modalReference;
+
+        modalReference = Modal.Show<Pages.Auth.Login>();
 
         var result = await modalReference.Result;
         if (result.Confirmed)

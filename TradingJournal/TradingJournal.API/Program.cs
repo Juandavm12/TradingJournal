@@ -57,7 +57,7 @@ builder.Services.AddSwaggerGen(c =>
 
 
 
-builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer("name = WindowsSecurity"));
+builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer("name = Connectionwhitparams"));
 
 //this is for the required parameters for the security of users
 builder.Services.AddIdentity<User, IdentityRole>(x =>
