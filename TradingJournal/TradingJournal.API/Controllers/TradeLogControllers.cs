@@ -63,11 +63,10 @@ namespace TradingJournal.API.Controllers
             _context.Add(tradelog);
             try
             {
-                if (tradelog.Risk == 0 || tradelog.Pnl == 0 || tradelog.WinRate == 0 ||
-                    tradelog.RiskRewardRatio == 0 || tradelog.Comission == 0 || tradelog.NetPnl == 0)
+                if (tradelog.Risk == 0)
                 {
 
-                    return BadRequest("You need to fill in all the numeric fields");
+                    return BadRequest("You need to Risk something to gain");
                 }
                 else
                 {
@@ -114,11 +113,11 @@ namespace TradingJournal.API.Controllers
             _context.Update(tradelog);
             try
             {
-                if (tradelog.Risk == 0 || tradelog.Pnl == 0 || tradelog.WinRate == 0 ||
-                    tradelog.RiskRewardRatio == 0 || tradelog.Comission == 0 || tradelog.NetPnl == 0)
+                if (tradelog.Risk == 0 
+                )
                 {
 
-                    return BadRequest("You need to fill in all the numeric fields");
+                    return BadRequest("You need to Risk something to gain");
                 }
                 else
                 {

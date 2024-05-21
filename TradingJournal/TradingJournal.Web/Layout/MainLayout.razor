@@ -96,26 +96,68 @@
                     </div>
                     </nav>                 
                 </Authorized>
-            </AuthorizeView>
-
-                   
+            </AuthorizeView>                   
 
 
             <AuthorizeView Roles="User">
                 <Authorized>
-                    <li><a href=""><i class="bi bi-person-slash"></i>&nbsp; Test </a></li>
-                    <div class="d-flex justify-content-end">
+                <nav class="navbar  navbar-expand-lg bg-secondary  bg-opacity-50">
+                    <div class="container-fluid">
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                               
+                                <li class="nav-item">
+                                    <a class="nav-link active" aria-current="page" href=""><i class="bi bi-graph-down"></i>&nbsp; Test </a>
+                                </li>
+                                
+                            </ul>
+                        </div>
                     </div>
-                </Authorized>
+
+                    <div class="d-flex justify-content-end">
+                        @if (!string.IsNullOrEmpty(photoUser))
+                        {
+                            <div class="btn-group dropstart">
+                                <button type="button" class="dropdown-toggle btn-outline-secondary" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="@photoUser" width="50" height="50" style="border-radius:20%" />
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="">@context.User.Identity!.Name</a></li>
+                                    <li><button class="dropdown-item" @onclick=@(() => ShowModal()) type="button"><i class="bi bi-person-slash"></i>&nbsp; &nbsp; Edit User</button></li>
+                                    <li><button class="dropdown-item" @onclick="Logout" type="button"><i class="bi bi-box-arrow-left"></i>&nbsp; &nbsp; Logout</button></li>
+                                </ul>
+                            </div>
+
+                        }
+
+                        @if (string.IsNullOrEmpty(photoUser))
+                        {
+                            <div class="btn-group dropstart">
+                                <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="">@context.User.Identity!.Name</a></li>
+                                    <li><button class="dropdown-item" @onclick=@(() => ShowModal()) type="button"><i class="bi bi-person-slash"></i>&nbsp; &nbsp; Edit User</button></li>
+                                    <li><button class="dropdown-item" @onclick="Logout" type="button"><i class="bi bi-box-arrow-left"></i>&nbsp; &nbsp; Logout</button></li>
+                                </ul>
+                            </div>
+
+                        }
+
+                    </div>
+                </nav>
+
+            </Authorized>
             </AuthorizeView>
-
-
            
         
 
         <AuthorizeView>
-            <Authorized>
-                
+            <Authorized>               
 
                   
 
