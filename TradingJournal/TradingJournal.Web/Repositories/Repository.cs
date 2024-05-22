@@ -36,6 +36,7 @@ namespace TradingJournal.Web.Repositories
             return new HttpResponseWrapper<T>(default, true, responseHttp);
         }
 
+
         [AllowAnonymous]
         public async Task<HttpResponseWrapper<object>> PostAsync<T>(string url, T model)
         {

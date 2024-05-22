@@ -12,5 +12,7 @@ namespace TradingJournal.Web.Repositories
         Task<HttpResponseWrapper<TResponse>> PutAsync<T, TResponse>(string url, T model);
         Task<HttpResponseWrapper<object>> Get(string url);
         Task<HttpResponseWrapper<TResponse>> Put<T, TResponse>(string url, T model);
+       
+
     }
 }

@@ -23,6 +23,9 @@ namespace TradingJournal.API.Data
         public DbSet<TradeLog> TradeLogs { get; set; }
         public DbSet<TraderType> TraderTypes { get; set; }
 
+        public DbSet<CoinpaprikaAPI.Entity.CoinInfo> Coins { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

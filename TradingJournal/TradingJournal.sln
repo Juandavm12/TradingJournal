@@ -8,6 +8,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TradingJournal.API", "TradingJournal.API\TradingJournal.API.csproj", "{95651C49-D7E7-47ED-9D0E-9892C945D039}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TradingJournal.Web", "TradingJournal.Web\TradingJournal.Web.csproj", "{568F56C2-78F3-4AD8-81B7-119FBEA46605}"
+	ProjectSection(ProjectDependencies) = postProject
+		{95651C49-D7E7-47ED-9D0E-9892C945D039} = {95651C49-D7E7-47ED-9D0E-9892C945D039}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{246D87C1-9282-48BE-9787-3E22EA59C86F}"
 	ProjectSection(SolutionItems) = preProject
