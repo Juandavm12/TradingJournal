@@ -1,0 +1,163 @@
+﻿@page "/info/{id}"
+@using CoinpaprikaAPI.Entity;
+@inject IRepository Repository
+
+
+  @*<GenericList MyList="coinList3">
+
+            <Body>              
+                        @foreach (var coin in coinList3!)
+                        {                                                        
+                                    @coin.Name                               
+                        }
+
+            </Body>
+
+        </GenericList>*@
+ 
+
+       
+
+
+<h3><i class="bi bi-coin" /> @coinList.Name</h3>
+
+
+<div class="card">
+    <div class="card-header">
+    </div>
+
+
+    <div class="card-body">
+
+
+
+        <Body>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                    </tr>
+                </thead>
+                <tbody>
+                <td>
+
+                <tr>
+                    <b>Description</b>
+                </tr>
+                <br />
+                <tr>
+                           @coinList.Description
+                </tr>
+                <br />
+
+                <tr>
+                    <b>Proof Type</b>
+                </tr>
+                <br />
+                <tr>
+                            @coinList.ProofType
+                </tr>
+                <br />
+
+                <tr>
+                    <b>First Data At</b>
+                </tr>
+                <br />
+                <tr>
+                            @coinList.FirstDataAt
+                </tr>
+                <br />
+
+                <tr>
+                    <b>Development Status</b>
+                </tr>
+                <br />
+                <tr>
+                            @coinList.DevelopmentStatus
+                </tr>
+                <br />
+
+                <tr>
+                    <b>Symbol</b>
+                </tr>
+                <br />
+                <tr>
+                            @coinList.Symbol
+                </tr>
+                <br />
+
+                <tr>
+                    <b>Structure</b>
+                </tr>
+                <br />
+                <tr>
+                            @coinList.OrgStructure
+                </tr>
+                <br />
+
+                <tr>
+                    <b>Id</b>
+                </tr>
+                <br />
+                <tr>
+                            @coinList.Id
+                </tr>
+                <br />
+
+                </td>           
+
+                </tbody>
+            </table>
+
+        </Body>
+
+
+    </div>
+</div>
+
+
+
+@code {
+
+    [Parameter]
+    public string id { get; set; }
+
+    private ExtendedCoinInfo coinList = new ExtendedCoinInfo();
+
+    private TickerInfo coinList2 { get; set; } = new TickerInfo();
+
+    private List<TickerInfo> coinList3 = new List<TickerInfo>();
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        await Charging();
+
+        Console.WriteLine(coinList2);
+    }
+
+
+
+
+
+    private async Task Charging()
+    {
+
+       var responseHppt = await Repository.GetAsync<CoinpaprikaAPI.Entity.ExtendedCoinInfo>($"api/coins/{id}");
+
+        coinList = responseHppt.Response!;
+
+        var response2Hppt = await Repository.GetAsync<TickerInfo>("api/coins/test2");
+
+        coinList2 = response2Hppt.Response!;
+
+        /*var responseHppt = await Repository.GetAsync<List<CoinpaprikaAPI.Entity.TickerInfo>>("api/coins/test");
+
+        coinList3 = responseHppt.Response!;*/
+
+
+
+    }
+
+
+
+}

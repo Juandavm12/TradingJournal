@@ -63,7 +63,7 @@
                                 </td>
 
                                 <td>
-                                    <a class="btn btn-outline-info ">Info <i class="bi bi-pencil-square"></i></a>
+                                    <a @onclick=@(() => ShowModal(coin.Id, true)) class="btn btn-outline-info ">Info <i class="bi bi-pencil-square"></i></a>
 
                                 </td>
 
@@ -84,7 +84,21 @@
 
 @code {
 
+    [CascadingParameter]
+    IModalService Modal { get; set; } = default!;
 
+    private async Task ShowModal(string id = "", bool isEdit = false)
+
+    {
+        IModalReference modalReference;
+        modalReference = Modal.Show<Coins.Info>(string.Empty, new ModalParameters().Add("id", id));
+
+        var result = await modalReference.Result;
+        if (result.Confirmed)
+        {
+            await Charging();
+        }
+    }
 
     private List<CoinpaprikaAPI.Entity.CoinInfo> coinList = new List<CoinpaprikaAPI.Entity.CoinInfo>();
 

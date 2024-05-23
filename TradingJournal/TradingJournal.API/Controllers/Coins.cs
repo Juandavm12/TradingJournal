@@ -2,18 +2,12 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
-using TradingJournal.API.Data;
-using TradingJournal.API.Helpers;
-using TradingJournal.Shared.DTOs;
-using TradingJournal.Shared.Entities;
+using CoinpaprikaAPI.Entity;
+
 
 namespace TradingJournal.API.Controllers
 {
@@ -23,34 +17,46 @@ namespace TradingJournal.API.Controllers
     [Route("/api/Coins")]
     public class Coins
     {
-          private readonly CoinpaprikaAPI.Client myClient;
+          private readonly Client myClient;
         
         //Constructor
-        public Coins()
-        {              
-            myClient = new CoinpaprikaAPI.Client();
-            
+        public Coins()        {              
+            myClient = new Client();            
         }
 
         [AllowAnonymous]
         [HttpGet]
-         public async Task<List<CoinpaprikaAPI.Entity.CoinInfo>> GetCoinListAsync()
+         public async Task<List<CoinInfo>> GetCoinsAsync()
          {
              var coins = await myClient.GetCoinsAsync();
-             var coinList = JsonConvert.DeserializeObject<List<CoinpaprikaAPI.Entity.CoinInfo>>(coins.Raw);
+             var coinList = JsonConvert.DeserializeObject<List<CoinInfo>>(coins.Raw);
              return coinList.Take(100).ToList();
          }
+         
 
         [AllowAnonymous]
-        [HttpGet("1")]
-        public async Task<List<CoinpaprikaAPI.Entity.OhlcValue>> Get()
+        [HttpGet("{id}")]
+        public async Task<ExtendedCoinInfo> GetCoinByIdAsync(string id)
         {
-           
-            var coins = await myClient.GetLatestOhlcForCoinAsync("btc - bitcoin", "USD");
-            var coinDetailsList = JsonConvert.DeserializeObject<List<CoinpaprikaAPI.Entity.OhlcValue>>(coins.Raw);
-            return coinDetailsList.Take(100).ToList();
+
+            var coins = await myClient.GetCoinByIdAsync(id);
+            var coinDetailsList = JsonConvert.DeserializeObject<ExtendedCoinInfo>(coins.Raw);
+            return coinDetailsList;
         }
 
+
+        [AllowAnonymous]
+        [HttpGet("test2")]
+        public async Task<TickerInfo> GetTickerForCoin()
+        {
+
+            var ticker = await myClient.GetTickerForIdAsync("usdt-tether");
+
+            var tickers = JsonConvert.DeserializeObject<TickerInfo>(ticker.Raw);
+            return tickers;
+        }
+
+        
     }
 
 }
