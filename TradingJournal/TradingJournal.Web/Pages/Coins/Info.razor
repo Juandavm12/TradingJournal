@@ -2,25 +2,10 @@
 @using CoinpaprikaAPI.Entity;
 @inject IRepository Repository
 
-
-  @*<GenericList MyList="coinList3">
-
-            <Body>              
-                        @foreach (var coin in coinList3!)
-                        {                                                        
-                                    @coin.Name                               
-                        }
-
-            </Body>
-
-        </GenericList>*@
- 
-
-       
+<PageTitle>Coin Info</PageTitle>
 
 
 <h3><i class="bi bi-coin" /> @coinList.Name</h3>
-
 
 <div class="card">
     <div class="card-header">
@@ -45,7 +30,7 @@
                 </tr>
                 <br />
                 <tr>
-                           @coinList.Description
+                            @coinList.Description
                 </tr>
                 <br />
 
@@ -103,7 +88,7 @@
                 </tr>
                 <br />
 
-                </td>           
+                </td>
 
                 </tbody>
             </table>
@@ -123,37 +108,24 @@
 
     private ExtendedCoinInfo coinList = new ExtendedCoinInfo();
 
-    private TickerInfo coinList2 { get; set; } = new TickerInfo();
-
-    private List<TickerInfo> coinList3 = new List<TickerInfo>();
-
 
     protected async override Task OnInitializedAsync()
     {
         await Charging();
 
-        Console.WriteLine(coinList2);
+
     }
-
-
 
 
 
     private async Task Charging()
     {
 
-       var responseHppt = await Repository.GetAsync<CoinpaprikaAPI.Entity.ExtendedCoinInfo>($"api/coins/{id}");
+        var responseHppt = await Repository.GetAsync<CoinpaprikaAPI.Entity.ExtendedCoinInfo>($"api/coins/{id}");
 
         coinList = responseHppt.Response!;
 
-        var response2Hppt = await Repository.GetAsync<TickerInfo>("api/coins/test2");
-
-        coinList2 = response2Hppt.Response!;
-
-        /*var responseHppt = await Repository.GetAsync<List<CoinpaprikaAPI.Entity.TickerInfo>>("api/coins/test");
-
-        coinList3 = responseHppt.Response!;*/
-
+  
 
 
     }

@@ -1,7 +1,7 @@
 ﻿@page "/"
 @inject IRepository Repository
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Trading Journal</PageTitle>
 
 <h1><p style="text-align: center;">WELCOME TO TRADING JOURNAL</p></h1>
 
@@ -109,18 +109,11 @@
     }
 
 
-
-
-
-    private async Task Charging()
-    {
+    private async Task Charging()    {
 
         var responseHppt = await Repository.GetAsync<List<CoinpaprikaAPI.Entity.CoinInfo>>("api/coins");
 
         coinList = responseHppt.Response!;
-
-
-
     }
 
 

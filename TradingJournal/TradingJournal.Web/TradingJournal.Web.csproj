@@ -38,7 +38,6 @@
 
   <ItemGroup>
     <None Include="wwwroot\Images\loader.gif" />
-    <None Include="wwwroot\js\DownloadExcel.js" />
   </ItemGroup>
 
 </Project>
