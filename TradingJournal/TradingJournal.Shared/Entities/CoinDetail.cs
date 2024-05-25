@@ -17,6 +17,7 @@ namespace TradingJournal.Shared.Entities
         public decimal High_24h { get; set; }
         public decimal Low_24h { get; set; }
         public decimal Current_price { get; set; }
+        public string genesis_date { get; set; }
         public Description Description { get; set; }
         public Links Links { get; set; }
     }

@@ -1,18 +1,13 @@
 ﻿@page "/info/{id}"
-@inject CoinGeckoService CoinGeckoService
+@inject IRepository Repository
 @attribute [Authorize(Roles = "Admin, User")]
-
-
 
 <PageTitle>Coin Info</PageTitle>
 
 
-
-
-
 @if (coin == null)
 {
-    <p>Loading...</p>
+    <div class="spinner" />
 }
 else
 {
@@ -37,10 +32,22 @@ else
                     <b>Description</b>
                 </tr>
                 <br />
+                   
                 <tr>
                      @(coin.Description?.En)
                 </tr>
                 <br />
+                    <tr>
+                        <b>Genesis Date</b>
+                    </tr>
+                    <br />
+                    <tr>
+                               
+                              @coin.genesis_date
+                               
+                                
+                    </tr>
+                    <br />
 
               
               
@@ -132,10 +139,15 @@ else
     private CoinDetail coin;
     [CascadingParameter]
     BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
     protected override async Task OnInitializedAsync()
     {
-        coin = await CoinGeckoService.GetCoinByIdAsync(Id);
-        
+
+        string key = "x_cg_demo_api_key=CG-LdodJKJHhswwReX1G1H8hTjp";
+        var responseHppt = await Repository.GetAsync<CoinDetail>( $"/coins/{Id}?{key}","coin");
+        coin = responseHppt.Response!;
+      
+       
     }
 
  

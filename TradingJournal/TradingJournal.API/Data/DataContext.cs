@@ -22,7 +22,6 @@ namespace TradingJournal.API.Data
         public DbSet<Trade> Trades { get; set; }
         public DbSet<TradeLog> TradeLogs { get; set; }
         public DbSet<TraderType> TraderTypes { get; set; }
-        public DbSet<CoinpaprikaAPI.Entity.CoinInfo> Coins { get; set; }
 
 
 

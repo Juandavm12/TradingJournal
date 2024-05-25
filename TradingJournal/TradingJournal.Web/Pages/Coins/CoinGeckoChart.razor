@@ -1,0 +1,116 @@
+﻿@page "/chart/{id}"
+@inject HttpClient Http
+@inject IJSRuntime JSRuntime
+@inject IRepository Repository
+
+<h3>@Id (Last 30 Days)</h3>
+
+<canvas id="CoinChart" width="1200" height="600"></canvas>
+
+
+@code {
+
+   
+
+    [Parameter]
+    public string Id { get; set; }
+
+ 
+    [CascadingParameter]
+    BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
+    public class CoinGeckoResponse
+    {
+        public List<List<double>> Prices { get; set; }
+    }
+
+
+
+    private async Task FetchAndDisplayData()
+    {
+
+        string key = "x_cg_demo_api_key=CG-LdodJKJHhswwReX1G1H8hTjp";
+        string url = $"https://api.coingecko.com/api/v3/coins/{Id}/market_chart?vs_currency=usd&days=30&{key}";
+
+
+        var coinGeckoData = await Http.GetFromJsonAsync<CoinGeckoResponse>(url);
+        var prices = coinGeckoData.Prices.Select(price => new { Date = DateTimeOffset.FromUnixTimeMilliseconds((long)price[0]).DateTime, Value = price[1] }).ToList();
+        var labels = prices.Select(p => p.Date.ToString("yyyy-MM-dd")).ToList();
+        var data = prices.Select(p => p.Value).ToList();
+        await JSRuntime.InvokeVoidAsync("updateChart", labels, data);
+
+    }
+
+
+    private DotNetObjectReference<CoinGeckoChart> objRef;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            objRef = DotNetObjectReference.Create(this);
+            await JSRuntime.InvokeVoidAsync("initializeChart", "CoinChart");
+            await FetchAndDisplayData();
+        }
+    }
+    
+
+
+   public async ValueTask DisposeAsync()
+    {
+        if (objRef != null)
+        {
+            objRef.Dispose();
+        }
+    }
+
+   
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*page "/chart"
+@inject IRepository Repository
+@inject IJSRuntime JSRuntime
+
+@foreach (var coin in Data!)
+{@coin.Timestamp
+
+
+    
+}
+
+@code {
+    private List<OHLCData> Data;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetOHLCData();
+    }
+    private async Task GetOHLCData()
+    {
+        string key = "x_cg_demo_api_key=CG-LdodJKJHhswwReX1G1H8hTjp";
+        string url = "/coins/bitcoin/ohlc?vs_currency=usd&days=30";
+
+
+        var responseHppt = await Repository.GetAsync<List<OHLCData>>(url, "coin");
+        Data = responseHppt.Response!;
+    }
+
+    
+
+
+   
+}*@

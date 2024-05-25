@@ -5,6 +5,7 @@ namespace TradingJournal.Web.Repositories
     public interface IRepository
     {
         Task<HttpResponseWrapper<T>> GetAsync<T>(string url);
+        Task<HttpResponseWrapper<T>> GetAsync<T>(string url,string url2);
         Task<HttpResponseWrapper<object>> PostAsync<T>(string url, T model);
         Task<HttpResponseWrapper<TResponse>> PostAsync<T, TResponse>(string url, T model);
         Task<HttpResponseWrapper<object>> DeleteAsync(string url);

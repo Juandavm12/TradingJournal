@@ -36,6 +36,23 @@ namespace TradingJournal.Web.Repositories
             return new HttpResponseWrapper<T>(default, true, responseHttp);
         }
 
+        public async Task<HttpResponseWrapper<T>> GetAsync<T>(string url,string url2)
+        {
+
+            var CoinGecko = $"https://api.coingecko.com/api/v3{url}";
+            var responseHttp = await _httpClient.GetAsync(CoinGecko);
+
+            if (responseHttp.IsSuccessStatusCode)
+            {
+                var response = await UnserializeAnswer<T>(responseHttp, _jsonDefaultOptions);
+
+                return new HttpResponseWrapper<T>(response, false, responseHttp);
+            }
+
+            return new HttpResponseWrapper<T>(default, true, responseHttp);
+        }
+
+
 
         [AllowAnonymous]
         public async Task<HttpResponseWrapper<object>> PostAsync<T>(string url, T model)
