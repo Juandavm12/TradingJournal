@@ -105,7 +105,7 @@ else
 
     {
         IModalReference modalReference;
-        modalReference = Modal.Show<UserEdit>(string.Empty, new ModalParameters().Add("UserId", id));
+        modalReference = Modal.Show<UserEdit>("User Edit", new ModalParameters().Add("UserId", id));
 
         var result = await modalReference.Result;
         if (result.Confirmed)
@@ -120,7 +120,7 @@ else
         IModalReference modalReference;
 
 
-        modalReference = Modal.Show<Auth.Register>(new ModalParameters().Add("IsAdmin", true));
+        modalReference = Modal.Show<Auth.Register>("Register",new ModalParameters().Add("IsAdmin", true));
 
         var result = await modalReference.Result;
         if (result.Confirmed)

@@ -1,0 +1,191 @@
+﻿@page "/coins"
+@inject CoinGeckoService CoinGeckoService
+@attribute [Authorize(Roles = "Admin, User")]
+
+<PageTitle>TOP 100 Coins</PageTitle>
+
+<h3><i class="bi bi-coin" /> TOP 100 Coins</h3>
+<Pagination CurrentPage="currentPage"
+            TotalPages="totalPages"
+            SelectedPage="SelectedPage" />
+<div class="card">
+    <div class="card-header">
+        <span>
+            
+        </span>
+    </div>
+
+    <div class="mx-2">
+
+        <tr>
+
+            <th><input style="width: 400px;" type="text" class="form-control" id="titulo" placeholder="Search Coin by Id" @bind-value="Filter" /></th>
+
+            <th>    <button type="button" class="btn btn-outline-success" @onclick="ApplyFilterAsync">Filter</button></th>
+
+            <th>  <button type="button" class="btn btn-outline-warning" @onclick="CleanFilterAsync">Clean</button></th>
+        </tr>
+
+
+
+    </div>
+
+    <div class="card-body">
+
+        <GenericList MyList="Coins">
+
+            <Body>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+
+                            <td>
+                                <b>Rank</b>
+                            </td>
+                            <td>
+                                <b>Name</b>
+                            </td>
+                            <td>
+                                <b>Symbol</b>
+                            </td>
+                            <td>
+                                <b>Price</b>
+                            </td>
+                            <td>
+                                <b>Market Cap</b>
+                            </td>
+                            <td>
+                                <b>Volume (24h)</b>
+                            </td>
+                            <td>
+                                <b>High (24h)</b>
+                            </td>
+                            <td>
+                                <b>Low (24h)</b>
+                            </td>
+                            <td>
+                                <b>Id</b>
+                            </td>
+                            <td>
+                                <b>Actions</b>
+                            </td>
+
+                        </tr>
+                        @foreach (var coin in Coins!)
+                        {
+
+                            <tr>
+
+                                <td>
+                                    @coin.Market_cap_rank
+                                </td>
+                                <td>
+                                    @coin.Name
+                                </td>
+                                <td>
+                                    @coin.Symbol
+                                </td>
+                                <td>
+                                    @coin.Current_price.ToString("C")
+                                </td>
+                                <td>
+                                    @coin.Market_cap.ToString("C")
+                                </td>
+                                <td>
+                                    @coin.Total_volume.ToString("C")
+                                </td>
+                                <td>
+                                    @coin.High_24h.ToString("C")
+                                </td>
+                                <td>
+                                    @coin.Low_24h.ToString("C")
+                                </td>
+                                <td>
+                                    @coin.Id
+                                </td>
+
+                                <td>
+                                    <a @onclick=@(() => ShowModal(coin.Id, true)) class="btn btn-outline-info ">Info <i class="bi bi-pencil-square"></i></a>
+                                   
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+
+            </Body>
+
+        </GenericList>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Page { get; set; } = "";
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Filter { get; set; } = "";
+
+
+    [CascadingParameter]
+    IModalService Modal { get; set; } = default!;
+
+    private async Task ShowModal(string id = "", bool isEdit = false)
+
+    {
+        IModalReference modalReference;
+        modalReference = Modal.Show<Coins.Info>("Coin Info", new ModalParameters().Add("id", id));
+
+        var result = await modalReference.Result;
+        if (result.Confirmed)
+        {
+            await Charging();
+        }
+    }
+
+    private List<Coin> Coins;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Charging();
+    }
+
+    private int currentPage = 1;
+    private int totalPages = 10;
+
+    private async Task SelectedPage(int page)
+    {
+        currentPage = page;
+        await Charging(page);
+    }  
+
+  
+    private async Task Charging(int page = 1)
+    {
+  
+        Coins = await CoinGeckoService.GetTopCoinsAsync(currentPage, 10, Filter);
+    }
+
+    
+    private async Task CleanFilterAsync()
+    {
+        Filter = string.Empty;
+        await ApplyFilterAsync();   
+    }
+    private async Task ApplyFilterAsync()
+    {
+        int page = 1;
+        await Charging(page);
+        await SelectedPage(page); 
+    }
+
+  
+}

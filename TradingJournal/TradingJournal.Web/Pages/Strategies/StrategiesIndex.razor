@@ -122,7 +122,7 @@
 
     {
         IModalReference modalReference;
-        modalReference = Modal.Show<StrategyEdit>(string.Empty, new ModalParameters().Add("StrategyCode", id));
+        modalReference = Modal.Show<StrategyEdit>("Startegy Edit", new ModalParameters().Add("StrategyCode", id));
 
         var result = await modalReference.Result;
         if (result.Confirmed)
@@ -137,7 +137,7 @@
         IModalReference modalReference;
 
 
-        modalReference = Modal.Show<StrategyCreate>();
+        modalReference = Modal.Show<StrategyCreate>("Strategy Create");
 
         var result = await modalReference.Result;
         if (result.Confirmed)

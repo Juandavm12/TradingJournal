@@ -131,7 +131,7 @@ else
 
     {
         IModalReference modalReference;
-        modalReference = Modal.Show<HaveEdit>(string.Empty, new ModalParameters().Add("HaveId", id));
+        modalReference = Modal.Show<HaveEdit>("Have Edit", new ModalParameters().Add("HaveId", id));
 
         var result = await modalReference.Result;
         if (result.Confirmed)
@@ -146,7 +146,7 @@ else
         IModalReference modalReference;
 
 
-        modalReference = Modal.Show<HaveCreate>();
+        modalReference = Modal.Show<HaveCreate>("Have Create");
 
         var result = await modalReference.Result;
         if (result.Confirmed)

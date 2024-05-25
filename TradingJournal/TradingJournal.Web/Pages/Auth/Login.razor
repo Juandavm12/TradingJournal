@@ -95,7 +95,7 @@
     private async Task ShowModal()
     {
         IModalReference modalReference;
-        modalReference = Modal.Show<Pages.Auth.RecoverPassword>();
+        modalReference = Modal.Show<Pages.Auth.RecoverPassword>("Password Recovery");
 
         var result = await modalReference.Result;
         if (result.Confirmed)

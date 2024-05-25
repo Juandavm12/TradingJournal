@@ -137,7 +137,7 @@
 
     {
         IModalReference modalReference;
-        modalReference = Modal.Show<AccountEdit>(string.Empty, new ModalParameters().Add("AccountAccNumber", id));
+        modalReference = Modal.Show<AccountEdit>("Account Edit", new ModalParameters().Add("AccountAccNumber", id));
 
         var result = await modalReference.Result;
         if (result.Confirmed)
@@ -152,7 +152,7 @@
         IModalReference modalReference;
 
 
-        modalReference = Modal.Show<AccountCreate>();
+        modalReference = Modal.Show<AccountCreate>("Account Creation");
 
         var result = await modalReference.Result;
         if (result.Confirmed)

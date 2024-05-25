@@ -105,7 +105,7 @@
 
     {
         IModalReference modalReference;
-        modalReference = Modal.Show<AccTypeEdit>(string.Empty, new ModalParameters().Add("AccTypeId", id));
+        modalReference = Modal.Show<AccTypeEdit>("Account Type Edit", new ModalParameters().Add("AccTypeId", id));
 
         var result = await modalReference.Result;
         if (result.Confirmed)
@@ -120,7 +120,7 @@
         IModalReference modalReference;
 
 
-        modalReference = Modal.Show<AccTypeCreate>();
+        modalReference = Modal.Show<AccTypeCreate>("Account Type Creation");
 
         var result = await modalReference.Result;
         if (result.Confirmed)

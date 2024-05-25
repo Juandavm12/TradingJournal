@@ -163,7 +163,7 @@
 
     {
         IModalReference modalReference;
-        modalReference = Modal.Show<TradeLogEdit>(string.Empty, new ModalParameters().Add("TradeLogTradeNumber", id));
+        modalReference = Modal.Show<TradeLogEdit>("Trade Log Edit", new ModalParameters().Add("TradeLogTradeNumber", id));
 
         var result = await modalReference.Result;
         if (result.Confirmed)
@@ -178,7 +178,7 @@
         IModalReference modalReference;
 
 
-        modalReference = Modal.Show<TradeLogCreate>();
+        modalReference = Modal.Show<TradeLogCreate>("Trade Log Create");
 
         var result = await modalReference.Result;
         if (result.Confirmed)

@@ -111,7 +111,7 @@
 
     {
         IModalReference modalReference;
-        modalReference = Modal.Show<TradeEdit>(string.Empty, new ModalParameters().Add("TradeId", id));
+        modalReference = Modal.Show<TradeEdit>("Trader Edit", new ModalParameters().Add("TradeId", id));
 
         var result = await modalReference.Result;
         if (result.Confirmed)
@@ -126,7 +126,7 @@
         IModalReference modalReference;
 
 
-        modalReference = Modal.Show<TradeCreate>();
+        modalReference = Modal.Show<TradeCreate>("TRader Create");
 
         var result = await modalReference.Result;
         if (result.Confirmed)

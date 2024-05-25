@@ -1,25 +1,33 @@
 ﻿@page "/info/{id}"
-@using CoinpaprikaAPI.Entity;
-@inject IRepository Repository
+@inject CoinGeckoService CoinGeckoService
+@attribute [Authorize(Roles = "Admin, User")]
+
+
 
 <PageTitle>Coin Info</PageTitle>
 
 
-<h3><i class="bi bi-coin" /> @coinList.Name</h3>
 
+
+
+@if (coin == null)
+{
+    <p>Loading...</p>
+}
+else
+{
 <div class="card">
     <div class="card-header">
+            <i class="bi bi-coin" /> @coin?.Name (@coin?.Symbol)
     </div>
-
-
+       
     <div class="card-body">
-
-
 
         <Body>
             <table class="table table-striped">
                 <thead>
                     <tr>
+                         
                     </tr>
                 </thead>
                 <tbody>
@@ -30,61 +38,77 @@
                 </tr>
                 <br />
                 <tr>
-                            @coinList.Description
+                     @(coin.Description?.En)
                 </tr>
                 <br />
 
+              
+              
                 <tr>
-                    <b>Proof Type</b>
-                </tr>
-                <br />
-                <tr>
-                            @coinList.ProofType
-                </tr>
-                <br />
-
-                <tr>
-                    <b>First Data At</b>
-                </tr>
-                <br />
-                <tr>
-                            @coinList.FirstDataAt
-                </tr>
-                <br />
-
-                <tr>
-                    <b>Development Status</b>
-                </tr>
-                <br />
-                <tr>
-                            @coinList.DevelopmentStatus
-                </tr>
-                <br />
-
-                <tr>
-                    <b>Symbol</b>
-                </tr>
-                <br />
-                <tr>
-                            @coinList.Symbol
-                </tr>
-                <br />
-
-                <tr>
-                    <b>Structure</b>
-                </tr>
-                <br />
-                <tr>
-                            @coinList.OrgStructure
-                </tr>
-                <br />
-
-                <tr>
-                    <b>Id</b>
-                </tr>
-                <br />
-                <tr>
-                            @coinList.Id
+                    <h4>Links:</h4>
+                    <ul>
+                                @if (coin.Links?.Homepage != null)
+                                {
+                                    @foreach (var link in coin.Links.Homepage)
+                                    {
+                                <li><a href="@link" >@link</a></li>
+                                    }
+                                }
+                                @if (coin.Links?.Blockchain_site != null)
+                                {
+                                    @foreach (var link in coin.Links.Blockchain_site)
+                                    {
+                                <li><a href="@link" >@link</a></li>
+                                    }
+                                }
+                                @if (coin.Links?.Official_forum_url != null)
+                                {
+                                    @foreach (var link in coin.Links.Official_forum_url)
+                                    {
+                                <li><a href="@link" >@link</a></li>
+                                    }
+                                }
+                                @if (coin.Links?.Chat_url != null)
+                                {
+                                    @foreach (var link in coin.Links.Chat_url)
+                                    {
+                                <li><a href="@link" >@link</a></li>
+                                    }
+                                }
+                                @if (coin.Links?.Announcement_url != null)
+                                {
+                                    @foreach (var link in coin.Links.Announcement_url)
+                                    {
+                                <li><a href="@link" >@link</a></li>
+                                    }
+                                }
+                                @if (!string.IsNullOrEmpty(coin.Links?.Twitter_screen_name))
+                                {
+                            <li><a href="https://twitter.com/@coin.Links.Twitter_screen_name" >@coin.Links.Twitter_screen_name</a></li>
+                                }
+                                @if (!string.IsNullOrEmpty(coin.Links?.Facebook_username))
+                                {
+                            <li><a href="https://facebook.com/@coin.Links.Facebook_username" >@coin.Links.Facebook_username</a></li>
+                                }
+                                @if (!string.IsNullOrEmpty(coin.Links?.Subreddit_url))
+                                {
+                            <li><a href="@coin.Links.Subreddit_url" >@coin.Links.Subreddit_url</a></li>
+                                }
+                                @if (coin.Links?.Repos_url?.Github != null)
+                                {
+                                    @foreach (var link in coin.Links.Repos_url.Github)
+                                    {
+                                <li><a href="@link" >@link</a></li>
+                                    }
+                                }
+                                @if (coin.Links?.Repos_url?.Bitbucket != null)
+                                {
+                                    @foreach (var link in coin.Links.Repos_url.Bitbucket)
+                                    {
+                                <li><a href="@link" >@link</a></li>
+                                    }
+                                }
+                    </ul>
                 </tr>
                 <br />
 
@@ -99,37 +123,22 @@
     </div>
 </div>
 
-
+}
 
 @code {
-
     [Parameter]
-    public string id { get; set; }
+    public string Id { get; set; }
 
-    private ExtendedCoinInfo coinList = new ExtendedCoinInfo();
-
-
-    protected async override Task OnInitializedAsync()
+    private CoinDetail coin;
+    [CascadingParameter]
+    BlazoredModalInstance BlazoredModal { get; set; } = default!;
+    protected override async Task OnInitializedAsync()
     {
-        await Charging();
-
-
+        coin = await CoinGeckoService.GetCoinByIdAsync(Id);
+        
     }
 
-
-
-    private async Task Charging()
-    {
-
-        var responseHppt = await Repository.GetAsync<CoinpaprikaAPI.Entity.ExtendedCoinInfo>($"api/coins/{id}");
-
-        coinList = responseHppt.Response!;
-
-  
-
-
-    }
-
-
-
+ 
 }
+
+

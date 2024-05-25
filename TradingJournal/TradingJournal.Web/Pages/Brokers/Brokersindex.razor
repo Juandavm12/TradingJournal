@@ -124,7 +124,7 @@
 
     {
         IModalReference modalReference;
-        modalReference = Modal.Show<BrokerEdit>(string.Empty, new ModalParameters().Add("BrokerId", id));
+        modalReference = Modal.Show<BrokerEdit>("Broker Edit", new ModalParameters().Add("BrokerId", id));
 
         var result = await modalReference.Result;
         if (result.Confirmed)
@@ -139,7 +139,7 @@
         IModalReference modalReference;
 
 
-        modalReference = Modal.Show<BrockerCreate>();
+        modalReference = Modal.Show<BrockerCreate>("Broker Create");
 
         var result = await modalReference.Result;
         if (result.Confirmed)
