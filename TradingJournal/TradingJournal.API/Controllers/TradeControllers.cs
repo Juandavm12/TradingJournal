@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using TradingJournal.API.Data;
+using TradingJournal.API.Helpers;
 using TradingJournal.Shared.DTOs;
 using TradingJournal.Shared.Entities;
-using TradingJournal.API.Helpers;
 
 namespace TradingJournal.API.Controllers
 {
@@ -67,7 +67,7 @@ namespace TradingJournal.API.Controllers
                 if (trade.UsersId != null)
                 {
                     await _context.SaveChangesAsync();
-                return Ok(trade);
+                    return Ok(trade);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace TradingJournal.API.Controllers
                 if (trade.UsersId != null)
                 {
                     await _context.SaveChangesAsync();
-                return Ok(trade);
+                    return Ok(trade);
                 }
                 else
                 {

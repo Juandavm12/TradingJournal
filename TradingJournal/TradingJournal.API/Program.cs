@@ -5,8 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using System;
+using System.Text;
 using TradingJournal.API.Data;
 using TradingJournal.API.Helpers;
 using TradingJournal.Shared.Entities;
@@ -31,7 +31,7 @@ builder.Services.AddIdentity<User, IdentityRole>(x =>
     x.SignIn.RequireConfirmedEmail = true;
     x.User.RequireUniqueEmail = true;
     x.Password.RequireDigit = true;
-x.Password.RequiredUniqueChars = 0;
+    x.Password.RequiredUniqueChars = 0;
     x.Password.RequireLowercase = true;
     x.Password.RequireNonAlphanumeric = false;
     x.Password.RequireUppercase = true;
@@ -81,11 +81,11 @@ static void SeedData(WebApplication app)
     }
 }
 
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
 
 
-app.UseHttpsRedirection();
+    app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

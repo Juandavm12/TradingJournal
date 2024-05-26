@@ -2,18 +2,18 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using TradingJournal.API.Data;
+using TradingJournal.API.Helpers;
 using TradingJournal.Shared.DTOs;
 using TradingJournal.Shared.Entities;
-using TradingJournal.API.Helpers;
 
 namespace TradingJournal.API.Controllers
 {
 
-    
+
 
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -66,16 +66,16 @@ namespace TradingJournal.API.Controllers
             try
             {
                 await _context.SaveChangesAsync();
-            return Ok(broker);
+                return Ok(broker);
             }
             catch (DbUpdateException dbUpdateException)
             {
                 if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
-                    
+
                 {
                     return BadRequest("A broker with that license number already exists!.");
                 }
-        else
+                else
                 {
                     return BadRequest(dbUpdateException.InnerException.Message);
                 }
@@ -108,9 +108,9 @@ namespace TradingJournal.API.Controllers
             try
             {
                 await _context.SaveChangesAsync();
-            return Ok(broker);
+                return Ok(broker);
 
-        }
+            }
             catch (DbUpdateException dbUpdateException)
             {
                 if (dbUpdateException.InnerException!.Message.Contains("duplicate"))

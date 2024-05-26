@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using TradingJournal.API.Data;
+using TradingJournal.API.Helpers;
 using TradingJournal.Shared.DTOs;
 using TradingJournal.Shared.Entities;
-using TradingJournal.API.Helpers;
 
 namespace TradingJournal.API.Controllers
 {
@@ -113,7 +113,7 @@ namespace TradingJournal.API.Controllers
             _context.Update(tradelog);
             try
             {
-                if (tradelog.Risk == 0 
+                if (tradelog.Risk == 0
                 )
                 {
 

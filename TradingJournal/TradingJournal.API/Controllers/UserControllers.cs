@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using TradingJournal.API.Data;
+using TradingJournal.API.Helpers;
 using TradingJournal.Shared.DTOs;
 using TradingJournal.Shared.Entities;
-using TradingJournal.API.Helpers;
 
 namespace TradingJournal.API.Controllers
 {
@@ -75,7 +75,7 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> GetAsync(string id)
         {
             var user = await _context.Users.FirstOrDefaultAsync
-                (x => x.Id.Equals(id) );
+                (x => x.Id.Equals(id));
 
             if (user == null)
             {

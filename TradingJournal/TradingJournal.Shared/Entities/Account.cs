@@ -1,13 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace TradingJournal.Shared.Entities
 {
@@ -32,7 +26,7 @@ namespace TradingJournal.Shared.Entities
         public int AccTypesId { get; set; }
 
 
-        [DataType(DataType.DateTime)]        
+        [DataType(DataType.DateTime)]
         public DateTime CreationDate { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:N2}")]

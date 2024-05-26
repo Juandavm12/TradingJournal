@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http.Headers;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using TradingJournal.Web.Helpers;
-using System;
 
 namespace TradingJournal.Web.Auth
 {
@@ -30,8 +30,8 @@ namespace TradingJournal.Web.Auth
             if (token is null)
             {
                 return _anonimous;
-              
-           }
+
+            }
             return BuildAuthenticationState(token.ToString()!);
         }
         private AuthenticationState BuildAuthenticationState(string token)

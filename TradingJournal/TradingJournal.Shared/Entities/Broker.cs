@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace TradingJournal.Shared.Entities
 {
@@ -21,7 +14,7 @@ namespace TradingJournal.Shared.Entities
 
         [Display(Name = "Address")]
         [MaxLength(50, ErrorMessage = "More than 50 charachters are not allowed")]
-          public string Address { get; set; }
+        public string Address { get; set; }
 
         [Display(Name = "Phone")]
         [MaxLength(50, ErrorMessage = "More than 50 charachters are not allowed")]

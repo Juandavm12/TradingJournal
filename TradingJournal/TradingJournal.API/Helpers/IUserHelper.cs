@@ -1,9 +1,9 @@
 ﻿//Interface of the Userhelper
-using TradingJournal.Shared.Entities;
 using Microsoft.AspNetCore.Identity;
+using System;
 using System.Threading.Tasks;
 using TradingJournal.Shared.DTOs;
-using System;
+using TradingJournal.Shared.Entities;
 
 namespace TradingJournal.API.Helpers
 {

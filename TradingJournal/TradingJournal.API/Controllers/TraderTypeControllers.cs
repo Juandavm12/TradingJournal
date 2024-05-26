@@ -2,18 +2,18 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using TradingJournal.API.Data;
+using TradingJournal.API.Helpers;
 using TradingJournal.Shared.DTOs;
 using TradingJournal.Shared.Entities;
-using TradingJournal.API.Helpers;
 
 namespace TradingJournal.API.Controllers
 {
 
-  
+
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("/api/TraderTypes")]
@@ -62,9 +62,10 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PostAsync(TraderType tradertype)
         {
             _context.Add(tradertype);
-            try { 
-            await _context.SaveChangesAsync();
-            return Ok(tradertype);
+            try
+            {
+                await _context.SaveChangesAsync();
+                return Ok(tradertype);
             }
             catch (DbUpdateException dbUpdateException)
             {

@@ -1,10 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
-using System.IO;
-using System.Reflection.Metadata;
-using System.Threading.Tasks;
-using System;
-using Azure.Storage.Blobs;
+﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace TradingJournal.API.Helpers
 {
@@ -26,16 +25,16 @@ namespace TradingJournal.API.Helpers
         public async Task<string> SaveFileAsync(byte[] content, string extention, string containerName)
         {
             var client = new BlobContainerClient(_connectionString, containerName);
-        await client.CreateIfNotExistsAsync();
-        client.SetAccessPolicy(PublicAccessType.Blob);
+            await client.CreateIfNotExistsAsync();
+            client.SetAccessPolicy(PublicAccessType.Blob);
             var fileName = $"{Guid.NewGuid()}{extention}";
-        var blob = client.GetBlobClient(fileName);
-            
+            var blob = client.GetBlobClient(fileName);
+
             using (var ms = new MemoryStream(content))
             {
                 await blob.UploadAsync(ms);
-}
-return blob.Uri.ToString();
+            }
+            return blob.Uri.ToString();
         }
     }
 }

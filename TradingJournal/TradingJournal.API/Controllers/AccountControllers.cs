@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Threading.Tasks;
 using TradingJournal.API.Data;
@@ -42,9 +41,9 @@ namespace TradingJournal.API.Controllers
                 {
 
                     return BadRequest("You must chose a Trader");
-                  
+
                 }
-                else if (account.InitialBalance==0)
+                else if (account.InitialBalance == 0)
                 {
                     return BadRequest("Initial balance can't be = 0");
                 }
@@ -112,7 +111,7 @@ namespace TradingJournal.API.Controllers
                 {
                     await _context.SaveChangesAsync();
                     return Ok(account);
-                   
+
                 }
             }
             catch (DbUpdateException dbUpdateException)

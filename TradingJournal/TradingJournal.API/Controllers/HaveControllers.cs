@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using TradingJournal.API.Data;
+using TradingJournal.API.Helpers;
 using TradingJournal.Shared.DTOs;
 using TradingJournal.Shared.Entities;
-using TradingJournal.API.Helpers;
 
 namespace TradingJournal.API.Controllers
 {
@@ -61,11 +61,12 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PostAsync(Have have)
         {
             _context.Add(have);
-            try {
+            try
+            {
                 if (have.UsersId != null)
                 {
                     await _context.SaveChangesAsync();
-            return Ok(have);
+                    return Ok(have);
                 }
                 else
                 {
@@ -77,7 +78,8 @@ namespace TradingJournal.API.Controllers
                 if (dbUpdateException.InnerException!.Message.Contains("Strategies"))
                 {
                     return BadRequest("You must choose a strategy.");
-                }else if (dbUpdateException.InnerException!.Message.Contains("UsersId"))
+                }
+                else if (dbUpdateException.InnerException!.Message.Contains("UsersId"))
                 {
                     return BadRequest("You must choose a Trader.");
                 }
@@ -111,11 +113,12 @@ namespace TradingJournal.API.Controllers
         public async Task<ActionResult> PutAsync(Have have)
         {
             _context.Update(have);
-            try {
+            try
+            {
                 if (have.UsersId != null)
                 {
                     await _context.SaveChangesAsync();
-            return Ok(have);
+                    return Ok(have);
                 }
                 else
                 {
@@ -127,14 +130,15 @@ namespace TradingJournal.API.Controllers
                 if (dbUpdateException.InnerException!.Message.Contains("Strategies"))
                 {
                     return BadRequest("You must choose a strategy.");
-    }else if (dbUpdateException.InnerException!.Message.Contains("UsersId"))
+                }
+                else if (dbUpdateException.InnerException!.Message.Contains("UsersId"))
                 {
                     return BadRequest("You must choose a Trader.");
-}
+                }
                 else
-{
-    return BadRequest(dbUpdateException.InnerException.Message);
-}
+                {
+                    return BadRequest(dbUpdateException.InnerException.Message);
+                }
             }
             catch (Exception exception)
             {

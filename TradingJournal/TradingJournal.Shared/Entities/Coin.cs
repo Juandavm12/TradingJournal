@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TradingJournal.Shared.Entities
+﻿namespace TradingJournal.Shared.Entities
 {
     public class Coin
     {
@@ -24,10 +18,10 @@ namespace TradingJournal.Shared.Entities
         public decimal market_cap_change_24h { get; set; }
         public decimal market_cap_change_percentage_24h { get; set; }
         public decimal circulating_supply { get; set; }
-        public decimal total_supply { get; set; }      
+        public decimal total_supply { get; set; }
         public decimal ath { get; set; }
         public decimal atl_change_percentage { get; set; }
-        public string atl_date { get; set; }   
+        public string atl_date { get; set; }
         public string last_updated { get; set; }
 
 

@@ -1,11 +1,10 @@
 ﻿//User Entitie whit all the validators
-using TradingJournal.Shared.Enums;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using TradingJournal.Shared.Enums;
 
 namespace TradingJournal.Shared.Entities
 {
@@ -13,7 +12,7 @@ namespace TradingJournal.Shared.Entities
     public class User : IdentityUser
     {
 
-  
+
 
         [MaxLength(20, ErrorMessage = "More than 20 charachters are not allowed")]
         [Required(ErrorMessage = "The field {0} is mandatory")]

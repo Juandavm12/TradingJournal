@@ -1,8 +1,8 @@
-﻿using System.Net.Http;
-using System.Text.Json;
+﻿using Microsoft.AspNetCore.Authorization;
+using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 
 namespace TradingJournal.Web.Repositories
 {
@@ -36,7 +36,7 @@ namespace TradingJournal.Web.Repositories
             return new HttpResponseWrapper<T>(default, true, responseHttp);
         }
 
-        public async Task<HttpResponseWrapper<T>> GetAsync<T>(string url,string url2)
+        public async Task<HttpResponseWrapper<T>> GetAsync<T>(string url, string url2)
         {
 
             var CoinGecko = $"https://api.coingecko.com/api/v3{url}";

@@ -1,31 +1,30 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using System;
+using TradingJournal.API.Data;
 using TradingJournal.API.Helpers;
 using TradingJournal.Shared.DTOs;
 using TradingJournal.Shared.Entities;
-using System.Linq;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using TradingJournal.API.Data;
-using Microsoft.EntityFrameworkCore;
-using Azure.Storage.Blobs.Models;
 
 
 namespace TradingJournal.API.Controllers
 {
-   
-        [ApiController]
-     [Route("/api/accounts")]   
+
+    [ApiController]
+    [Route("/api/accounts")]
     public class AccountsController : ControllerBase
     {
-            private readonly IUserHelper _userHelper;
+        private readonly IUserHelper _userHelper;
         private readonly IConfiguration _configuration;
         private readonly IFileStorage _fileStorage;
         private readonly IMailHelper _mailHelper;
@@ -72,7 +71,7 @@ namespace TradingJournal.API.Controllers
             return BadRequest(response.Message);
         }
 
-       
+
 
         [HttpPost("changePassword")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -271,8 +270,8 @@ namespace TradingJournal.API.Controllers
             {
                 return BadRequest("You must Select a Trader Type");
             }
-            }
-        
+        }
+
 
         [HttpPost("ResedToken")]
         public async Task<ActionResult> ResedToken([FromBody] EmailDto model)
