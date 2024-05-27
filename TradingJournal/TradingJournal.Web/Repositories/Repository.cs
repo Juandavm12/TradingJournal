@@ -13,12 +13,14 @@ namespace TradingJournal.Web.Repositories
         private JsonSerializerOptions _jsonDefaultOptions => new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
+
         };
 
 
         public Repository(HttpClient httpClient)
         {
             _httpClient = httpClient;
+
         }
 
         //method get
@@ -38,8 +40,8 @@ namespace TradingJournal.Web.Repositories
 
         public async Task<HttpResponseWrapper<T>> GetAsync<T>(string url, string url2)
         {
-
-            var CoinGecko = $"https://api.coingecko.com/api/v3{url}";
+            string apiKey = "x_cg_demo_api_key=CG-LdodJKJHhswwReX1G1H8hTjp";
+            var CoinGecko = $"https://api.coingecko.com/api/v3{url}&{apiKey}";
             var responseHttp = await _httpClient.GetAsync(CoinGecko);
 
             if (responseHttp.IsSuccessStatusCode)

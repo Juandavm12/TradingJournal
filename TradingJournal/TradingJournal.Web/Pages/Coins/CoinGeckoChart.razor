@@ -32,12 +32,15 @@
 </div>
 
 
+
+
+
 <canvas id="myChart" width="1200" height="600"></canvas>
 
 <script>
     function createChart(labels, data) {
         const easing = Chart.helpers.easingEffects.easeInQuad;
-        const totalDuration = 5000;
+        const totalDuration = 500;
 
         const duration = (ctx) => easing(ctx.index / data.length) * totalDuration / data.length;
         const delay = (ctx) => easing(ctx.index / data.length) * totalDuration;
@@ -90,7 +93,34 @@
             },
             options: {
                 animations: animation,
-                scales: {                  
+                plugins: {
+                    zoom: {
+                        pan: {
+                            enabled: true,
+                            mode: 'xy',
+                            threshold: 10,                       
+                            modifierKey: null 
+                        },
+                        zoom: {
+                            wheel: {
+                                enabled: true,
+                                speed: 0.1 // Speed of zoom via mouse wheel
+                            },
+                            pinch: {
+                                enabled: true
+                            },
+                            mode: 'xy',
+                           
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: false
+                    },
+                    y: {
+                        beginAtZero: false
+                    }
                 }
             }
         });
@@ -101,6 +131,7 @@
             chart.destroy();
         }
     }
+
 </script>
 
 @code {
@@ -108,14 +139,8 @@
     public string Id { get; set; }
 
     public int days { get; set; } = 30;
-
-    public List<double> data { get; set; } = new List<double>();
-    public List<string> labels { get; set; } = new List<string>();
-
-    public class CoinGeckoResponse
-    {
-        public List<List<double>> Prices { get; set; }
-    }
+  
+    public MarketChart CoinList { get; set; }
 
 
     protected override async Task OnInitializedAsync()
@@ -124,15 +149,13 @@
     }
 
     private async Task LoadData()
-    {
-             string key = "x_cg_demo_api_key=CG-LdodJKJHhswwReX1G1H8hTjp";
-        string url = $"https://api.coingecko.com/api/v3/coins/{Id}/market_chart?vs_currency=usd&days={days}&precision=4&{key}";
+    {        
+        string url = $"/coins/{Id}/market_chart?vs_currency=usd&days={days}&precision=4";
 
-        var coinGeckoData = await Http.GetFromJsonAsync<CoinGeckoResponse>(url);
-        var prices = coinGeckoData.Prices.Select(price => new { Date = DateTimeOffset.FromUnixTimeMilliseconds((long)price[0]).DateTime, Value = price[1] }).ToList();
-        labels = prices.Select(p => p.Date.ToString("yyyy-MM-dd")).ToList();
-        data = prices.Select(p => p.Value).ToList();
-        await JSRuntime.InvokeVoidAsync("createChart", labels, data);
+        var responseHppt = await Repository.GetAsync<MarketChart>(url, "coin");       
+        var coins = responseHppt.Response!.Prices.Select(x => new { Date = new DateTime(1970, 1, 1).AddMilliseconds((long)x[0]), Value = x[1] }).ToList();
+        await JSRuntime.InvokeVoidAsync("createChart", coins.Select(p => p.Date.ToString()).ToList(), coins.Select(p => p.Value).ToList());
+      
     }
     private async Task Reload()
     {

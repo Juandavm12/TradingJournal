@@ -142,11 +142,10 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        string url = $"/coins/{Id}?";
 
-        string key = "x_cg_demo_api_key=CG-LdodJKJHhswwReX1G1H8hTjp";
-        var responseHppt = await Repository.GetAsync<CoinDetail>( $"/coins/{Id}?{key}","coin");
-        coin = responseHppt.Response!;
-      
+        var responseHppt = await Repository.GetAsync<CoinDetail>( url,"coin");
+        coin = responseHppt.Response!;      
        
     }
 

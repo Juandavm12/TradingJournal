@@ -1,4 +1,6 @@
-﻿namespace TradingJournal.Shared.Entities
+﻿using System.Collections.Generic;
+
+namespace TradingJournal.Shared.Entities
 {
     public class Coin
     {
@@ -23,6 +25,7 @@
         public decimal atl_change_percentage { get; set; }
         public string atl_date { get; set; }
         public string last_updated { get; set; }
+        public List<List<double>> Market { get; set; }
 
 
 
