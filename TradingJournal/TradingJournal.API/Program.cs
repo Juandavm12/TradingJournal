@@ -22,7 +22,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer("name = WindowsSecurity"));
+builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer("name = Connectionwhitparams"));
 
 
 builder.Services.AddIdentity<User, IdentityRole>(x =>
@@ -82,22 +82,28 @@ static void SeedData(WebApplication app)
 }
 
 // Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
+{
+}
+
+app.UseSwagger();
+    app.UseSwaggerUI();
 
 
     app.UseHttpsRedirection();
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapControllers();
+    app.UseAuthentication();
+    app.UseAuthorization();
+    app.MapControllers();
 
-app.UseCors(x => x
+    app.UseCors(x => x
 
- .AllowAnyMethod()
- .AllowAnyHeader()
- .SetIsOriginAllowed(origin => true)
- .AllowCredentials()
+     .AllowAnyMethod()
+     .AllowAnyHeader()
+     .SetIsOriginAllowed(origin => true)
+     .AllowCredentials()
 
 
- );
+     );
 
-app.Run();
+    app.Run();
