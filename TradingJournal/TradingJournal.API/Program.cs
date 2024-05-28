@@ -127,14 +127,14 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-app.UseCors(x => x
+    app.UseCors(x => x
 
- .AllowAnyMethod()
- .AllowAnyHeader()
- .SetIsOriginAllowed(origin => true)
- .AllowCredentials()
+     .AllowAnyMethod()
+     .AllowAnyHeader()
+     .SetIsOriginAllowed(origin => true)
+     .AllowCredentials()
 
 
- );
+     );
 
-app.Run();
+    app.Run();
