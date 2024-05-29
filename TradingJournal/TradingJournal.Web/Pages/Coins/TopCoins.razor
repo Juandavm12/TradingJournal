@@ -165,9 +165,11 @@
     private async Task ShowModal2(string id = "", string Name = "", bool isEdit = false)
 
     {
-        IModalReference modalReference;
-        var options = new ModalOptions(){ Size = ModalSize.ExtraLarge };
-        modalReference = Modal.Show<Coins.CoinGeckoChart>("Coin Chart", new ModalParameters().Add("id", id),options);
+        IModalReference modalReference;      
+        var parameters = new ModalParameters();
+        parameters.Add("Id", id);
+        parameters.Add("Name", Name);
+        modalReference = Modal.Show<Coins.CoinGeckoChart>("Coin Chart",parameters);
 
         var result = await modalReference.Result;
         if (result.Confirmed)

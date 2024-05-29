@@ -1,4 +1,4 @@
-﻿@page "/chart/{id}"
+﻿@page "/chart/{id},{Name}"
 @inject HttpClient Http
 @inject IJSRuntime JSRuntime
 @inject IRepository Repository
@@ -6,16 +6,16 @@
 <div class="d-flex justify-content-end">
     <div class="px-2">
         <h3>
-            <a @onclick="ResetZoom" class="btn btn-outline-info ">Reset Zoom </a>
+           
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            @Id (Last @days Days)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            @Name (Last @days Days)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
            
         </h3>
     </div>
     <div class="px-2">
         <div class="form-floating mb-3">
-            <select class="form-select" id="floatingInput" placeholder="Days " @bind="@days">
+            <select class="form-select" id="floatingInput" placeholder="Days " @onchange="OnDaysChanged">
                 <option value="0">-- Select Chart Days --</option>
                 <option value="1">-- 1 Day --</option>
                 <option value="7">-- 7 Days --</option>
@@ -30,7 +30,7 @@
     </div>
     <div class="px-4">
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <a @onclick="Reload" class="btn btn-outline-warning ">Reload <i class="bi bi-arrow-clockwise"></i></a>
+         <a @onclick="ResetZoom" class="btn btn-outline-info ">Reset Zoom <i class="bi bi-arrow-clockwise"></i></a>     
        
     </div>        
   
@@ -153,6 +153,9 @@
     [Parameter]
     public string Id { get; set; }
 
+    [Parameter]
+    public string Name { get; set; }
+
     public int days { get; set; } = 30;
   
     public MarketChart CoinList { get; set; }
@@ -181,5 +184,13 @@
     private async Task ResetZoom()
     {
         await JSRuntime.InvokeVoidAsync("resetZoom", "myChart");    
+    }
+     private void OnDaysChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value.ToString(), out int selectedDays))
+        {
+            days = selectedDays;
+            Reload();
+        }
     }
 }
