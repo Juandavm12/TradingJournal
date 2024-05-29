@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -9,6 +10,7 @@ namespace TradingJournal.Web.Repositories
     public class Repository : IRepository
     {
         private readonly HttpClient _httpClient;
+        private readonly IConfiguration _configuration;
 
         private JsonSerializerOptions _jsonDefaultOptions => new JsonSerializerOptions
         {
@@ -17,9 +19,10 @@ namespace TradingJournal.Web.Repositories
         };
 
 
-        public Repository(HttpClient httpClient)
+        public Repository(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
+            _configuration = configuration;
 
         }
 
@@ -39,9 +42,8 @@ namespace TradingJournal.Web.Repositories
         }
 
         public async Task<HttpResponseWrapper<T>> GetAsync<T>(string url, string url2)
-        {
-            string apiKey = "x_cg_demo_api_key=CG-LdodJKJHhswwReX1G1H8hTjp";
-            var CoinGecko = $"https://api.coingecko.com/api/v3{url}&{apiKey}";
+        {            
+            var CoinGecko = $"https://api.coingecko.com/api/v3{url}&{_configuration["CoinGecko:ApiKey"]}";
             var responseHttp = await _httpClient.GetAsync(CoinGecko);
 
             if (responseHttp.IsSuccessStatusCode)

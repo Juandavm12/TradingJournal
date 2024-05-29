@@ -5,7 +5,10 @@
 
 <div class="d-flex justify-content-end">
     <div class="px-2">
-        <h3>@Id (Last @days Days)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <h3>
+            <a @onclick="ResetZoom" class="btn btn-outline-info ">Reset Zoom </a>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            @Id (Last @days Days)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
            
         </h3>
@@ -25,8 +28,10 @@
             <label for="floatingInput">Days:</label>
         </div>
     </div>
-    <div class="px-2">
+    <div class="px-4">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <a @onclick="Reload" class="btn btn-outline-warning ">Reload <i class="bi bi-arrow-clockwise"></i></a>
+       
     </div>        
   
 </div>
@@ -102,9 +107,10 @@
                             modifierKey: null 
                         },
                         zoom: {
+
                             wheel: {
                                 enabled: true,
-                                speed: 0.1 // Speed of zoom via mouse wheel
+                                speed: 0.1 
                             },
                             pinch: {
                                 enabled: true
@@ -125,10 +131,19 @@
             }
         });
     }
+         
+   
     function destroyChart(chartId) {
         var chart = Chart.getChart(chartId);
         if (chart !== undefined) {
             chart.destroy();
+        }
+    }
+
+    function resetZoom(chartId) {
+        var chart = Chart.getChart(chartId);
+        if (chart !== undefined) {
+            chart.resetZoom();
         }
     }
 
@@ -161,5 +176,10 @@
     {
         await JSRuntime.InvokeVoidAsync("destroyChart", "myChart");
         await LoadData();
+    }
+
+    private async Task ResetZoom()
+    {
+        await JSRuntime.InvokeVoidAsync("resetZoom", "myChart");    
     }
 }
