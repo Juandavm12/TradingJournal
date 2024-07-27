@@ -21,7 +21,7 @@
     },
     "resourceName": {
       "type": "string",
-      "defaultValue": "TradingJournalAPIITM2024",
+      "defaultValue": "TradingJournalAPI",
       "metadata": {
         "description": "Name of the main resource to be created by this template."
       }

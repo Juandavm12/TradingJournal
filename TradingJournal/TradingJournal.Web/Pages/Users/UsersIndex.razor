@@ -74,9 +74,11 @@ else
                             <td>@user.EmailConfirmed</td>
                             <td>@tradertype</td>
                             <td>@user.UserType</td>
+
                             <td>
 
                                 <a @onclick=@(() => ShowModal(user.Id, true)) class="btn btn-outline-primary ">Edit <i class="bi bi-pencil-square"></i></a>
+                                <a @onclick=@(() => ShowModal3(user.Id, true)) class="btn btn-outline-secondary ">Trades <i class="bi bi-pencil-square"></i></a>
                                 <button class="btn btn-outline-danger" @onclick=@(() => Delete(user))>Delete <i class="bi bi-trash3"></i></button>
                             </td>
                         </tr>
@@ -121,6 +123,20 @@ else
 
 
         modalReference = Modal.Show<Auth.Register>("Register",new ModalParameters().Add("IsAdmin", true));
+
+        var result = await modalReference.Result;
+        if (result.Confirmed)
+        {
+            await LoadAsync();
+        }
+    }
+
+
+    private async Task ShowModal3(string id = "", bool isEdit = false)
+
+    {
+        IModalReference modalReference;
+        modalReference = Modal.Show<TradesUser>("Trades", new ModalParameters().Add("UserId", id));
 
         var result = await modalReference.Result;
         if (result.Confirmed)

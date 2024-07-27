@@ -144,6 +144,7 @@
     [Parameter]
     [SupplyParameterFromQuery]
     public string Filter { get; set; } = "";
+   
 
 
     [CascadingParameter]
@@ -183,6 +184,7 @@
     protected override async Task OnInitializedAsync()
     {
         await Charging();
+      
     }
 
     private int currentPage = 1;

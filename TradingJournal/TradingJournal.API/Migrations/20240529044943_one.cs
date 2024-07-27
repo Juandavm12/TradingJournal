@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TradingJournal.API.Migrations
 {
     /// <inheritdoc />
-    public partial class _1 : Migration
+    public partial class one : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

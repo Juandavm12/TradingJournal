@@ -12,8 +12,8 @@ using TradingJournal.API.Data;
 namespace TradingJournal.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240528145210_1")]
-    partial class _1
+    [Migration("20240529044943_one")]
+    partial class one
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

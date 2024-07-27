@@ -1,0 +1,196 @@
+﻿@page "/Users/TradesUser/{UserId}"
+@inject IRepository repository
+@inject SweetAlertService sweetAlertService
+@inject NavigationManager navigationManager
+@inject ILoginService loginService
+@inherits LayoutComponentBase
+@inject AuthenticationStateProvider GetAuthenticationStateAsync
+
+<PageTitle>Trades User</PageTitle>
+
+
+
+@if (user is null)
+
+{
+    <div class="spinner" />
+
+}
+else
+{
+
+    <EditForm Model="user" OnValidSubmit="SaveUserAsync">
+        <DataAnnotationsValidator />
+
+        <div class="card">
+            <div class="card-header">
+                <span>
+                    <i class="bi bi-person-slash" /> Edit User
+                    <button class="btn btn-sm btn-dark  mx-2  float-end" type="submit"><i class="bi bi-floppy2" /> Save Changes</button>
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-floating mb-3">
+                            <select class="form-select" id="floatingInput" placeholder="User Type " @bind="@user.UserType">
+                                <option value="0">-- Select a User Type --</option>
+                                <option value="User">User</option>
+                                <option value="Admin">Admin</option>
+                            </select>
+                            <label for="floatingInput">User Type:</label>
+                            <ValidationMessage For="@(() => user.UserType)" />
+                        </div>
+
+
+                        <div class="form-floating mb-3">
+                            <InputText class="form-control" id="floatingInput3" placeholder="First Name " @bind-Value="@user.FirstName" />
+                            <label for="floatingInput3">First Name :</label>
+                            <ValidationMessage For="@(() => user.FirstName)" />
+                        </div>
+
+
+                        <div class="form-floating mb-3">
+                            <InputText class="form-control" id="floatingInput4" placeholder="Last Name " @bind-Value="@user.LastName" />
+                            <label for="floatingInput4">Last Name :</label>
+                            <ValidationMessage For="@(() => user.LastName)" />
+                        </div>
+
+
+                        <div class="form-floating mb-3">
+                            <InputText class="form-control" id="floatingInput5" placeholder="Document" @bind-Value="@user.Document" />
+                            <label for="floatingInput5">Document :</label>
+                            <ValidationMessage For="@(() => user.Document)" />
+                        </div>
+
+
+                        <div class="form-floating mb-3">
+                            <InputText class="form-control" id="floatingInput6" placeholder="Phone" @bind-Value="@user.PhoneNumber" />
+                            <label for="floatingInput6">Phone :</label>
+                            <ValidationMessage For="@(() => user.PhoneNumber)" />
+                        </div>
+
+
+                        <div class="form-floating mb-3">
+                            <InputText class="form-control" id="floatingInput7" placeholder="Address" @bind-Value="@user.Address" />
+                            <label for="floatingInput7">Address :</label>
+                            <ValidationMessage For="@(() => user.Address)" />
+                        </div>
+                    </div>
+
+
+                    <div class="col-6">
+
+                        <div class="form-floating mb-3">
+                            <select class="form-select" id="floatingInput2" placeholder="Trader Type " @bind="@user.TraderTypesId">
+                                <option value="0">-- Select a Trader Type --</option>
+                                @if (TraderTypes is not null)
+                                {
+                                    @foreach (var obj in TraderTypes)
+                                    {
+                                        <option value="@obj.Id">@obj.Name</option>
+                                    }
+                                }
+                            </select>
+                            <label for="floatingInput2">Trader Type:</label>
+                            <ValidationMessage For="@(() => user.TraderTypesId)" />
+                        </div>
+
+
+                        <div class="mb-3">
+                            <div>
+                                <InputImg Label="Photo" ImageSelected="ImageSelected" ImageURL="@imageUrl" />
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span>
+        </span>
+    </EditForm>
+
+
+}
+
+
+
+
+
+
+@code {
+
+    [Parameter]
+    public string UserId { get; set; }
+    private List<TraderType> TraderTypes;
+    private User user;
+    private string imageUrl;
+
+    protected override async Task OnInitializedAsync()    
+    {
+        await LoadUserAsyc();
+        if (!string.IsNullOrEmpty(user!.Photo))
+        {
+            imageUrl = user.Photo;
+            user.Photo = null;
+        }
+    }
+
+
+
+    private async Task LoadUserAsyc()
+    {   
+        var response2HTTP = await repository.GetAsync<List<TraderType>>("/api/TraderTypes/combo");
+        TraderTypes = response2HTTP.Response!;
+
+        var responseHTTP = await repository.GetAsync<User>($"api/users/{UserId}");
+        if (responseHTTP.Error)
+        {
+            if (responseHTTP.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("users");
+                return;
+            }
+            else
+            {
+                var mensajeError = await responseHTTP.GetErrorMessageAsync();
+                await sweetAlertService.FireAsync("Error", mensajeError, SweetAlertIcon.Error);
+                return;
+            }
+        }
+        else
+        {
+            user = responseHTTP.Response;
+        }
+        user = responseHTTP.Response;
+    }
+
+    private void ImageSelected(string imagenBase64)
+    {
+        user!.Photo = imagenBase64;
+        imageUrl = null;
+    }
+
+
+    [CascadingParameter]
+    BlazoredModalInstance BlazoredModal { get; set; } = default!;
+    private async Task SaveUserAsync()
+    {
+        var responseHttp = await repository.PutAsync<User>("/api/accounts/User", user!);
+        if (responseHttp.Error)
+        {
+            var message = await responseHttp.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+
+            return;
+        }
+        await BlazoredModal.CloseAsync(ModalResult.Ok());
+        navigationManager.NavigateTo("/users");
+    }
+}
+
+
+
+
+

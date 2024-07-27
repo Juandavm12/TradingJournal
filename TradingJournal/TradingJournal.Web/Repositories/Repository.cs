@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -42,9 +43,10 @@ namespace TradingJournal.Web.Repositories
         }
 
         public async Task<HttpResponseWrapper<T>> GetAsync<T>(string url, string url2)
-        {            
-            var CoinGecko = $"https://api.coingecko.com/api/v3{url}&{_configuration["CoinGecko:ApiKey"]}";
-            var responseHttp = await _httpClient.GetAsync(CoinGecko);
+        {
+            var key = "x_cg_demo_api_key=CG-LdodJKJHhswwReX1G1H8hTjp";
+            var CoinGecko = $"https://api.coingecko.com/api/v3{url}&{key}";
+            var responseHttp = await _httpClient.GetAsync(CoinGecko);           
 
             if (responseHttp.IsSuccessStatusCode)
             {
